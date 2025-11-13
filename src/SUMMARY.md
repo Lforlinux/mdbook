@@ -35,3 +35,13 @@
   - [Scaling & Performance](opensource-llm-rag-stack/scaling.md)
   - [Troubleshooting](opensource-llm-rag-stack/troubleshooting.md)
   - [Technical Q&A](opensource-llm-rag-stack/technical-qa.md)
+
+- [Kubernetes GitOps Platform](kubernetes-gitops-platform/introduction.md)
+  - [Architecture](kubernetes-gitops-platform/architecture.md)
+  - [Technical Implementation](kubernetes-gitops-platform/technical-implementation.md)
+  - [Deployment](kubernetes-gitops-platform/deployment.md)
+  - [Monitoring & Observability](kubernetes-gitops-platform/monitoring.md)
+  - [Security & Best Practices](kubernetes-gitops-platform/security.md)
+  - [Scaling & Performance](kubernetes-gitops-platform/scaling.md)
+  - [Troubleshooting](kubernetes-gitops-platform/troubleshooting.md)
+  - [Technical Q&A](kubernetes-gitops-platform/technical-qa.md)

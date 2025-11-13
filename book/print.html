@@ -191,6 +191,9 @@
 <h3 id="opensource-llm-rag-stack"><a class="header" href="#opensource-llm-rag-stack"><a href="opensource-llm-rag-stack/introduction.html">Opensource-LLM-RAG-Stack</a></a></h3>
 <p>A production-ready, containerized RAG (Retrieval-Augmented Generation) stack with comprehensive monitoring, observability, and enterprise-grade DevOps practices.</p>
 <p><strong>Key Technologies:</strong> Docker, Ollama, Chroma, PostgreSQL, Prometheus, Grafana, Open WebUI</p>
+<h3 id="kubernetes-gitops-platform"><a class="header" href="#kubernetes-gitops-platform"><a href="kubernetes-gitops-platform/introduction.html">Kubernetes GitOps Platform</a></a></h3>
+<p>A production-ready AWS EKS cluster with complete GitOps platform toolkit, automated deployment, monitoring, and observability. Combines infrastructure as code with ArgoCD for automated platform management.</p>
+<p><strong>Key Technologies:</strong> Terraform, AWS EKS, Kubernetes, ArgoCD, Prometheus, Grafana, Loki, Helm</p>
 <hr />
 <h2 id="-navigation"><a class="header" href="#-navigation">📚 Navigation</a></h2>
 <p>Use the sidebar to navigate through each project's detailed documentation, including:</p>
@@ -4072,6 +4075,2152 @@ curl http://localhost:11434/api/tags
 <li><strong>A/B Testing</strong>: Test different configurations</li>
 </ol>
 <p>Continuous improvement based on user feedback and metrics."</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-1"><a class="header" href="#kubernetes-gitops-platform-1">Kubernetes GitOps Platform</a></h1>
+<p>A production-ready AWS EKS cluster with complete GitOps platform toolkit, automated deployment, monitoring, and observability.</p>
+<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
+<p>The Kubernetes GitOps Platform is a comprehensive infrastructure and platform solution that combines two repositories:</p>
+<ul>
+<li><strong>k8s-infrastructure-as-code</strong>: Complete AWS EKS infrastructure provisioning with Terraform</li>
+<li><strong>k8s-platform-toolkit</strong>: Platform services including monitoring, logging, testing, and demo applications</li>
+</ul>
+<p>This project demonstrates enterprise-grade Kubernetes platform operations, GitOps automation, and SRE best practices.</p>
+<p><img src="kubernetes-gitops-platform/../images/architecture.png" alt="Architecture Diagram" /></p>
+<h2 id="key-features-3"><a class="header" href="#key-features-3">Key Features</a></h2>
+<ul>
+<li><strong>Complete Infrastructure as Code</strong>: Provision entire AWS EKS cluster and all platform services with a single command</li>
+<li><strong>GitOps Automation</strong>: ArgoCD automatically deploys and manages all platform applications from Git repositories</li>
+<li><strong>Production-Ready Platform</strong>: Comprehensive observability stack with monitoring, logging, and testing tools</li>
+<li><strong>High Availability</strong>: Multi-AZ deployment with auto-scaling worker nodes and Horizontal Pod Autoscaler (HPA)</li>
+<li><strong>Zero-Downtime Deployments</strong>: Kubernetes rolling updates ensure continuous service availability</li>
+<li><strong>Complete Observability</strong>: Prometheus, Grafana, Loki, and Promtail for metrics, logs, and dashboards</li>
+<li><strong>SRE-Ready</strong>: Availability testing and sanity checks built-in</li>
+</ul>
+<h2 id="project-highlights-3"><a class="header" href="#project-highlights-3">Project Highlights</a></h2>
+<p>This project demonstrates:</p>
+<ul>
+<li>Modern Kubernetes platform operations</li>
+<li>GitOps with ArgoCD app-of-apps pattern</li>
+<li>Infrastructure as Code with Terraform</li>
+<li>Comprehensive observability and monitoring</li>
+<li>SRE best practices and testing</li>
+<li>High availability and auto-scaling</li>
+<li>Production-ready deployment patterns</li>
+</ul>
+<h2 id="repository-structure-1"><a class="header" href="#repository-structure-1">Repository Structure</a></h2>
+<h3 id="infrastructure-repository-k8s-infrastructure-as-code"><a class="header" href="#infrastructure-repository-k8s-infrastructure-as-code">Infrastructure Repository (<code>k8s-infrastructure-as-code</code>)</a></h3>
+<ul>
+<li>Terraform configurations for AWS EKS</li>
+<li>VPC, networking, and security groups</li>
+<li>IAM roles and policies</li>
+<li>ArgoCD installation</li>
+<li>Helm charts for applications</li>
+<li>Makefile automation</li>
+</ul>
+<h3 id="platform-toolkit-repository-k8s-platform-toolkit"><a class="header" href="#platform-toolkit-repository-k8s-platform-toolkit">Platform Toolkit Repository (<code>k8s-platform-toolkit</code>)</a></h3>
+<ul>
+<li>Monitoring stack (Prometheus, Grafana)</li>
+<li>Logging stack (Loki, Promtail)</li>
+<li>Testing applications (Sanity Test, Availability Test)</li>
+<li>Demo microservices (Online Boutique)</li>
+<li>Chaos engineering experiments</li>
+<li>ArgoCD application definitions</li>
+</ul>
+<h2 id="technology-stack-1"><a class="header" href="#technology-stack-1">Technology Stack</a></h2>
+<ul>
+<li><strong>Infrastructure</strong>: Terraform, AWS EKS, VPC, IAM</li>
+<li><strong>Container Orchestration</strong>: Kubernetes</li>
+<li><strong>GitOps</strong>: ArgoCD</li>
+<li><strong>Monitoring</strong>: Prometheus, Grafana, kube-state-metrics, node-exporter</li>
+<li><strong>Logging</strong>: Loki, Promtail</li>
+<li><strong>Package Management</strong>: Helm</li>
+<li><strong>Automation</strong>: Makefile, Docker</li>
+<li><strong>Testing</strong>: Custom Python applications, Locust</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-architecture"><a class="header" href="#kubernetes-gitops-platform-architecture">Kubernetes GitOps Platform Architecture</a></h1>
+<h2 id="system-architecture-3"><a class="header" href="#system-architecture-3">System Architecture</a></h2>
+<p><img src="kubernetes-gitops-platform/../images/architecture.png" alt="Architecture Diagram" /></p>
+<p>The Kubernetes GitOps Platform follows a two-repository architecture pattern:</p>
+<h3 id="infrastructure-layer-k8s-infrastructure-as-code"><a class="header" href="#infrastructure-layer-k8s-infrastructure-as-code">Infrastructure Layer (k8s-infrastructure-as-code)</a></h3>
+<p><strong>Components:</strong></p>
+<ul>
+<li><strong>AWS VPC</strong>: Multi-AZ network with public and private subnets</li>
+<li><strong>EKS Cluster</strong>: Managed Kubernetes control plane</li>
+<li><strong>Worker Nodes</strong>: Auto-scaling node groups in private subnets</li>
+<li><strong>Application Load Balancer</strong>: External access to services</li>
+<li><strong>Security Groups</strong>: Network security and access control</li>
+<li><strong>IAM Roles</strong>: Service accounts and permissions</li>
+</ul>
+<h3 id="platform-services-layer-k8s-platform-toolkit"><a class="header" href="#platform-services-layer-k8s-platform-toolkit">Platform Services Layer (k8s-platform-toolkit)</a></h3>
+<p><strong>Components:</strong></p>
+<ul>
+<li><strong>ArgoCD</strong>: GitOps continuous delivery</li>
+<li><strong>Monitoring Stack</strong>: Prometheus, Grafana, kube-state-metrics, node-exporter</li>
+<li><strong>Logging Stack</strong>: Loki, Promtail</li>
+<li><strong>Testing Tools</strong>: Sanity Test, Availability Test</li>
+<li><strong>Demo Applications</strong>: Online Boutique microservices</li>
+<li><strong>Chaos Engineering</strong>: Resilience testing tools</li>
+</ul>
+<h2 id="gitops-workflow"><a class="header" href="#gitops-workflow">GitOps Workflow</a></h2>
+<p><img src="kubernetes-gitops-platform/../images/eks-gitops.png" alt="EKS GitOps Workflow" /></p>
+<h3 id="workflow-steps"><a class="header" href="#workflow-steps">Workflow Steps</a></h3>
+<ol>
+<li>
+<p><strong>Infrastructure Deployment</strong></p>
+<ul>
+<li>Terraform provisions AWS EKS cluster</li>
+<li>ArgoCD is installed via Helm</li>
+<li>App-of-apps pattern is configured</li>
+</ul>
+</li>
+<li>
+<p><strong>Platform Toolkit Deployment</strong></p>
+<ul>
+<li>ArgoCD references k8s-platform-toolkit repository</li>
+<li>App-of-apps pattern deploys all platform applications</li>
+<li>Applications sync automatically from Git</li>
+</ul>
+</li>
+<li>
+<p><strong>Continuous Deployment</strong></p>
+<ul>
+<li>Changes pushed to Git repositories</li>
+<li>ArgoCD detects changes automatically</li>
+<li>Applications sync with zero-downtime rolling updates</li>
+</ul>
+</li>
+</ol>
+<h2 id="app-of-apps-pattern"><a class="header" href="#app-of-apps-pattern">App-of-Apps Pattern</a></h2>
+<p>The platform uses ArgoCD's app-of-apps pattern for hierarchical application management:</p>
+<pre><code>k8s-platform-toolkit (Root App)
+├── monitoring-stack
+│   ├── Prometheus
+│   ├── Grafana
+│   ├── kube-state-metrics
+│   └── node-exporter
+├── loki-stack
+│   └── Loki
+├── promtail
+├── online-boutique
+│   └── 11 microservices
+├── sanity-test
+└── availability-test
+</code></pre>
+<h3 id="sync-waves"><a class="header" href="#sync-waves">Sync Waves</a></h3>
+<p>Applications deploy in ordered waves:</p>
+<ul>
+<li><strong>Wave 1</strong>: Testing infrastructure (Sanity Test, Availability Test)</li>
+<li><strong>Wave 2-4</strong>: Monitoring stack components</li>
+<li><strong>Wave 5</strong>: Promtail (depends on Loki)</li>
+<li><strong>Wave 99</strong>: Chaos experiments (manual sync)</li>
+</ul>
+<h2 id="network-architecture"><a class="header" href="#network-architecture">Network Architecture</a></h2>
+<h3 id="vpc-structure"><a class="header" href="#vpc-structure">VPC Structure</a></h3>
+<ul>
+<li><strong>Public Subnets</strong>: Internet Gateway access, NAT Gateway</li>
+<li><strong>Private Subnets</strong>: Worker nodes, internal services</li>
+<li><strong>Multi-AZ</strong>: High availability across availability zones</li>
+<li><strong>Security Groups</strong>: Network-level access control</li>
+</ul>
+<h3 id="service-access"><a class="header" href="#service-access">Service Access</a></h3>
+<ul>
+<li><strong>LoadBalancer Services</strong>: External access via AWS ALB</li>
+<li><strong>ClusterIP Services</strong>: Internal cluster communication</li>
+<li><strong>Ingress</strong>: Optional ingress controller for HTTP routing</li>
+</ul>
+<h2 id="high-availability-design"><a class="header" href="#high-availability-design">High Availability Design</a></h2>
+<h3 id="cluster-level"><a class="header" href="#cluster-level">Cluster Level</a></h3>
+<ul>
+<li><strong>Multi-AZ Deployment</strong>: Control plane and nodes across zones</li>
+<li><strong>Auto Scaling Groups</strong>: Worker node auto-scaling</li>
+<li><strong>Health Checks</strong>: Node and pod health monitoring</li>
+</ul>
+<h3 id="application-level"><a class="header" href="#application-level">Application Level</a></h3>
+<ul>
+<li><strong>Replica Sets</strong>: Multiple pod instances</li>
+<li><strong>Horizontal Pod Autoscaler</strong>: Automatic pod scaling</li>
+<li><strong>Rolling Updates</strong>: Zero-downtime deployments</li>
+<li><strong>Readiness Probes</strong>: Health check validation</li>
+</ul>
+<h2 id="data-flow-3"><a class="header" href="#data-flow-3">Data Flow</a></h2>
+<h3 id="metrics-flow"><a class="header" href="#metrics-flow">Metrics Flow</a></h3>
+<pre><code>Pods → Prometheus → Grafana → Dashboards
+Nodes → node-exporter → Prometheus
+K8s Objects → kube-state-metrics → Prometheus
+</code></pre>
+<h3 id="logs-flow"><a class="header" href="#logs-flow">Logs Flow</a></h3>
+<pre><code>Pods → Promtail → Loki → Grafana
+</code></pre>
+<h3 id="gitops-flow"><a class="header" href="#gitops-flow">GitOps Flow</a></h3>
+<pre><code>Git Repository → ArgoCD → Kubernetes API → Pods
+</code></pre>
+<h2 id="security-architecture"><a class="header" href="#security-architecture">Security Architecture</a></h2>
+<h3 id="network-security-2"><a class="header" href="#network-security-2">Network Security</a></h3>
+<ul>
+<li><strong>Private Subnets</strong>: Worker nodes isolated from internet</li>
+<li><strong>Security Groups</strong>: Restrictive network policies</li>
+<li><strong>VPC Flow Logs</strong>: Network traffic monitoring</li>
+</ul>
+<h3 id="access-control-1"><a class="header" href="#access-control-1">Access Control</a></h3>
+<ul>
+<li><strong>IAM Roles</strong>: AWS resource access</li>
+<li><strong>RBAC</strong>: Kubernetes role-based access</li>
+<li><strong>Service Accounts</strong>: Pod-level permissions</li>
+</ul>
+<h3 id="secrets-management-1"><a class="header" href="#secrets-management-1">Secrets Management</a></h3>
+<ul>
+<li><strong>Kubernetes Secrets</strong>: Application secrets</li>
+<li><strong>AWS Secrets Manager</strong>: Integration capability</li>
+<li><strong>ArgoCD Secrets</strong>: Git repository credentials</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-technical-implementation"><a class="header" href="#kubernetes-gitops-platform-technical-implementation">Kubernetes GitOps Platform Technical Implementation</a></h1>
+<h2 id="infrastructure-as-code-terraform-1"><a class="header" href="#infrastructure-as-code-terraform-1">Infrastructure as Code (Terraform)</a></h2>
+<h3 id="vpc-configuration"><a class="header" href="#vpc-configuration">VPC Configuration</a></h3>
+<pre><code class="language-hcl">module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~&gt; 5.0"
+
+  name = "eks-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+  enable_vpn_gateway = false
+
+  tags = {
+    Terraform   = "true"
+    Environment = "production"
+  }
+}
+</code></pre>
+<h3 id="eks-cluster-configuration"><a class="header" href="#eks-cluster-configuration">EKS Cluster Configuration</a></h3>
+<pre><code class="language-hcl">module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~&gt; 19.0"
+
+  cluster_name    = "production-eks"
+  cluster_version = "1.28"
+
+  vpc_id                         = module.vpc.vpc_id
+  subnet_ids                     = module.vpc.private_subnets
+  cluster_endpoint_public_access = true
+
+  # Managed Node Groups
+  eks_managed_node_groups = {
+    application = {
+      name = "application-nodes"
+      instance_types = ["t3.small"]
+      min_size     = 1
+      max_size     = 5
+      desired_size = 3
+    }
+    
+    platform = {
+      name = "platform-nodes"
+      instance_types = ["t3.medium"]
+      min_size     = 1
+      max_size     = 5
+      desired_size = 2
+    }
+  }
+}
+</code></pre>
+<h3 id="argocd-installation"><a class="header" href="#argocd-installation">ArgoCD Installation</a></h3>
+<pre><code class="language-hcl">resource "helm_release" "argocd" {
+  name       = "argocd"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  version    = "5.51.6"
+  namespace  = "argocd"
+
+  values = [
+    file("${path.module}/argocd/values.yaml")
+  ]
+
+  depends_on = [module.eks]
+}
+</code></pre>
+<h2 id="gitops-implementation"><a class="header" href="#gitops-implementation">GitOps Implementation</a></h2>
+<h3 id="app-of-apps-pattern-1"><a class="header" href="#app-of-apps-pattern-1">App-of-Apps Pattern</a></h3>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-platform-toolkit
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    targetRevision: HEAD
+    path: argocd/apps
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+</code></pre>
+<h3 id="sync-waves-configuration"><a class="header" href="#sync-waves-configuration">Sync Waves Configuration</a></h3>
+<pre><code class="language-yaml"># Wave 1: Testing Infrastructure
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sanity-test
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+---
+# Wave 2-4: Monitoring Stack
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-stack
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+---
+# Wave 5: Logging (depends on Loki)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: promtail
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+</code></pre>
+<h2 id="monitoring-stack-implementation"><a class="header" href="#monitoring-stack-implementation">Monitoring Stack Implementation</a></h2>
+<h3 id="prometheus-configuration-1"><a class="header" href="#prometheus-configuration-1">Prometheus Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+    
+    scrape_configs:
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+      
+      - job_name: 'kubernetes-nodes'
+        kubernetes_sd_configs:
+          - role: node
+      
+      - job_name: 'kube-state-metrics'
+        static_configs:
+          - targets: ['kube-state-metrics:8080']
+      
+      - job_name: 'node-exporter'
+        static_configs:
+          - targets: ['node-exporter:9100']
+</code></pre>
+<h3 id="grafana-dashboard-configuration"><a class="header" href="#grafana-dashboard-configuration">Grafana Dashboard Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: monitoring
+data:
+  online-boutique.json: |
+    {
+      "dashboard": {
+        "title": "Online Boutique Metrics",
+        "panels": [
+          {
+            "title": "Request Rate",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total[5m])"
+              }
+            ]
+          }
+        ]
+      }
+    }
+</code></pre>
+<h2 id="logging-stack-implementation"><a class="header" href="#logging-stack-implementation">Logging Stack Implementation</a></h2>
+<h3 id="loki-configuration"><a class="header" href="#loki-configuration">Loki Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-config
+  namespace: monitoring
+data:
+  loki.yaml: |
+    auth_enabled: false
+    server:
+      http_listen_port: 3100
+    ingester:
+      lifecycler:
+        address: 127.0.0.1
+        ring:
+          kvstore:
+            store: inmemory
+          replication_factor: 1
+    schema_config:
+      configs:
+        - from: 2020-10-24
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
+</code></pre>
+<h3 id="promtail-configuration"><a class="header" href="#promtail-configuration">Promtail Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-config
+  namespace: monitoring
+data:
+  promtail.yml: |
+    server:
+      http_listen_port: 3101
+    positions:
+      filename: /tmp/positions.yaml
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+    scrape_configs:
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: __host__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+</code></pre>
+<h2 id="testing-applications"><a class="header" href="#testing-applications">Testing Applications</a></h2>
+<h3 id="availability-test-implementation"><a class="header" href="#availability-test-implementation">Availability Test Implementation</a></h3>
+<pre><code class="language-python">import requests
+import time
+from datetime import datetime
+
+class AvailabilityTest:
+    def __init__(self, frontend_url, cart_url):
+        self.frontend_url = frontend_url
+        self.cart_url = cart_url
+        self.test_results = []
+    
+    def test_cart_workflow(self):
+        """Test complete cart workflow"""
+        try:
+            # Test 1: Frontend accessibility
+            response = requests.get(f"{self.frontend_url}/")
+            assert response.status_code == 200
+            
+            # Test 2: Add to cart
+            add_response = requests.post(
+                f"{self.cart_url}/add",
+                json={"product_id": "test-product", "quantity": 1}
+            )
+            assert add_response.status_code == 200
+            
+            # Test 3: Remove from cart
+            remove_response = requests.post(
+                f"{self.cart_url}/remove",
+                json={"product_id": "test-product"}
+            )
+            assert remove_response.status_code == 200
+            
+            return {"status": "pass", "timestamp": datetime.now()}
+        except Exception as e:
+            return {"status": "fail", "error": str(e), "timestamp": datetime.now()}
+</code></pre>
+<h3 id="sanity-test-implementation"><a class="header" href="#sanity-test-implementation">Sanity Test Implementation</a></h3>
+<pre><code class="language-python">class SanityTest:
+    def __init__(self, services):
+        self.services = services
+        self.results = {}
+    
+    def test_all_services(self):
+        """Test health of all microservices"""
+        for service in self.services:
+            try:
+                response = requests.get(f"{service}/health", timeout=5)
+                self.results[service] = {
+                    "status": "healthy" if response.status_code == 200 else "unhealthy",
+                    "response_time": response.elapsed.total_seconds()
+                }
+            except Exception as e:
+                self.results[service] = {
+                    "status": "error",
+                    "error": str(e)
+                }
+        return self.results
+</code></pre>
+<h2 id="automation-with-makefile"><a class="header" href="#automation-with-makefile">Automation with Makefile</a></h2>
+<h3 id="deployment-automation"><a class="header" href="#deployment-automation">Deployment Automation</a></h3>
+<pre><code class="language-makefile">DOCKER_IMAGE ?= hashicorp/terraform:1.6
+EXEC = docker run --rm -i \
+    -e AWS_PROFILE=$(AWS_PROFILE) \
+    -v $(HOME)/.aws:/root/.aws \
+    -v $(PWD):/data \
+    -w /data \
+    $(DOCKER_IMAGE)
+
+.PHONY: deploy
+deploy:
+    @$(EXEC) init -no-color
+    @$(EXEC) apply -no-color
+    @echo "=== ArgoCD Access Information ==="
+    @echo "URL: $$($(EXEC) output -raw argocd_server_url)"
+    @echo "Username: $$($(EXEC) output -raw argocd_username)"
+    @echo "Password: $$($(EXEC) output -raw argocd_password)"
+</code></pre>
+<h2 id="horizontal-pod-autoscaler"><a class="header" href="#horizontal-pod-autoscaler">Horizontal Pod Autoscaler</a></h2>
+<h3 id="hpa-configuration"><a class="header" href="#hpa-configuration">HPA Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nodejs-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodejs-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+</code></pre>
+<h2 id="helm-chart-structure"><a class="header" href="#helm-chart-structure">Helm Chart Structure</a></h2>
+<h3 id="nodejs-application-chart"><a class="header" href="#nodejs-application-chart">NodeJS Application Chart</a></h3>
+<pre><code class="language-yaml"># values.yaml
+replicaCount: 2
+image:
+  repository: nodejs-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-deployment"><a class="header" href="#kubernetes-gitops-platform-deployment">Kubernetes GitOps Platform Deployment</a></h1>
+<h2 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h2>
+<h3 id="aws-account-setup"><a class="header" href="#aws-account-setup">AWS Account Setup</a></h3>
+<ul>
+<li>AWS account with programmatic access</li>
+<li>IAM user with required policies:
+<ul>
+<li><code>AmazonEC2FullAccess</code></li>
+<li><code>IAMFullAccess</code></li>
+<li><code>AutoScalingFullAccess</code></li>
+<li><code>AmazonEKSClusterPolicy</code></li>
+<li><code>AmazonEKSWorkerNodePolicy</code></li>
+<li><code>AmazonVPCFullAccess</code></li>
+<li><code>AmazonEKSServicePolicy</code></li>
+<li><code>AmazonEKS_CNI_Policy</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="local-requirements"><a class="header" href="#local-requirements">Local Requirements</a></h3>
+<ul>
+<li>Docker installed and running</li>
+<li>AWS CLI configured with credentials</li>
+<li>Git for cloning repositories</li>
+</ul>
+<h2 id="quick-start-deployment"><a class="header" href="#quick-start-deployment">Quick Start Deployment</a></h2>
+<h3 id="1-clone-infrastructure-repository"><a class="header" href="#1-clone-infrastructure-repository">1. Clone Infrastructure Repository</a></h3>
+<pre><code class="language-bash">git clone https://github.com/Lforlinux/k8s-infrastructure-as-code.git
+cd k8s-infrastructure-as-code
+</code></pre>
+<h3 id="2-configure-aws-credentials"><a class="header" href="#2-configure-aws-credentials">2. Configure AWS Credentials</a></h3>
+<pre><code class="language-bash"># Option 1: AWS CLI configuration
+aws configure
+
+# Option 2: Environment variable
+export AWS_PROFILE=your-profile
+</code></pre>
+<h3 id="3-deploy-entire-stack"><a class="header" href="#3-deploy-entire-stack">3. Deploy Entire Stack</a></h3>
+<pre><code class="language-bash">make deploy
+</code></pre>
+<p>This single command:</p>
+<ol>
+<li>Initializes Terraform</li>
+<li>Plans infrastructure changes</li>
+<li>Applies infrastructure (VPC, EKS, ArgoCD)</li>
+<li>Displays access information</li>
+</ol>
+<h3 id="4-review-deployment-output"><a class="header" href="#4-review-deployment-output">4. Review Deployment Output</a></h3>
+<p>After deployment, you'll see:</p>
+<ul>
+<li>Kubernetes cluster access command</li>
+<li>ArgoCD server URL</li>
+<li>ArgoCD username and password</li>
+</ul>
+<h2 id="deployment-workflow"><a class="header" href="#deployment-workflow">Deployment Workflow</a></h2>
+<h3 id="infrastructure-deployment"><a class="header" href="#infrastructure-deployment">Infrastructure Deployment</a></h3>
+<pre><code>1. Terraform Init
+   ↓
+2. Terraform Plan (Review changes)
+   ↓
+3. Terraform Apply (Create resources)
+   ↓
+4. EKS Cluster Created
+   ↓
+5. ArgoCD Installed via Helm
+   ↓
+6. App-of-Apps Pattern Configured
+</code></pre>
+<h3 id="platform-toolkit-deployment"><a class="header" href="#platform-toolkit-deployment">Platform Toolkit Deployment</a></h3>
+<pre><code>1. ArgoCD Detects App-of-Apps
+   ↓
+2. References k8s-platform-toolkit Repository
+   ↓
+3. Deploys Applications in Sync Waves
+   ↓
+4. Monitoring Stack (Wave 3)
+   ↓
+5. Logging Stack (Wave 4-5)
+   ↓
+6. Testing Applications (Wave 1)
+   ↓
+7. Demo Applications (Wave 2)
+</code></pre>
+<h2 id="accessing-the-cluster"><a class="header" href="#accessing-the-cluster">Accessing the Cluster</a></h2>
+<h3 id="kubernetes-access"><a class="header" href="#kubernetes-access">Kubernetes Access</a></h3>
+<pre><code class="language-bash"># Get cluster name and region from Terraform
+aws eks --region $(terraform output -raw region) \
+  update-kubeconfig --name $(terraform output -raw cluster_name)
+
+# Verify access
+kubectl get nodes
+</code></pre>
+<h3 id="argocd-access"><a class="header" href="#argocd-access">ArgoCD Access</a></h3>
+<pre><code class="language-bash"># Get ArgoCD LoadBalancer URL
+kubectl get svc -n argocd argocd-server
+
+# Get admin password
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+</code></pre>
+<h3 id="application-access"><a class="header" href="#application-access">Application Access</a></h3>
+<pre><code class="language-bash"># List all LoadBalancer services
+kubectl get svc --all-namespaces -o wide | grep LoadBalancer
+
+# Access specific services
+# Grafana: http://&lt;grafana-lb-url&gt;
+# Prometheus: http://&lt;prometheus-lb-url&gt;
+# Online Boutique: http://&lt;frontend-lb-url&gt;
+</code></pre>
+<h2 id="gitops-workflow-1"><a class="header" href="#gitops-workflow-1">GitOps Workflow</a></h2>
+<h3 id="making-changes"><a class="header" href="#making-changes">Making Changes</a></h3>
+<ol>
+<li>
+<p><strong>Update Application Code</strong></p>
+<pre><code class="language-bash"># Make changes to application
+vim k8s-platform-toolkit/application/online-boutique/online-boutique-manifest.yaml
+</code></pre>
+</li>
+<li>
+<p><strong>Commit and Push</strong></p>
+<pre><code class="language-bash">git add .
+git commit -m "Update application configuration"
+git push origin main
+</code></pre>
+</li>
+<li>
+<p><strong>ArgoCD Auto-Sync</strong></p>
+<ul>
+<li>ArgoCD detects Git changes</li>
+<li>Automatically syncs applications</li>
+<li>Performs rolling updates</li>
+</ul>
+</li>
+<li>
+<p><strong>Monitor Deployment</strong></p>
+<pre><code class="language-bash"># Watch ArgoCD applications
+kubectl get applications -n argocd -w
+
+# Check sync status
+argocd app get &lt;app-name&gt;
+</code></pre>
+</li>
+</ol>
+<h2 id="zero-downtime-deployments"><a class="header" href="#zero-downtime-deployments">Zero-Downtime Deployments</a></h2>
+<h3 id="rolling-update-strategy"><a class="header" href="#rolling-update-strategy">Rolling Update Strategy</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    spec:
+      containers:
+      - name: app
+        image: nodejs-app:v2.0.0
+</code></pre>
+<h3 id="deployment-process-2"><a class="header" href="#deployment-process-2">Deployment Process</a></h3>
+<ol>
+<li>New pods created with new image</li>
+<li>Readiness probes verify health</li>
+<li>Old pods terminated after new pods ready</li>
+<li>Service continues serving traffic throughout</li>
+</ol>
+<h2 id="application-lifecycle"><a class="header" href="#application-lifecycle">Application Lifecycle</a></h2>
+<h3 id="adding-new-application"><a class="header" href="#adding-new-application">Adding New Application</a></h3>
+<ol>
+<li>
+<p><strong>Create Application Manifests</strong></p>
+<pre><code class="language-bash"># In k8s-platform-toolkit repository
+mkdir -p application/my-app
+# Create deployment.yaml, service.yaml, etc.
+</code></pre>
+</li>
+<li>
+<p><strong>Create ArgoCD Application Definition</strong></p>
+<pre><code class="language-yaml"># argocd/apps/my-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+spec:
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    path: application/my-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: my-app
+</code></pre>
+</li>
+<li>
+<p><strong>Commit and Push</strong></p>
+<pre><code class="language-bash">git add .
+git commit -m "Add new application"
+git push origin main
+</code></pre>
+</li>
+<li>
+<p><strong>ArgoCD Auto-Deploys</strong></p>
+<ul>
+<li>Detects new application definition</li>
+<li>Creates namespace</li>
+<li>Deploys application</li>
+</ul>
+</li>
+</ol>
+<h3 id="updating-applications"><a class="header" href="#updating-applications">Updating Applications</a></h3>
+<ol>
+<li><strong>Update Manifests in Git</strong></li>
+<li><strong>ArgoCD Detects Changes</strong></li>
+<li><strong>Automatic Sync (if enabled)</strong></li>
+<li><strong>Rolling Update Performed</strong></li>
+</ol>
+<h3 id="removing-applications"><a class="header" href="#removing-applications">Removing Applications</a></h3>
+<ol>
+<li>
+<p><strong>Delete ArgoCD Application</strong></p>
+<pre><code class="language-bash">kubectl delete application my-app -n argocd
+</code></pre>
+</li>
+<li>
+<p><strong>Or Remove from Git</strong></p>
+<ul>
+<li>Delete application definition</li>
+<li>ArgoCD removes application</li>
+<li>Resources cleaned up</li>
+</ul>
+</li>
+</ol>
+<h2 id="troubleshooting-deployment"><a class="header" href="#troubleshooting-deployment">Troubleshooting Deployment</a></h2>
+<h3 id="check-terraform-state"><a class="header" href="#check-terraform-state">Check Terraform State</a></h3>
+<pre><code class="language-bash"># View current state
+terraform show
+
+# List resources
+terraform state list
+
+# Inspect specific resource
+terraform state show module.eks.aws_eks_cluster.this[0]
+</code></pre>
+<h3 id="check-argocd-sync-status"><a class="header" href="#check-argocd-sync-status">Check ArgoCD Sync Status</a></h3>
+<pre><code class="language-bash"># List all applications
+kubectl get applications -n argocd
+
+# Describe application
+kubectl describe application &lt;app-name&gt; -n argocd
+
+# Check sync status
+argocd app sync &lt;app-name&gt;
+</code></pre>
+<h3 id="verify-pod-status"><a class="header" href="#verify-pod-status">Verify Pod Status</a></h3>
+<pre><code class="language-bash"># Check all pods
+kubectl get pods --all-namespaces
+
+# Check specific namespace
+kubectl get pods -n monitoring
+
+# View pod logs
+kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-monitoring--observability"><a class="header" href="#kubernetes-gitops-platform-monitoring--observability">Kubernetes GitOps Platform Monitoring &amp; Observability</a></h1>
+<h2 id="monitoring-stack-1"><a class="header" href="#monitoring-stack-1">Monitoring Stack</a></h2>
+<h3 id="prometheus-configuration-2"><a class="header" href="#prometheus-configuration-2">Prometheus Configuration</a></h3>
+<p>Prometheus collects metrics from:</p>
+<ul>
+<li><strong>Kubernetes Pods</strong>: Application metrics via annotations</li>
+<li><strong>Kubernetes Nodes</strong>: Node-level metrics via node-exporter</li>
+<li><strong>Kubernetes Objects</strong>: Cluster state via kube-state-metrics</li>
+<li><strong>Services</strong>: Service discovery and scraping</li>
+</ul>
+<h3 id="key-metrics-collected"><a class="header" href="#key-metrics-collected">Key Metrics Collected</a></h3>
+<h4 id="application-metrics"><a class="header" href="#application-metrics">Application Metrics</a></h4>
+<ul>
+<li>Request rate and latency</li>
+<li>Error rates and status codes</li>
+<li>Resource utilization (CPU, memory)</li>
+<li>Custom business metrics</li>
+</ul>
+<h4 id="infrastructure-metrics"><a class="header" href="#infrastructure-metrics">Infrastructure Metrics</a></h4>
+<ul>
+<li>Node CPU, memory, disk usage</li>
+<li>Pod resource consumption</li>
+<li>Network traffic and bandwidth</li>
+<li>Storage utilization</li>
+</ul>
+<h4 id="kubernetes-metrics"><a class="header" href="#kubernetes-metrics">Kubernetes Metrics</a></h4>
+<ul>
+<li>Deployment status and replicas</li>
+<li>Pod status and restarts</li>
+<li>Service endpoints</li>
+<li>HPA scaling events</li>
+</ul>
+<h3 id="grafana-dashboards-1"><a class="header" href="#grafana-dashboards-1">Grafana Dashboards</a></h3>
+<h4 id="pre-configured-dashboards"><a class="header" href="#pre-configured-dashboards">Pre-configured Dashboards</a></h4>
+<ul>
+<li><strong>Kubernetes Cluster Overview</strong>: Cluster health and resource usage</li>
+<li><strong>Online Boutique Dashboard</strong>: Microservices metrics and performance</li>
+<li><strong>Node Exporter</strong>: Node-level system metrics</li>
+<li><strong>Kube State Metrics</strong>: Kubernetes object state</li>
+</ul>
+<h4 id="custom-dashboards"><a class="header" href="#custom-dashboards">Custom Dashboards</a></h4>
+<pre><code class="language-json">{
+  "dashboard": {
+    "title": "Online Boutique Metrics",
+    "panels": [
+      {
+        "title": "Request Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "{{service}}"
+          }
+        ]
+      },
+      {
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{status=~\"5..\"}[5m])",
+            "legendFormat": "{{service}}"
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<h2 id="logging-stack"><a class="header" href="#logging-stack">Logging Stack</a></h2>
+<h3 id="loki-configuration-1"><a class="header" href="#loki-configuration-1">Loki Configuration</a></h3>
+<p>Loki aggregates logs from all pods:</p>
+<ul>
+<li><strong>Efficient Storage</strong>: Indexed by labels, not log content</li>
+<li><strong>Prometheus-inspired</strong>: Similar query language</li>
+<li><strong>Grafana Integration</strong>: Native Grafana data source</li>
+</ul>
+<h3 id="promtail-configuration-1"><a class="header" href="#promtail-configuration-1">Promtail Configuration</a></h3>
+<p>Promtail collects logs:</p>
+<ul>
+<li><strong>DaemonSet</strong>: Runs on every node</li>
+<li><strong>Automatic Discovery</strong>: Discovers pods automatically</li>
+<li><strong>Metadata Enrichment</strong>: Adds Kubernetes labels</li>
+<li><strong>Log Shipping</strong>: Sends logs to Loki</li>
+</ul>
+<h3 id="log-queries"><a class="header" href="#log-queries">Log Queries</a></h3>
+<pre><code class="language-logql"># Query logs by service
+{namespace="online-boutique", service="cartservice"}
+
+# Filter by log level
+{namespace="online-boutique"} |= "error"
+
+# Count errors
+count_over_time({namespace="online-boutique"} |= "error" [5m])
+</code></pre>
+<h2 id="testing--validation"><a class="header" href="#testing--validation">Testing &amp; Validation</a></h2>
+<h3 id="sanity-test-monitoring"><a class="header" href="#sanity-test-monitoring">Sanity Test Monitoring</a></h3>
+<p><strong>Purpose</strong>: Automated health check testing</p>
+<ul>
+<li>Tests all microservices every 60 seconds</li>
+<li>Tracks response times and errors</li>
+<li>Provides REST API for status</li>
+<li>Web UI dashboard for results</li>
+</ul>
+<p><strong>Metrics Tracked</strong>:</p>
+<ul>
+<li>Total test runs</li>
+<li>Pass/fail counts</li>
+<li>Response times per service</li>
+<li>Error rates</li>
+</ul>
+<h3 id="availability-test-monitoring"><a class="header" href="#availability-test-monitoring">Availability Test Monitoring</a></h3>
+<p><strong>Purpose</strong>: SRE-style availability testing</p>
+<ul>
+<li>Real user workflow simulation</li>
+<li>Tests every 5 minutes</li>
+<li>Calculates uptime percentage</li>
+<li>Tracks consecutive failures</li>
+</ul>
+<p><strong>SRE Metrics</strong>:</p>
+<ul>
+<li><strong>Uptime %</strong>: Service availability percentage</li>
+<li><strong>MTTR</strong>: Mean Time To Recovery</li>
+<li><strong>MTBF</strong>: Mean Time Between Failures</li>
+<li><strong>Error Budget</strong>: Remaining error budget</li>
+</ul>
+<h2 id="alerting-1"><a class="header" href="#alerting-1">Alerting</a></h2>
+<h3 id="prometheus-alert-rules"><a class="header" href="#prometheus-alert-rules">Prometheus Alert Rules</a></h3>
+<pre><code class="language-yaml">groups:
+  - name: kubernetes
+    rules:
+      - alert: HighCPUUsage
+        expr: node_cpu_usage &gt; 80
+        for: 5m
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+      
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[5m]) &gt; 0
+        for: 5m
+        annotations:
+          summary: "Pod {{ $labels.pod }} is crash looping"
+      
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) &gt; 0.1
+        for: 5m
+        annotations:
+          summary: "High error rate for {{ $labels.service }}"
+</code></pre>
+<h3 id="alert-manager-configuration"><a class="header" href="#alert-manager-configuration">Alert Manager Configuration</a></h3>
+<pre><code class="language-yaml">route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+receivers:
+  - name: 'default'
+    webhook_configs:
+      - url: 'http://alertmanager:9093/api/v1/alerts'
+  - name: 'critical-alerts'
+    slack_configs:
+      - api_url: 'YOUR_SLACK_WEBHOOK_URL'
+        channel: '#alerts'
+</code></pre>
+<h2 id="observability-best-practices"><a class="header" href="#observability-best-practices">Observability Best Practices</a></h2>
+<h3 id="1-comprehensive-instrumentation"><a class="header" href="#1-comprehensive-instrumentation">1. <strong>Comprehensive Instrumentation</strong></a></h3>
+<ul>
+<li>Instrument all services with metrics</li>
+<li>Use consistent metric naming</li>
+<li>Include business metrics</li>
+<li>Track custom events</li>
+</ul>
+<h3 id="2-structured-logging"><a class="header" href="#2-structured-logging">2. <strong>Structured Logging</strong></a></h3>
+<ul>
+<li>Use structured log format (JSON)</li>
+<li>Include correlation IDs</li>
+<li>Log at appropriate levels</li>
+<li>Include context information</li>
+</ul>
+<h3 id="3-dashboard-design"><a class="header" href="#3-dashboard-design">3. <strong>Dashboard Design</strong></a></h3>
+<ul>
+<li>Create service-specific dashboards</li>
+<li>Include key SLIs and SLOs</li>
+<li>Show trends over time</li>
+<li>Enable drill-down capabilities</li>
+</ul>
+<h3 id="4-alert-tuning"><a class="header" href="#4-alert-tuning">4. <strong>Alert Tuning</strong></a></h3>
+<ul>
+<li>Set appropriate thresholds</li>
+<li>Avoid alert fatigue</li>
+<li>Use alert grouping</li>
+<li>Include runbook links</li>
+</ul>
+<h3 id="5-log-retention"><a class="header" href="#5-log-retention">5. <strong>Log Retention</strong></a></h3>
+<ul>
+<li>Configure retention policies</li>
+<li>Archive old logs</li>
+<li>Compress stored logs</li>
+<li>Monitor storage usage</li>
+</ul>
+<h2 id="key-performance-indicators-kpis"><a class="header" href="#key-performance-indicators-kpis">Key Performance Indicators (KPIs)</a></h2>
+<h3 id="application-kpis"><a class="header" href="#application-kpis">Application KPIs</a></h3>
+<ul>
+<li><strong>Request Rate</strong>: Requests per second</li>
+<li><strong>Error Rate</strong>: Percentage of failed requests</li>
+<li><strong>Latency</strong>: P50, P95, P99 response times</li>
+<li><strong>Availability</strong>: Uptime percentage</li>
+</ul>
+<h3 id="infrastructure-kpis"><a class="header" href="#infrastructure-kpis">Infrastructure KPIs</a></h3>
+<ul>
+<li><strong>CPU Utilization</strong>: Average and peak usage</li>
+<li><strong>Memory Utilization</strong>: Memory consumption</li>
+<li><strong>Network Throughput</strong>: Bytes per second</li>
+<li><strong>Storage Usage</strong>: Disk space utilization</li>
+</ul>
+<h3 id="platform-kpis"><a class="header" href="#platform-kpis">Platform KPIs</a></h3>
+<ul>
+<li><strong>Deployment Frequency</strong>: Deployments per day</li>
+<li><strong>Lead Time</strong>: Time from commit to production</li>
+<li><strong>MTTR</strong>: Mean Time To Recovery</li>
+<li><strong>Change Failure Rate</strong>: Percentage of failed deployments</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-security--best-practices"><a class="header" href="#kubernetes-gitops-platform-security--best-practices">Kubernetes GitOps Platform Security &amp; Best Practices</a></h1>
+<h2 id="network-security-3"><a class="header" href="#network-security-3">Network Security</a></h2>
+<h3 id="vpc-configuration-1"><a class="header" href="#vpc-configuration-1">VPC Configuration</a></h3>
+<ul>
+<li><strong>Private Subnets</strong>: Worker nodes in private subnets</li>
+<li><strong>Public Subnets</strong>: Load balancers and NAT gateways</li>
+<li><strong>Security Groups</strong>: Restrictive network policies</li>
+<li><strong>VPC Flow Logs</strong>: Network traffic monitoring</li>
+</ul>
+<h3 id="security-group-rules"><a class="header" href="#security-group-rules">Security Group Rules</a></h3>
+<pre><code class="language-hcl"># Worker node security group
+resource "aws_security_group" "worker_group_mgmt" {
+  name_prefix = "worker-group-mgmt"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+</code></pre>
+<h2 id="iam-security"><a class="header" href="#iam-security">IAM Security</a></h2>
+<h3 id="eks-cluster-iam"><a class="header" href="#eks-cluster-iam">EKS Cluster IAM</a></h3>
+<pre><code class="language-hcl"># Cluster service role
+resource "aws_iam_role" "cluster" {
+  name = "eks-cluster-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "eks.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# Attach required policies
+resource "aws_iam_role_policy_attachment" "cluster_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.cluster.name
+}
+</code></pre>
+<h3 id="node-group-iam"><a class="header" href="#node-group-iam">Node Group IAM</a></h3>
+<pre><code class="language-hcl"># Worker node role
+resource "aws_iam_role" "nodes" {
+  name = "eks-node-group-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# Required policies
+resource "aws_iam_role_policy_attachment" "nodes_AmazonEKSWorkerNodePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role       = aws_iam_role.nodes.name
+}
+</code></pre>
+<h2 id="kubernetes-rbac"><a class="header" href="#kubernetes-rbac">Kubernetes RBAC</a></h2>
+<h3 id="service-account-configuration"><a class="header" href="#service-account-configuration">Service Account Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - nodes/proxy
+      - services
+      - endpoints
+      - pods
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: monitoring
+</code></pre>
+<h2 id="secrets-management-2"><a class="header" href="#secrets-management-2">Secrets Management</a></h2>
+<h3 id="kubernetes-secrets"><a class="header" href="#kubernetes-secrets">Kubernetes Secrets</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: production
+type: Opaque
+data:
+  database-password: &lt;base64-encoded&gt;
+  api-key: &lt;base64-encoded&gt;
+</code></pre>
+<h3 id="aws-secrets-manager-integration"><a class="header" href="#aws-secrets-manager-integration">AWS Secrets Manager Integration</a></h3>
+<pre><code class="language-hcl"># Retrieve secret from AWS Secrets Manager
+data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = "production/database/password"
+}
+
+# Use in Kubernetes
+resource "kubernetes_secret" "app_secrets" {
+  metadata {
+    name      = "app-secrets"
+    namespace = "production"
+  }
+
+  data = {
+    database-password = data.aws_secretsmanager_secret_version.db_password.secret_string
+  }
+}
+</code></pre>
+<h2 id="pod-security"><a class="header" href="#pod-security">Pod Security</a></h2>
+<h3 id="pod-security-standards"><a class="header" href="#pod-security-standards">Pod Security Standards</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+</code></pre>
+<h3 id="security-context"><a class="header" href="#security-context">Security Context</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secure-app
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: app
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+</code></pre>
+<h2 id="network-policies"><a class="header" href="#network-policies">Network Policies</a></h2>
+<h3 id="pod-to-pod-communication"><a class="header" href="#pod-to-pod-communication">Pod-to-Pod Communication</a></h3>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-policy
+  namespace: online-boutique
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: loadbalancer
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: cartservice
+      ports:
+        - protocol: TCP
+          port: 7070
+</code></pre>
+<h2 id="argocd-security"><a class="header" href="#argocd-security">ArgoCD Security</a></h2>
+<h3 id="rbac-configuration"><a class="header" href="#rbac-configuration">RBAC Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:admin, applications, *, */*, allow
+    p, role:admin, clusters, get, *, allow
+    p, role:admin, repositories, get, *, allow
+    g, admins, role:admin
+</code></pre>
+<h3 id="repository-access"><a class="header" href="#repository-access">Repository Access</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: repo-credentials
+  namespace: argocd
+type: Opaque
+stringData:
+  url: https://github.com/Lforlinux/k8s-platform-toolkit.git
+  username: git
+  password: &lt;token&gt;
+</code></pre>
+<h2 id="security-best-practices-3"><a class="header" href="#security-best-practices-3">Security Best Practices</a></h2>
+<h3 id="1-least-privilege"><a class="header" href="#1-least-privilege">1. <strong>Least Privilege</strong></a></h3>
+<ul>
+<li>Grant minimum required permissions</li>
+<li>Use service accounts with specific roles</li>
+<li>Limit IAM policy scope</li>
+<li>Regular permission audits</li>
+</ul>
+<h3 id="2-encryption"><a class="header" href="#2-encryption">2. <strong>Encryption</strong></a></h3>
+<ul>
+<li>Encrypt data at rest (EBS volumes)</li>
+<li>Encrypt data in transit (TLS/SSL)</li>
+<li>Use encrypted secrets</li>
+<li>Enable EKS encryption</li>
+</ul>
+<h3 id="3-image-security"><a class="header" href="#3-image-security">3. <strong>Image Security</strong></a></h3>
+<ul>
+<li>Scan container images for vulnerabilities</li>
+<li>Use trusted base images</li>
+<li>Keep images updated</li>
+<li>Implement image signing</li>
+</ul>
+<h3 id="4-network-segmentation"><a class="header" href="#4-network-segmentation">4. <strong>Network Segmentation</strong></a></h3>
+<ul>
+<li>Use network policies</li>
+<li>Isolate namespaces</li>
+<li>Limit external access</li>
+<li>Monitor network traffic</li>
+</ul>
+<h3 id="5-audit-logging"><a class="header" href="#5-audit-logging">5. <strong>Audit Logging</strong></a></h3>
+<ul>
+<li>Enable Kubernetes audit logs</li>
+<li>Log all API requests</li>
+<li>Monitor access patterns</li>
+<li>Alert on suspicious activity</li>
+</ul>
+<h3 id="6-compliance"><a class="header" href="#6-compliance">6. <strong>Compliance</strong></a></h3>
+<ul>
+<li>Follow CIS Kubernetes Benchmark</li>
+<li>Implement security policies</li>
+<li>Regular security assessments</li>
+<li>Document security procedures</li>
+</ul>
+<h2 id="security-checklist"><a class="header" href="#security-checklist">Security Checklist</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"/>
+VPC with private subnets configured</li>
+<li><input disabled="" type="checkbox"/>
+Security groups with restrictive rules</li>
+<li><input disabled="" type="checkbox"/>
+IAM roles with least privilege</li>
+<li><input disabled="" type="checkbox"/>
+RBAC policies configured</li>
+<li><input disabled="" type="checkbox"/>
+Network policies implemented</li>
+<li><input disabled="" type="checkbox"/>
+Secrets encrypted and secured</li>
+<li><input disabled="" type="checkbox"/>
+Pod security standards enforced</li>
+<li><input disabled="" type="checkbox"/>
+Image scanning enabled</li>
+<li><input disabled="" type="checkbox"/>
+Audit logging configured</li>
+<li><input disabled="" type="checkbox"/>
+Regular security updates applied</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-scaling--performance"><a class="header" href="#kubernetes-gitops-platform-scaling--performance">Kubernetes GitOps Platform Scaling &amp; Performance</a></h1>
+<h2 id="horizontal-pod-autoscaler-hpa"><a class="header" href="#horizontal-pod-autoscaler-hpa">Horizontal Pod Autoscaler (HPA)</a></h2>
+<h3 id="hpa-configuration-1"><a class="header" href="#hpa-configuration-1">HPA Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nodejs-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodejs-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 2
+          periodSeconds: 15
+      selectPolicy: Max
+</code></pre>
+<h3 id="custom-metrics-hpa"><a class="header" href="#custom-metrics-hpa">Custom Metrics HPA</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-hpa-custom
+spec:
+  metrics:
+    - type: Pods
+      pods:
+        metric:
+          name: http_requests_per_second
+        target:
+          type: AverageValue
+          averageValue: "100"
+</code></pre>
+<h2 id="cluster-autoscaling"><a class="header" href="#cluster-autoscaling">Cluster Autoscaling</a></h2>
+<h3 id="node-group-configuration"><a class="header" href="#node-group-configuration">Node Group Configuration</a></h3>
+<pre><code class="language-hcl">eks_managed_node_groups = {
+  application = {
+    name = "application-nodes"
+    instance_types = ["t3.small", "t3.medium"]
+    
+    min_size     = 1
+    max_size     = 10
+    desired_size = 3
+    
+    # Cluster Autoscaler labels
+    labels = {
+      "k8s.io/cluster-autoscaler/enabled" = "true"
+      "k8s.io/cluster-autoscaler/${local.cluster_name}" = "owned"
+    }
+    
+    # Taints and tolerations
+    taints = []
+  }
+}
+</code></pre>
+<h3 id="cluster-autoscaler-deployment"><a class="header" href="#cluster-autoscaler-deployment">Cluster Autoscaler Deployment</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.28.0
+        name: cluster-autoscaler
+        command:
+          - ./cluster-autoscaler
+          - --v=4
+          - --stderrthreshold=info
+          - --cloud-provider=aws
+          - --skip-nodes-with-local-storage=false
+          - --expander=least-waste
+          - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/${CLUSTER_NAME}
+        env:
+          - name: AWS_REGION
+            value: us-east-1
+          - name: CLUSTER_NAME
+            value: production-eks
+</code></pre>
+<h2 id="vertical-pod-autoscaler-vpa"><a class="header" href="#vertical-pod-autoscaler-vpa">Vertical Pod Autoscaler (VPA)</a></h2>
+<h3 id="vpa-configuration"><a class="header" href="#vpa-configuration">VPA Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: nodejs-app-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodejs-app
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: app
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        maxAllowed:
+          cpu: 2
+          memory: 2Gi
+        controlledResources: ["cpu", "memory"]
+</code></pre>
+<h2 id="performance-optimization-3"><a class="header" href="#performance-optimization-3">Performance Optimization</a></h2>
+<h3 id="resource-requests-and-limits"><a class="header" href="#resource-requests-and-limits">Resource Requests and Limits</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: optimized-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+</code></pre>
+<h3 id="node-affinity"><a class="header" href="#node-affinity">Node Affinity</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-with-affinity
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - application
+</code></pre>
+<h3 id="pod-disruption-budget"><a class="header" href="#pod-disruption-budget">Pod Disruption Budget</a></h3>
+<pre><code class="language-yaml">apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: app-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: nodejs-app
+</code></pre>
+<h2 id="load-testing"><a class="header" href="#load-testing">Load Testing</a></h2>
+<h3 id="locust-configuration"><a class="header" href="#locust-configuration">Locust Configuration</a></h3>
+<pre><code class="language-python">from locust import HttpUser, task, between
+
+class WebsiteUser(HttpUser):
+    wait_time = between(1, 3)
+    
+    @task(3)
+    def view_home(self):
+        self.client.get("/")
+    
+    @task(2)
+    def add_to_cart(self):
+        self.client.post("/cart/add", json={
+            "product_id": "test-product",
+            "quantity": 1
+        })
+    
+    @task(1)
+    def checkout(self):
+        self.client.post("/checkout", json={
+            "cart_id": "test-cart"
+        })
+</code></pre>
+<h3 id="running-load-tests"><a class="header" href="#running-load-tests">Running Load Tests</a></h3>
+<pre><code class="language-bash">export TARGET_HOST=&lt;your-alb-url&gt;
+
+docker run -i --rm \
+  -v $PWD/reports:/opt/reports \
+  -p 8089:8089 \
+  -e TARGET_HOST=$TARGET_HOST \
+  -e LOCUST_FILE=locustfile.py \
+  registry.opensource.zalan.do/tip/docker-locust
+</code></pre>
+<h2 id="monitoring-scaling-events"><a class="header" href="#monitoring-scaling-events">Monitoring Scaling Events</a></h2>
+<h3 id="hpa-metrics"><a class="header" href="#hpa-metrics">HPA Metrics</a></h3>
+<pre><code class="language-bash"># Watch HPA status
+kubectl get hpa -w
+
+# Describe HPA
+kubectl describe hpa nodejs-app-hpa
+
+# Check scaling events
+kubectl get events --field-selector involvedObject.name=nodejs-app-hpa
+</code></pre>
+<h3 id="cluster-autoscaler-logs"><a class="header" href="#cluster-autoscaler-logs">Cluster Autoscaler Logs</a></h3>
+<pre><code class="language-bash"># View autoscaler logs
+kubectl logs -n kube-system deployment/cluster-autoscaler
+
+# Check node scaling
+kubectl get nodes -w
+</code></pre>
+<h2 id="scaling-strategies"><a class="header" href="#scaling-strategies">Scaling Strategies</a></h2>
+<h3 id="1-predictive-scaling"><a class="header" href="#1-predictive-scaling">1. <strong>Predictive Scaling</strong></a></h3>
+<ul>
+<li>Analyze historical patterns</li>
+<li>Scale before expected load</li>
+<li>Use scheduled scaling</li>
+<li>Monitor trends</li>
+</ul>
+<h3 id="2-reactive-scaling"><a class="header" href="#2-reactive-scaling">2. <strong>Reactive Scaling</strong></a></h3>
+<ul>
+<li>HPA for automatic scaling</li>
+<li>Fast response to load changes</li>
+<li>Multiple metrics consideration</li>
+<li>Stabilization windows</li>
+</ul>
+<h3 id="3-cost-optimization"><a class="header" href="#3-cost-optimization">3. <strong>Cost Optimization</strong></a></h3>
+<ul>
+<li>Right-size resource requests</li>
+<li>Use spot instances for non-critical workloads</li>
+<li>Implement cluster autoscaling</li>
+<li>Monitor and optimize</li>
+</ul>
+<h3 id="4-performance-tuning"><a class="header" href="#4-performance-tuning">4. <strong>Performance Tuning</strong></a></h3>
+<ul>
+<li>Optimize application code</li>
+<li>Use connection pooling</li>
+<li>Implement caching</li>
+<li>Database query optimization</li>
+</ul>
+<h2 id="capacity-planning"><a class="header" href="#capacity-planning">Capacity Planning</a></h2>
+<h3 id="resource-calculation"><a class="header" href="#resource-calculation">Resource Calculation</a></h3>
+<pre><code>Total CPU Required = (Requests per Pod × CPU per Request) × Desired Pods
+Total Memory Required = (Memory per Pod) × Desired Pods
+
+Node Capacity = Node CPU / Pod CPU Request
+Max Pods per Node = min(Node Capacity, Pod Limit)
+</code></pre>
+<h3 id="scaling-triggers-1"><a class="header" href="#scaling-triggers-1">Scaling Triggers</a></h3>
+<ul>
+<li><strong>CPU Utilization</strong>: &gt; 70% average</li>
+<li><strong>Memory Utilization</strong>: &gt; 80% average</li>
+<li><strong>Request Rate</strong>: &gt; Threshold</li>
+<li><strong>Queue Depth</strong>: &gt; Limit</li>
+<li><strong>Custom Metrics</strong>: Business-specific</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-troubleshooting"><a class="header" href="#kubernetes-gitops-platform-troubleshooting">Kubernetes GitOps Platform Troubleshooting</a></h1>
+<h2 id="cluster-access-issues"><a class="header" href="#cluster-access-issues">Cluster Access Issues</a></h2>
+<h3 id="verify-aws-credentials"><a class="header" href="#verify-aws-credentials">Verify AWS Credentials</a></h3>
+<pre><code class="language-bash"># Check AWS identity
+aws sts get-caller-identity
+
+# Verify credentials
+aws configure list
+
+# Test EKS access
+aws eks list-clusters --region us-east-1
+</code></pre>
+<h3 id="update-kubeconfig"><a class="header" href="#update-kubeconfig">Update Kubeconfig</a></h3>
+<pre><code class="language-bash"># Get cluster details from Terraform
+terraform output cluster_name
+terraform output region
+
+# Update kubeconfig
+aws eks --region $(terraform output -raw region) \
+  update-kubeconfig --name $(terraform output -raw cluster_name)
+
+# Verify access
+kubectl get nodes
+</code></pre>
+<h3 id="common-issues-1"><a class="header" href="#common-issues-1">Common Issues</a></h3>
+<ul>
+<li><strong>Invalid credentials</strong>: Check AWS credentials configuration</li>
+<li><strong>Wrong region</strong>: Verify cluster region matches</li>
+<li><strong>Network issues</strong>: Check VPC and security groups</li>
+<li><strong>IAM permissions</strong>: Verify required IAM policies</li>
+</ul>
+<h2 id="argocd-issues"><a class="header" href="#argocd-issues">ArgoCD Issues</a></h2>
+<h3 id="argocd-not-accessible"><a class="header" href="#argocd-not-accessible">ArgoCD Not Accessible</a></h3>
+<pre><code class="language-bash"># Check ArgoCD server status
+kubectl get svc -n argocd argocd-server
+
+# Get LoadBalancer URL
+kubectl get svc -n argocd argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+
+# Check ArgoCD pods
+kubectl get pods -n argocd
+
+# View ArgoCD logs
+kubectl logs -n argocd deployment/argocd-server
+</code></pre>
+<h3 id="get-argocd-password"><a class="header" href="#get-argocd-password">Get ArgoCD Password</a></h3>
+<pre><code class="language-bash"># Get admin password
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+
+# Or use argocd CLI
+argocd admin initial-password -n argocd
+</code></pre>
+<h3 id="application-sync-issues"><a class="header" href="#application-sync-issues">Application Sync Issues</a></h3>
+<pre><code class="language-bash"># List all applications
+kubectl get applications -n argocd
+
+# Describe application
+kubectl describe application &lt;app-name&gt; -n argocd
+
+# Check sync status
+argocd app get &lt;app-name&gt;
+
+# Manual sync
+argocd app sync &lt;app-name&gt;
+
+# Force refresh
+argocd app get &lt;app-name&gt; --refresh
+</code></pre>
+<h3 id="common-argocd-issues"><a class="header" href="#common-argocd-issues">Common ArgoCD Issues</a></h3>
+<ul>
+<li><strong>Repository access</strong>: Check repository credentials</li>
+<li><strong>Sync failures</strong>: Review application manifests</li>
+<li><strong>Health status</strong>: Check pod and service status</li>
+<li><strong>Permission errors</strong>: Verify RBAC configuration</li>
+</ul>
+<h2 id="pod-issues"><a class="header" href="#pod-issues">Pod Issues</a></h2>
+<h3 id="pod-not-starting"><a class="header" href="#pod-not-starting">Pod Not Starting</a></h3>
+<pre><code class="language-bash"># Check pod status
+kubectl get pods -n &lt;namespace&gt;
+
+# Describe pod
+kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;
+
+# View pod logs
+kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt;
+
+# Check events
+kubectl get events -n &lt;namespace&gt; --sort-by='.lastTimestamp'
+</code></pre>
+<h3 id="common-pod-issues"><a class="header" href="#common-pod-issues">Common Pod Issues</a></h3>
+<ul>
+<li><strong>ImagePullBackOff</strong>: Check image name and registry access</li>
+<li><strong>CrashLoopBackOff</strong>: Check application logs and configuration</li>
+<li><strong>Pending</strong>: Check resource availability and node capacity</li>
+<li><strong>Error</strong>: Review container logs and health checks</li>
+</ul>
+<h3 id="resource-issues"><a class="header" href="#resource-issues">Resource Issues</a></h3>
+<pre><code class="language-bash"># Check node resources
+kubectl top nodes
+
+# Check pod resources
+kubectl top pods -n &lt;namespace&gt;
+
+# Check resource requests/limits
+kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt; | grep -A 5 "Limits\|Requests"
+</code></pre>
+<h2 id="service-issues"><a class="header" href="#service-issues">Service Issues</a></h2>
+<h3 id="service-not-accessible"><a class="header" href="#service-not-accessible">Service Not Accessible</a></h3>
+<pre><code class="language-bash"># Check service status
+kubectl get svc -n &lt;namespace&gt;
+
+# Describe service
+kubectl describe svc &lt;service-name&gt; -n &lt;namespace&gt;
+
+# Check endpoints
+kubectl get endpoints &lt;service-name&gt; -n &lt;namespace&gt;
+
+# Test service from pod
+kubectl run -it --rm debug --image=busybox --restart=Never -- \
+  wget -O- http://&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local
+</code></pre>
+<h3 id="loadbalancer-issues"><a class="header" href="#loadbalancer-issues">LoadBalancer Issues</a></h3>
+<pre><code class="language-bash"># Check LoadBalancer status
+kubectl get svc -n &lt;namespace&gt; &lt;service-name&gt;
+
+# Check AWS ELB
+aws elbv2 describe-load-balancers --region us-east-1
+
+# Check target health
+aws elbv2 describe-target-health \
+  --target-group-arn &lt;target-group-arn&gt; \
+  --region us-east-1
+</code></pre>
+<h2 id="network-issues"><a class="header" href="#network-issues">Network Issues</a></h2>
+<h3 id="dns-resolution"><a class="header" href="#dns-resolution">DNS Resolution</a></h3>
+<pre><code class="language-bash"># Test DNS from pod
+kubectl run -it --rm debug --image=busybox --restart=Never -- \
+  nslookup &lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local
+
+# Check CoreDNS
+kubectl get pods -n kube-system -l k8s-app=kube-dns
+
+# Check CoreDNS logs
+kubectl logs -n kube-system -l k8s-app=kube-dns
+</code></pre>
+<h3 id="network-policies-1"><a class="header" href="#network-policies-1">Network Policies</a></h3>
+<pre><code class="language-bash"># List network policies
+kubectl get networkpolicies -n &lt;namespace&gt;
+
+# Describe network policy
+kubectl describe networkpolicy &lt;policy-name&gt; -n &lt;namespace&gt;
+
+# Temporarily disable for testing
+kubectl delete networkpolicy &lt;policy-name&gt; -n &lt;namespace&gt;
+</code></pre>
+<h2 id="monitoring-issues"><a class="header" href="#monitoring-issues">Monitoring Issues</a></h2>
+<h3 id="prometheus-not-scraping"><a class="header" href="#prometheus-not-scraping">Prometheus Not Scraping</a></h3>
+<pre><code class="language-bash"># Check Prometheus targets
+# Access Prometheus UI and check /targets endpoint
+
+# Check service discovery
+kubectl get pods -n monitoring -l app=prometheus
+kubectl logs -n monitoring -l app=prometheus
+
+# Verify service annotations
+kubectl get pod &lt;pod-name&gt; -n &lt;namespace&gt; -o yaml | grep prometheus.io
+</code></pre>
+<h3 id="grafana-not-loading-dashboards"><a class="header" href="#grafana-not-loading-dashboards">Grafana Not Loading Dashboards</a></h3>
+<pre><code class="language-bash"># Check Grafana pods
+kubectl get pods -n monitoring -l app=grafana
+
+# Check Grafana logs
+kubectl logs -n monitoring -l app=grafana
+
+# Verify data source
+# Access Grafana UI and check data source configuration
+</code></pre>
+<h2 id="application-specific-issues"><a class="header" href="#application-specific-issues">Application-Specific Issues</a></h2>
+<h3 id="online-boutique-issues"><a class="header" href="#online-boutique-issues">Online Boutique Issues</a></h3>
+<pre><code class="language-bash"># Check all microservices
+kubectl get pods -n online-boutique
+
+# Check specific service
+kubectl logs -n online-boutique deployment/&lt;service-name&gt;
+
+# Test service connectivity
+kubectl exec -it -n online-boutique &lt;pod-name&gt; -- curl http://&lt;service-name&gt;:&lt;port&gt;
+</code></pre>
+<h3 id="sanity-test-issues"><a class="header" href="#sanity-test-issues">Sanity Test Issues</a></h3>
+<pre><code class="language-bash"># Check sanity test status
+kubectl get pods -n sanity-test
+
+# View test results
+kubectl logs -n sanity-test deployment/sanity-test
+
+# Access dashboard
+kubectl get svc -n sanity-test sanity-test-loadbalancer
+</code></pre>
+<h3 id="availability-test-issues"><a class="header" href="#availability-test-issues">Availability Test Issues</a></h3>
+<pre><code class="language-bash"># Check availability test
+kubectl get pods -n availability-test
+
+# View test logs
+kubectl logs -n availability-test deployment/availability-test
+
+# Check test results
+curl http://&lt;availability-test-lb-url&gt;/api/status
+</code></pre>
+<h2 id="terraform-issues"><a class="header" href="#terraform-issues">Terraform Issues</a></h2>
+<h3 id="state-lock"><a class="header" href="#state-lock">State Lock</a></h3>
+<pre><code class="language-bash"># Check for state lock
+terraform force-unlock &lt;lock-id&gt;
+
+# Or remove lock manually
+aws dynamodb delete-item \
+  --table-name terraform-state-lock \
+  --key '{"LockID":{"S":"&lt;lock-id&gt;"}}'
+</code></pre>
+<h3 id="state-issues"><a class="header" href="#state-issues">State Issues</a></h3>
+<pre><code class="language-bash"># Refresh state
+terraform refresh
+
+# Import existing resource
+terraform import &lt;resource&gt; &lt;resource-id&gt;
+
+# Validate configuration
+terraform validate
+
+# Format code
+terraform fmt
+</code></pre>
+<h3 id="deployment-failures"><a class="header" href="#deployment-failures">Deployment Failures</a></h3>
+<pre><code class="language-bash"># Check Terraform logs
+terraform apply -no-color 2&gt;&amp;1 | tee terraform.log
+
+# Review plan
+terraform plan -detailed-exitcode
+
+# Destroy and recreate
+terraform destroy
+terraform apply
+</code></pre>
+<h2 id="performance-issues-1"><a class="header" href="#performance-issues-1">Performance Issues</a></h2>
+<h3 id="slow-pod-startup"><a class="header" href="#slow-pod-startup">Slow Pod Startup</a></h3>
+<pre><code class="language-bash"># Check node resources
+kubectl describe node &lt;node-name&gt;
+
+# Check pod scheduling
+kubectl get events --field-selector involvedObject.name=&lt;pod-name&gt;
+
+# Check image pull time
+kubectl describe pod &lt;pod-name&gt; | grep -A 5 "Events"
+</code></pre>
+<h3 id="high-resource-usage"><a class="header" href="#high-resource-usage">High Resource Usage</a></h3>
+<pre><code class="language-bash"># Check resource usage
+kubectl top nodes
+kubectl top pods --all-namespaces
+
+# Check HPA status
+kubectl get hpa --all-namespaces
+
+# Review resource requests/limits
+kubectl describe pod &lt;pod-name&gt; | grep -A 5 "Limits\|Requests"
+</code></pre>
+<h2 id="debugging-commands-1"><a class="header" href="#debugging-commands-1">Debugging Commands</a></h2>
+<h3 id="general-debugging"><a class="header" href="#general-debugging">General Debugging</a></h3>
+<pre><code class="language-bash"># Get all resources in namespace
+kubectl get all -n &lt;namespace&gt;
+
+# Describe resource
+kubectl describe &lt;resource-type&gt; &lt;resource-name&gt; -n &lt;namespace&gt;
+
+# View logs
+kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt; --tail=100 -f
+
+# Execute command in pod
+kubectl exec -it &lt;pod-name&gt; -n &lt;namespace&gt; -- /bin/sh
+
+# Port forward for local access
+kubectl port-forward -n &lt;namespace&gt; &lt;pod-name&gt; 8080:8080
+</code></pre>
+<h3 id="cluster-debugging"><a class="header" href="#cluster-debugging">Cluster Debugging</a></h3>
+<pre><code class="language-bash"># Check cluster status
+kubectl cluster-info
+
+# Check API server
+kubectl get --raw /healthz
+
+# Check node status
+kubectl get nodes -o wide
+
+# Check system pods
+kubectl get pods -n kube-system
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-technical-qa"><a class="header" href="#kubernetes-gitops-platform-technical-qa">Kubernetes GitOps Platform Technical Q&amp;A</a></h1>
+<h2 id="architecture--design-questions-3"><a class="header" href="#architecture--design-questions-3">Architecture &amp; Design Questions</a></h2>
+<h3 id="q1-walk-me-through-the-architecture-of-your-kubernetes-gitops-platform"><a class="header" href="#q1-walk-me-through-the-architecture-of-your-kubernetes-gitops-platform">Q1: "Walk me through the architecture of your Kubernetes GitOps Platform."</a></h3>
+<p><strong>Answer:</strong>
+"The platform uses a two-repository architecture:</p>
+<ul>
+<li><strong>k8s-infrastructure-as-code</strong>: Terraform provisions AWS EKS cluster, VPC, networking, and installs ArgoCD</li>
+<li><strong>k8s-platform-toolkit</strong>: Contains all platform applications (monitoring, logging, testing) deployed via GitOps</li>
+</ul>
+<p>The workflow:</p>
+<ol>
+<li>Terraform creates EKS cluster and installs ArgoCD</li>
+<li>ArgoCD uses app-of-apps pattern to reference platform toolkit repository</li>
+<li>All platform applications deploy automatically via GitOps</li>
+<li>Changes in Git automatically sync to cluster with zero downtime</li>
+</ol>
+<p>Key components:</p>
+<ul>
+<li><strong>Infrastructure</strong>: AWS EKS, VPC, IAM, Security Groups</li>
+<li><strong>GitOps</strong>: ArgoCD with app-of-apps pattern</li>
+<li><strong>Monitoring</strong>: Prometheus, Grafana, kube-state-metrics, node-exporter</li>
+<li><strong>Logging</strong>: Loki and Promtail</li>
+<li><strong>Testing</strong>: Sanity Test and Availability Test</li>
+<li><strong>Demo</strong>: Online Boutique microservices"</li>
+</ul>
+<h3 id="q2-why-did-you-choose-a-two-repository-architecture"><a class="header" href="#q2-why-did-you-choose-a-two-repository-architecture">Q2: "Why did you choose a two-repository architecture?"</a></h3>
+<p><strong>Answer:</strong>
+"Two-repository architecture provides:</p>
+<ol>
+<li><strong>Separation of Concerns</strong>: Infrastructure vs. applications</li>
+<li><strong>Independent Lifecycles</strong>: Infrastructure changes don't affect applications</li>
+<li><strong>Team Collaboration</strong>: Different teams can work on different repos</li>
+<li><strong>Security</strong>: Different access controls per repository</li>
+<li><strong>Reusability</strong>: Platform toolkit can deploy to multiple clusters</li>
+<li><strong>GitOps Best Practices</strong>: Clear separation of infrastructure and application code</li>
+</ol>
+<p>This pattern is common in enterprise GitOps implementations."</p>
+<h3 id="q3-explain-the-app-of-apps-pattern"><a class="header" href="#q3-explain-the-app-of-apps-pattern">Q3: "Explain the app-of-apps pattern."</a></h3>
+<p><strong>Answer:</strong>
+"App-of-apps is an ArgoCD pattern for managing multiple applications:</p>
+<ul>
+<li><strong>Root Application</strong>: Manages child applications</li>
+<li><strong>Child Applications</strong>: Individual application definitions</li>
+<li><strong>Hierarchical Management</strong>: Single point of control</li>
+<li><strong>Automated Sync</strong>: All apps sync from Git automatically</li>
+<li><strong>Sync Waves</strong>: Ordered deployment using annotations</li>
+</ul>
+<p>Benefits:</p>
+<ul>
+<li>Centralized application management</li>
+<li>Consistent deployment patterns</li>
+<li>Easy to add/remove applications</li>
+<li>Automated reconciliation"</li>
+</ul>
+<h2 id="infrastructure-questions-1"><a class="header" href="#infrastructure-questions-1">Infrastructure Questions</a></h2>
+<h3 id="q4-how-does-terraform-provision-the-eks-cluster"><a class="header" href="#q4-how-does-terraform-provision-the-eks-cluster">Q4: "How does Terraform provision the EKS cluster?"</a></h3>
+<p><strong>Answer:</strong>
+"Terraform uses the official EKS module:</p>
+<ol>
+<li><strong>VPC Module</strong>: Creates networking infrastructure</li>
+<li><strong>EKS Module</strong>: Provisions managed control plane</li>
+<li><strong>Node Groups</strong>: Configures managed worker nodes</li>
+<li><strong>IAM Roles</strong>: Sets up service accounts and permissions</li>
+<li><strong>Helm Provider</strong>: Installs ArgoCD via Helm</li>
+<li><strong>Kubernetes Provider</strong>: Configures app-of-apps</li>
+</ol>
+<p>The entire infrastructure is defined as code with:</p>
+<ul>
+<li>Multi-AZ deployment for high availability</li>
+<li>Auto-scaling node groups</li>
+<li>Security groups and network policies</li>
+<li>IAM roles with least privilege"</li>
+</ul>
+<h3 id="q5-how-do-you-ensure-high-availability"><a class="header" href="#q5-how-do-you-ensure-high-availability">Q5: "How do you ensure high availability?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple HA strategies:</p>
+<ol>
+<li><strong>Multi-AZ Deployment</strong>: Control plane and nodes across zones</li>
+<li><strong>Auto Scaling</strong>: Worker nodes and pods scale automatically</li>
+<li><strong>Replica Sets</strong>: Multiple pod instances per service</li>
+<li><strong>HPA</strong>: Horizontal Pod Autoscaler for pod scaling</li>
+<li><strong>Cluster Autoscaler</strong>: Node-level auto-scaling</li>
+<li><strong>Load Balancing</strong>: AWS ALB for external access</li>
+<li><strong>Health Checks</strong>: Readiness and liveness probes</li>
+</ol>
+<p>This ensures the platform can handle failures and scale with demand."</p>
+<h2 id="gitops-questions"><a class="header" href="#gitops-questions">GitOps Questions</a></h2>
+<h3 id="q6-how-does-argocd-automatically-deploy-applications"><a class="header" href="#q6-how-does-argocd-automatically-deploy-applications">Q6: "How does ArgoCD automatically deploy applications?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD GitOps workflow:</p>
+<ol>
+<li><strong>Repository Monitoring</strong>: ArgoCD watches Git repositories</li>
+<li><strong>Change Detection</strong>: Detects commits and changes</li>
+<li><strong>Sync Policy</strong>: Automated sync with self-healing enabled</li>
+<li><strong>Application Deployment</strong>: Applies manifests to cluster</li>
+<li><strong>Health Monitoring</strong>: Tracks application health status</li>
+<li><strong>Reconciliation</strong>: Continuously ensures desired state</li>
+</ol>
+<p>Configuration:</p>
+<ul>
+<li>Auto-sync enabled for most applications</li>
+<li>Sync waves for ordered deployment</li>
+<li>Self-healing for automatic recovery</li>
+<li>Pruning for resource cleanup"</li>
+</ul>
+<h3 id="q7-how-do-you-handle-application-updates"><a class="header" href="#q7-how-do-you-handle-application-updates">Q7: "How do you handle application updates?"</a></h3>
+<p><strong>Answer:</strong>
+"Update process:</p>
+<ol>
+<li><strong>Make Changes</strong>: Update manifests in Git repository</li>
+<li><strong>Commit and Push</strong>: Changes pushed to main branch</li>
+<li><strong>ArgoCD Detection</strong>: ArgoCD detects changes automatically</li>
+<li><strong>Sync</strong>: Applications sync with rolling updates</li>
+<li><strong>Verification</strong>: Health checks validate deployment</li>
+<li><strong>Rollback</strong>: Git revert for quick rollback if needed</li>
+</ol>
+<p>Zero-downtime through:</p>
+<ul>
+<li>Kubernetes rolling updates</li>
+<li>Readiness probes</li>
+<li>Multiple replicas</li>
+<li>Health check validation"</li>
+</ul>
+<h2 id="monitoring-questions-2"><a class="header" href="#monitoring-questions-2">Monitoring Questions</a></h2>
+<h3 id="q8-how-do-you-monitor-the-platform"><a class="header" href="#q8-how-do-you-monitor-the-platform">Q8: "How do you monitor the platform?"</a></h3>
+<p><strong>Answer:</strong>
+"Comprehensive monitoring stack:</p>
+<ol>
+<li><strong>Prometheus</strong>: Metrics collection from all services</li>
+<li><strong>Grafana</strong>: Visualization with pre-built dashboards</li>
+<li><strong>kube-state-metrics</strong>: Kubernetes object metrics</li>
+<li><strong>node-exporter</strong>: Node-level system metrics</li>
+<li><strong>Loki</strong>: Centralized log aggregation</li>
+<li><strong>Promtail</strong>: Log collection agent</li>
+</ol>
+<p>Key metrics:</p>
+<ul>
+<li>Application performance (request rate, latency, errors)</li>
+<li>Infrastructure metrics (CPU, memory, disk)</li>
+<li>Kubernetes metrics (pod status, deployments)</li>
+<li>Business metrics (custom application metrics)"</li>
+</ul>
+<h3 id="q9-how-do-you-test-application-availability"><a class="header" href="#q9-how-do-you-test-application-availability">Q9: "How do you test application availability?"</a></h3>
+<p><strong>Answer:</strong>
+"Two testing approaches:</p>
+<ol>
+<li>
+<p><strong>Sanity Test</strong>: Health checks for all microservices every 60 seconds</p>
+<ul>
+<li>Tests individual service health</li>
+<li>Tracks response times</li>
+<li>Provides web dashboard</li>
+</ul>
+</li>
+<li>
+<p><strong>Availability Test</strong>: SRE-style testing every 5 minutes</p>
+<ul>
+<li>Simulates real user workflows</li>
+<li>Tests complete user journeys</li>
+<li>Calculates uptime percentage and SRE metrics</li>
+<li>Provides Jenkins-like dashboard</li>
+</ul>
+</li>
+</ol>
+<p>Both tests run automatically and provide real-time status."</p>
+<h2 id="scaling-questions"><a class="header" href="#scaling-questions">Scaling Questions</a></h2>
+<h3 id="q10-how-does-auto-scaling-work"><a class="header" href="#q10-how-does-auto-scaling-work">Q10: "How does auto-scaling work?"</a></h3>
+<p><strong>Answer:</strong>
+"Multi-level auto-scaling:</p>
+<ol>
+<li>
+<p><strong>HPA</strong>: Horizontal Pod Autoscaler scales pods based on CPU/memory</p>
+<ul>
+<li>Monitors pod resource usage</li>
+<li>Scales between min/max replicas</li>
+<li>Fast response to load changes</li>
+</ul>
+</li>
+<li>
+<p><strong>Cluster Autoscaler</strong>: Scales worker nodes</p>
+<ul>
+<li>Monitors unschedulable pods</li>
+<li>Adds nodes when needed</li>
+<li>Removes nodes when underutilized</li>
+</ul>
+</li>
+<li>
+<p><strong>VPA</strong>: Vertical Pod Autoscaler (optional)</p>
+<ul>
+<li>Adjusts resource requests/limits</li>
+<li>Based on historical usage</li>
+<li>Optimizes resource allocation</li>
+</ul>
+</li>
+</ol>
+<p>This ensures the platform scales automatically with demand."</p>
+<h2 id="security-questions-1"><a class="header" href="#security-questions-1">Security Questions</a></h2>
+<h3 id="q11-how-do-you-secure-the-platform"><a class="header" href="#q11-how-do-you-secure-the-platform">Q11: "How do you secure the platform?"</a></h3>
+<p><strong>Answer:</strong>
+"Multi-layer security:</p>
+<ol>
+<li><strong>Network</strong>: Private subnets, security groups, network policies</li>
+<li><strong>IAM</strong>: Least privilege roles, service accounts, RBAC</li>
+<li><strong>Secrets</strong>: Kubernetes secrets, AWS Secrets Manager integration</li>
+<li><strong>Pod Security</strong>: Security contexts, pod security standards</li>
+<li><strong>Encryption</strong>: Data at rest and in transit</li>
+<li><strong>Audit</strong>: Kubernetes audit logging, VPC flow logs</li>
+</ol>
+<p>Security best practices:</p>
+<ul>
+<li>Defense in depth</li>
+<li>Regular security updates</li>
+<li>Image vulnerability scanning</li>
+<li>Compliance with CIS benchmarks"</li>
+</ul>
+<h2 id="advanced-questions-3"><a class="header" href="#advanced-questions-3">Advanced Questions</a></h2>
+<h3 id="q12-how-would-you-scale-this-to-production"><a class="header" href="#q12-how-would-you-scale-this-to-production">Q12: "How would you scale this to production?"</a></h3>
+<p><strong>Answer:</strong>
+"Production scaling strategies:</p>
+<ol>
+<li><strong>Multi-Cluster</strong>: Deploy to multiple regions/clusters</li>
+<li><strong>Service Mesh</strong>: Istio or Linkerd for advanced traffic management</li>
+<li><strong>CI/CD Integration</strong>: Automated testing and deployment pipelines</li>
+<li><strong>Disaster Recovery</strong>: Backup and restore procedures</li>
+<li><strong>Advanced Monitoring</strong>: Custom metrics and alerting</li>
+<li><strong>Cost Optimization</strong>: Spot instances, reserved capacity</li>
+<li><strong>Compliance</strong>: Enhanced security and audit logging</li>
+</ol>
+<p>The architecture supports horizontal scaling and can be extended for enterprise production use."</p>
 
                     </main>
 

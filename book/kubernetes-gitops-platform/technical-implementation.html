@@ -1,0 +1,605 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Technical Implementation - Projects Portfolio</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="A comprehensive portfolio showcasing DevOps, SRE, and Cloud engineering projects">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Projects Portfolio</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="kubernetes-gitops-platform-technical-implementation"><a class="header" href="#kubernetes-gitops-platform-technical-implementation">Kubernetes GitOps Platform Technical Implementation</a></h1>
+<h2 id="infrastructure-as-code-terraform"><a class="header" href="#infrastructure-as-code-terraform">Infrastructure as Code (Terraform)</a></h2>
+<h3 id="vpc-configuration"><a class="header" href="#vpc-configuration">VPC Configuration</a></h3>
+<pre><code class="language-hcl">module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~&gt; 5.0"
+
+  name = "eks-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+  enable_vpn_gateway = false
+
+  tags = {
+    Terraform   = "true"
+    Environment = "production"
+  }
+}
+</code></pre>
+<h3 id="eks-cluster-configuration"><a class="header" href="#eks-cluster-configuration">EKS Cluster Configuration</a></h3>
+<pre><code class="language-hcl">module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~&gt; 19.0"
+
+  cluster_name    = "production-eks"
+  cluster_version = "1.28"
+
+  vpc_id                         = module.vpc.vpc_id
+  subnet_ids                     = module.vpc.private_subnets
+  cluster_endpoint_public_access = true
+
+  # Managed Node Groups
+  eks_managed_node_groups = {
+    application = {
+      name = "application-nodes"
+      instance_types = ["t3.small"]
+      min_size     = 1
+      max_size     = 5
+      desired_size = 3
+    }
+    
+    platform = {
+      name = "platform-nodes"
+      instance_types = ["t3.medium"]
+      min_size     = 1
+      max_size     = 5
+      desired_size = 2
+    }
+  }
+}
+</code></pre>
+<h3 id="argocd-installation"><a class="header" href="#argocd-installation">ArgoCD Installation</a></h3>
+<pre><code class="language-hcl">resource "helm_release" "argocd" {
+  name       = "argocd"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  version    = "5.51.6"
+  namespace  = "argocd"
+
+  values = [
+    file("${path.module}/argocd/values.yaml")
+  ]
+
+  depends_on = [module.eks]
+}
+</code></pre>
+<h2 id="gitops-implementation"><a class="header" href="#gitops-implementation">GitOps Implementation</a></h2>
+<h3 id="app-of-apps-pattern"><a class="header" href="#app-of-apps-pattern">App-of-Apps Pattern</a></h3>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-platform-toolkit
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    targetRevision: HEAD
+    path: argocd/apps
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+</code></pre>
+<h3 id="sync-waves-configuration"><a class="header" href="#sync-waves-configuration">Sync Waves Configuration</a></h3>
+<pre><code class="language-yaml"># Wave 1: Testing Infrastructure
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sanity-test
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+---
+# Wave 2-4: Monitoring Stack
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-stack
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+---
+# Wave 5: Logging (depends on Loki)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: promtail
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+</code></pre>
+<h2 id="monitoring-stack-implementation"><a class="header" href="#monitoring-stack-implementation">Monitoring Stack Implementation</a></h2>
+<h3 id="prometheus-configuration"><a class="header" href="#prometheus-configuration">Prometheus Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+    
+    scrape_configs:
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+      
+      - job_name: 'kubernetes-nodes'
+        kubernetes_sd_configs:
+          - role: node
+      
+      - job_name: 'kube-state-metrics'
+        static_configs:
+          - targets: ['kube-state-metrics:8080']
+      
+      - job_name: 'node-exporter'
+        static_configs:
+          - targets: ['node-exporter:9100']
+</code></pre>
+<h3 id="grafana-dashboard-configuration"><a class="header" href="#grafana-dashboard-configuration">Grafana Dashboard Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: monitoring
+data:
+  online-boutique.json: |
+    {
+      "dashboard": {
+        "title": "Online Boutique Metrics",
+        "panels": [
+          {
+            "title": "Request Rate",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total[5m])"
+              }
+            ]
+          }
+        ]
+      }
+    }
+</code></pre>
+<h2 id="logging-stack-implementation"><a class="header" href="#logging-stack-implementation">Logging Stack Implementation</a></h2>
+<h3 id="loki-configuration"><a class="header" href="#loki-configuration">Loki Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-config
+  namespace: monitoring
+data:
+  loki.yaml: |
+    auth_enabled: false
+    server:
+      http_listen_port: 3100
+    ingester:
+      lifecycler:
+        address: 127.0.0.1
+        ring:
+          kvstore:
+            store: inmemory
+          replication_factor: 1
+    schema_config:
+      configs:
+        - from: 2020-10-24
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
+</code></pre>
+<h3 id="promtail-configuration"><a class="header" href="#promtail-configuration">Promtail Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-config
+  namespace: monitoring
+data:
+  promtail.yml: |
+    server:
+      http_listen_port: 3101
+    positions:
+      filename: /tmp/positions.yaml
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+    scrape_configs:
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: __host__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+</code></pre>
+<h2 id="testing-applications"><a class="header" href="#testing-applications">Testing Applications</a></h2>
+<h3 id="availability-test-implementation"><a class="header" href="#availability-test-implementation">Availability Test Implementation</a></h3>
+<pre><code class="language-python">import requests
+import time
+from datetime import datetime
+
+class AvailabilityTest:
+    def __init__(self, frontend_url, cart_url):
+        self.frontend_url = frontend_url
+        self.cart_url = cart_url
+        self.test_results = []
+    
+    def test_cart_workflow(self):
+        """Test complete cart workflow"""
+        try:
+            # Test 1: Frontend accessibility
+            response = requests.get(f"{self.frontend_url}/")
+            assert response.status_code == 200
+            
+            # Test 2: Add to cart
+            add_response = requests.post(
+                f"{self.cart_url}/add",
+                json={"product_id": "test-product", "quantity": 1}
+            )
+            assert add_response.status_code == 200
+            
+            # Test 3: Remove from cart
+            remove_response = requests.post(
+                f"{self.cart_url}/remove",
+                json={"product_id": "test-product"}
+            )
+            assert remove_response.status_code == 200
+            
+            return {"status": "pass", "timestamp": datetime.now()}
+        except Exception as e:
+            return {"status": "fail", "error": str(e), "timestamp": datetime.now()}
+</code></pre>
+<h3 id="sanity-test-implementation"><a class="header" href="#sanity-test-implementation">Sanity Test Implementation</a></h3>
+<pre><code class="language-python">class SanityTest:
+    def __init__(self, services):
+        self.services = services
+        self.results = {}
+    
+    def test_all_services(self):
+        """Test health of all microservices"""
+        for service in self.services:
+            try:
+                response = requests.get(f"{service}/health", timeout=5)
+                self.results[service] = {
+                    "status": "healthy" if response.status_code == 200 else "unhealthy",
+                    "response_time": response.elapsed.total_seconds()
+                }
+            except Exception as e:
+                self.results[service] = {
+                    "status": "error",
+                    "error": str(e)
+                }
+        return self.results
+</code></pre>
+<h2 id="automation-with-makefile"><a class="header" href="#automation-with-makefile">Automation with Makefile</a></h2>
+<h3 id="deployment-automation"><a class="header" href="#deployment-automation">Deployment Automation</a></h3>
+<pre><code class="language-makefile">DOCKER_IMAGE ?= hashicorp/terraform:1.6
+EXEC = docker run --rm -i \
+    -e AWS_PROFILE=$(AWS_PROFILE) \
+    -v $(HOME)/.aws:/root/.aws \
+    -v $(PWD):/data \
+    -w /data \
+    $(DOCKER_IMAGE)
+
+.PHONY: deploy
+deploy:
+    @$(EXEC) init -no-color
+    @$(EXEC) apply -no-color
+    @echo "=== ArgoCD Access Information ==="
+    @echo "URL: $$($(EXEC) output -raw argocd_server_url)"
+    @echo "Username: $$($(EXEC) output -raw argocd_username)"
+    @echo "Password: $$($(EXEC) output -raw argocd_password)"
+</code></pre>
+<h2 id="horizontal-pod-autoscaler"><a class="header" href="#horizontal-pod-autoscaler">Horizontal Pod Autoscaler</a></h2>
+<h3 id="hpa-configuration"><a class="header" href="#hpa-configuration">HPA Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nodejs-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodejs-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+</code></pre>
+<h2 id="helm-chart-structure"><a class="header" href="#helm-chart-structure">Helm Chart Structure</a></h2>
+<h3 id="nodejs-application-chart"><a class="header" href="#nodejs-application-chart">NodeJS Application Chart</a></h3>
+<pre><code class="language-yaml"># values.yaml
+replicaCount: 2
+image:
+  repository: nodejs-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../kubernetes-gitops-platform/architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../kubernetes-gitops-platform/deployment.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../kubernetes-gitops-platform/architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../kubernetes-gitops-platform/deployment.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

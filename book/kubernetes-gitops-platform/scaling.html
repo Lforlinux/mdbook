@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Technical Q&amp;A - Projects Portfolio</title>
+        <title>Scaling &amp; Performance - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -178,166 +178,294 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="opensource-llm-rag-stack-technical-qa"><a class="header" href="#opensource-llm-rag-stack-technical-qa">Opensource-LLM-RAG-Stack Technical Q&amp;A</a></h1>
-<h2 id="architecture--design-questions"><a class="header" href="#architecture--design-questions">Architecture &amp; Design Questions</a></h2>
-<h3 id="q1-walk-me-through-the-rag-stack-architecture"><a class="header" href="#q1-walk-me-through-the-rag-stack-architecture">Q1: "Walk me through the RAG stack architecture."</a></h3>
-<p><strong>Answer:</strong>
-"The RAG stack is a containerized microservices architecture:</p>
+                        <h1 id="kubernetes-gitops-platform-scaling--performance"><a class="header" href="#kubernetes-gitops-platform-scaling--performance">Kubernetes GitOps Platform Scaling &amp; Performance</a></h1>
+<h2 id="horizontal-pod-autoscaler-hpa"><a class="header" href="#horizontal-pod-autoscaler-hpa">Horizontal Pod Autoscaler (HPA)</a></h2>
+<h3 id="hpa-configuration"><a class="header" href="#hpa-configuration">HPA Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nodejs-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodejs-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 2
+          periodSeconds: 15
+      selectPolicy: Max
+</code></pre>
+<h3 id="custom-metrics-hpa"><a class="header" href="#custom-metrics-hpa">Custom Metrics HPA</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-hpa-custom
+spec:
+  metrics:
+    - type: Pods
+      pods:
+        metric:
+          name: http_requests_per_second
+        target:
+          type: AverageValue
+          averageValue: "100"
+</code></pre>
+<h2 id="cluster-autoscaling"><a class="header" href="#cluster-autoscaling">Cluster Autoscaling</a></h2>
+<h3 id="node-group-configuration"><a class="header" href="#node-group-configuration">Node Group Configuration</a></h3>
+<pre><code class="language-hcl">eks_managed_node_groups = {
+  application = {
+    name = "application-nodes"
+    instance_types = ["t3.small", "t3.medium"]
+    
+    min_size     = 1
+    max_size     = 10
+    desired_size = 3
+    
+    # Cluster Autoscaler labels
+    labels = {
+      "k8s.io/cluster-autoscaler/enabled" = "true"
+      "k8s.io/cluster-autoscaler/${local.cluster_name}" = "owned"
+    }
+    
+    # Taints and tolerations
+    taints = []
+  }
+}
+</code></pre>
+<h3 id="cluster-autoscaler-deployment"><a class="header" href="#cluster-autoscaler-deployment">Cluster Autoscaler Deployment</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.28.0
+        name: cluster-autoscaler
+        command:
+          - ./cluster-autoscaler
+          - --v=4
+          - --stderrthreshold=info
+          - --cloud-provider=aws
+          - --skip-nodes-with-local-storage=false
+          - --expander=least-waste
+          - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/${CLUSTER_NAME}
+        env:
+          - name: AWS_REGION
+            value: us-east-1
+          - name: CLUSTER_NAME
+            value: production-eks
+</code></pre>
+<h2 id="vertical-pod-autoscaler-vpa"><a class="header" href="#vertical-pod-autoscaler-vpa">Vertical Pod Autoscaler (VPA)</a></h2>
+<h3 id="vpa-configuration"><a class="header" href="#vpa-configuration">VPA Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: nodejs-app-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nodejs-app
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: app
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        maxAllowed:
+          cpu: 2
+          memory: 2Gi
+        controlledResources: ["cpu", "memory"]
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="resource-requests-and-limits"><a class="header" href="#resource-requests-and-limits">Resource Requests and Limits</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: optimized-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+</code></pre>
+<h3 id="node-affinity"><a class="header" href="#node-affinity">Node Affinity</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-with-affinity
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - application
+</code></pre>
+<h3 id="pod-disruption-budget"><a class="header" href="#pod-disruption-budget">Pod Disruption Budget</a></h3>
+<pre><code class="language-yaml">apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: app-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: nodejs-app
+</code></pre>
+<h2 id="load-testing"><a class="header" href="#load-testing">Load Testing</a></h2>
+<h3 id="locust-configuration"><a class="header" href="#locust-configuration">Locust Configuration</a></h3>
+<pre><code class="language-python">from locust import HttpUser, task, between
+
+class WebsiteUser(HttpUser):
+    wait_time = between(1, 3)
+    
+    @task(3)
+    def view_home(self):
+        self.client.get("/")
+    
+    @task(2)
+    def add_to_cart(self):
+        self.client.post("/cart/add", json={
+            "product_id": "test-product",
+            "quantity": 1
+        })
+    
+    @task(1)
+    def checkout(self):
+        self.client.post("/checkout", json={
+            "cart_id": "test-cart"
+        })
+</code></pre>
+<h3 id="running-load-tests"><a class="header" href="#running-load-tests">Running Load Tests</a></h3>
+<pre><code class="language-bash">export TARGET_HOST=&lt;your-alb-url&gt;
+
+docker run -i --rm \
+  -v $PWD/reports:/opt/reports \
+  -p 8089:8089 \
+  -e TARGET_HOST=$TARGET_HOST \
+  -e LOCUST_FILE=locustfile.py \
+  registry.opensource.zalan.do/tip/docker-locust
+</code></pre>
+<h2 id="monitoring-scaling-events"><a class="header" href="#monitoring-scaling-events">Monitoring Scaling Events</a></h2>
+<h3 id="hpa-metrics"><a class="header" href="#hpa-metrics">HPA Metrics</a></h3>
+<pre><code class="language-bash"># Watch HPA status
+kubectl get hpa -w
+
+# Describe HPA
+kubectl describe hpa nodejs-app-hpa
+
+# Check scaling events
+kubectl get events --field-selector involvedObject.name=nodejs-app-hpa
+</code></pre>
+<h3 id="cluster-autoscaler-logs"><a class="header" href="#cluster-autoscaler-logs">Cluster Autoscaler Logs</a></h3>
+<pre><code class="language-bash"># View autoscaler logs
+kubectl logs -n kube-system deployment/cluster-autoscaler
+
+# Check node scaling
+kubectl get nodes -w
+</code></pre>
+<h2 id="scaling-strategies"><a class="header" href="#scaling-strategies">Scaling Strategies</a></h2>
+<h3 id="1-predictive-scaling"><a class="header" href="#1-predictive-scaling">1. <strong>Predictive Scaling</strong></a></h3>
 <ul>
-<li><strong>Open WebUI</strong>: User interface for chat and document management</li>
-<li><strong>Ollama</strong>: LLM inference engine for text generation</li>
-<li><strong>Chroma</strong>: Vector database for semantic search</li>
-<li><strong>PostgreSQL</strong>: Relational database for chat history</li>
-<li><strong>Prometheus</strong>: Metrics collection</li>
-<li><strong>Grafana</strong>: Visualization and dashboards</li>
+<li>Analyze historical patterns</li>
+<li>Scale before expected load</li>
+<li>Use scheduled scaling</li>
+<li>Monitor trends</li>
 </ul>
-<p>The architecture enables retrieval-augmented generation by combining vector search with LLM inference."</p>
-<h3 id="q2-why-did-you-choose-chroma-over-other-vector-databases"><a class="header" href="#q2-why-did-you-choose-chroma-over-other-vector-databases">Q2: "Why did you choose Chroma over other vector databases?"</a></h3>
-<p><strong>Answer:</strong>
-"Chroma was chosen for several reasons:</p>
-<ol>
-<li><strong>Simplicity</strong>: Easy to set up and use</li>
-<li><strong>Open Source</strong>: Free and community-driven</li>
-<li><strong>Docker Support</strong>: Containerized deployment</li>
-<li><strong>Performance</strong>: Efficient for small to medium datasets</li>
-<li><strong>Integration</strong>: Works well with Python ecosystem</li>
-</ol>
-<p>For this use case, Chroma provides the right balance of features and simplicity."</p>
-<h3 id="q3-how-does-the-rag-pipeline-work"><a class="header" href="#q3-how-does-the-rag-pipeline-work">Q3: "How does the RAG pipeline work?"</a></h3>
-<p><strong>Answer:</strong>
-"RAG pipeline steps:</p>
-<ol>
-<li><strong>Document Ingestion</strong>: Upload and chunk documents</li>
-<li><strong>Embedding Generation</strong>: Create vector embeddings</li>
-<li><strong>Vector Storage</strong>: Store in Chroma database</li>
-<li><strong>Query Processing</strong>: Convert user query to embedding</li>
-<li><strong>Retrieval</strong>: Find relevant document chunks</li>
-<li><strong>Context Augmentation</strong>: Add chunks to prompt</li>
-<li><strong>Generation</strong>: LLM generates response with context</li>
-</ol>
-<p>This enables the LLM to answer questions based on uploaded documents."</p>
-<h2 id="technical-implementation-questions"><a class="header" href="#technical-implementation-questions">Technical Implementation Questions</a></h2>
-<h3 id="q4-how-do-you-handle-document-chunking"><a class="header" href="#q4-how-do-you-handle-document-chunking">Q4: "How do you handle document chunking?"</a></h3>
-<p><strong>Answer:</strong>
-"Document chunking strategy:</p>
-<ol>
-<li><strong>Size</strong>: 500-1000 tokens per chunk</li>
-<li><strong>Overlap</strong>: 100-200 tokens between chunks</li>
-<li><strong>Boundaries</strong>: Preserve sentence/paragraph boundaries</li>
-<li><strong>Metadata</strong>: Store source and position metadata</li>
-<li><strong>Indexing</strong>: Create full-text search indexes</li>
-</ol>
-<p>This ensures relevant context is retrieved while maintaining coherence."</p>
-<h3 id="q5-how-would-you-scale-this-to-handle-more-documents"><a class="header" href="#q5-how-would-you-scale-this-to-handle-more-documents">Q5: "How would you scale this to handle more documents?"</a></h3>
-<p><strong>Answer:</strong>
-"Scaling strategies:</p>
-<ol>
-<li><strong>Horizontal Scaling</strong>: Multiple Chroma instances</li>
-<li><strong>Sharding</strong>: Partition documents by category</li>
-<li><strong>Caching</strong>: Cache frequent queries</li>
-<li><strong>Indexing</strong>: Optimize vector indexes</li>
-<li><strong>Load Balancing</strong>: Distribute queries across instances</li>
-<li><strong>Database Optimization</strong>: PostgreSQL read replicas</li>
-</ol>
-<p>The architecture supports horizontal scaling for increased capacity."</p>
-<h2 id="performance-questions"><a class="header" href="#performance-questions">Performance Questions</a></h2>
-<h3 id="q6-how-do-you-optimize-rag-performance"><a class="header" href="#q6-how-do-you-optimize-rag-performance">Q6: "How do you optimize RAG performance?"</a></h3>
-<p><strong>Answer:</strong>
-"Performance optimizations:</p>
-<ol>
-<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
-<li><strong>Query Optimization</strong>: Efficient vector search</li>
-<li><strong>Reranking</strong>: Use cross-encoder for better results</li>
-<li><strong>Batch Processing</strong>: Process documents in batches</li>
-<li><strong>Connection Pooling</strong>: Optimize database connections</li>
-<li><strong>Caching</strong>: Cache frequent queries and responses</li>
-</ol>
-<p>These optimizations reduce latency and improve user experience."</p>
-<h3 id="q7-what-are-the-bottlenecks-in-your-rag-system"><a class="header" href="#q7-what-are-the-bottlenecks-in-your-rag-system">Q7: "What are the bottlenecks in your RAG system?"</a></h3>
-<p><strong>Answer:</strong>
-"Potential bottlenecks:</p>
-<ol>
-<li><strong>Embedding Generation</strong>: Can be slow for large documents</li>
-<li><strong>Vector Search</strong>: Query time increases with database size</li>
-<li><strong>LLM Inference</strong>: Model generation time</li>
-<li><strong>Database Queries</strong>: PostgreSQL query performance</li>
-<li><strong>Network Latency</strong>: Inter-service communication</li>
-</ol>
-<p>Mitigation strategies include caching, optimization, and scaling."</p>
-<h2 id="monitoring-questions"><a class="header" href="#monitoring-questions">Monitoring Questions</a></h2>
-<h3 id="q8-how-do-you-monitor-the-rag-stack"><a class="header" href="#q8-how-do-you-monitor-the-rag-stack">Q8: "How do you monitor the RAG stack?"</a></h3>
-<p><strong>Answer:</strong>
-"Comprehensive monitoring:</p>
-<ol>
-<li><strong>Prometheus</strong>: Collect metrics from all services</li>
-<li><strong>Grafana</strong>: Visualize metrics and create dashboards</li>
-<li><strong>Logs</strong>: Centralized logging for all services</li>
-<li><strong>Health Checks</strong>: Service availability monitoring</li>
-<li><strong>Custom Metrics</strong>: Track RAG-specific metrics</li>
-</ol>
-<p>Key metrics include request rate, latency, error rate, and resource usage."</p>
-<h3 id="q9-what-metrics-do-you-track"><a class="header" href="#q9-what-metrics-do-you-track">Q9: "What metrics do you track?"</a></h3>
-<p><strong>Answer:</strong>
-"Key metrics:</p>
-<ol>
-<li><strong>Request Metrics</strong>: Total requests, success rate</li>
-<li><strong>Latency</strong>: P50, P95, P99 response times</li>
-<li><strong>Error Rate</strong>: Percentage of failed requests</li>
-<li><strong>Resource Usage</strong>: CPU, memory, disk per service</li>
-<li><strong>Database Metrics</strong>: Query performance, connections</li>
-<li><strong>Vector DB</strong>: Document count, query performance</li>
-<li><strong>LLM Metrics</strong>: Token usage, generation time</li>
-</ol>
-<p>These metrics provide visibility into system health and performance."</p>
-<h2 id="security-questions"><a class="header" href="#security-questions">Security Questions</a></h2>
-<h3 id="q10-how-do-you-secure-the-rag-stack"><a class="header" href="#q10-how-do-you-secure-the-rag-stack">Q10: "How do you secure the RAG stack?"</a></h3>
-<p><strong>Answer:</strong>
-"Security measures:</p>
-<ol>
-<li><strong>Network Isolation</strong>: Docker networks for service isolation</li>
-<li><strong>Authentication</strong>: User authentication for API access</li>
-<li><strong>Encryption</strong>: Data encryption at rest and in transit</li>
-<li><strong>Secrets Management</strong>: Secure handling of credentials</li>
-<li><strong>Access Control</strong>: Role-based access control</li>
-<li><strong>Audit Logging</strong>: Track all access and changes</li>
-</ol>
-<p>Security is implemented at multiple layers for defense in depth."</p>
-<h3 id="q11-how-do-you-handle-sensitive-documents"><a class="header" href="#q11-how-do-you-handle-sensitive-documents">Q11: "How do you handle sensitive documents?"</a></h3>
-<p><strong>Answer:</strong>
-"Sensitive document handling:</p>
-<ol>
-<li><strong>Access Control</strong>: Restrict document access by user/role</li>
-<li><strong>Encryption</strong>: Encrypt sensitive documents</li>
-<li><strong>Audit Trail</strong>: Log all document access</li>
-<li><strong>Data Retention</strong>: Implement retention policies</li>
-<li><strong>Compliance</strong>: Follow data protection regulations</li>
-<li><strong>Secure Deletion</strong>: Properly delete sensitive data</li>
-</ol>
-<p>Multiple safeguards protect sensitive information."</p>
-<h2 id="advanced-questions"><a class="header" href="#advanced-questions">Advanced Questions</a></h2>
-<h3 id="q12-how-would-you-improve-the-rag-system"><a class="header" href="#q12-how-would-you-improve-the-rag-system">Q12: "How would you improve the RAG system?"</a></h3>
-<p><strong>Answer:</strong>
-"Improvement strategies:</p>
-<ol>
-<li><strong>Better Embeddings</strong>: Use larger embedding models</li>
-<li><strong>Reranking</strong>: Implement cross-encoder reranking</li>
-<li><strong>Hybrid Search</strong>: Combine vector and keyword search</li>
-<li><strong>Query Expansion</strong>: Expand queries for better retrieval</li>
-<li><strong>Fine-tuning</strong>: Fine-tune LLM for domain-specific tasks</li>
-<li><strong>Evaluation</strong>: Implement RAG evaluation metrics</li>
-<li><strong>A/B Testing</strong>: Test different configurations</li>
-</ol>
-<p>Continuous improvement based on user feedback and metrics."</p>
+<h3 id="2-reactive-scaling"><a class="header" href="#2-reactive-scaling">2. <strong>Reactive Scaling</strong></a></h3>
+<ul>
+<li>HPA for automatic scaling</li>
+<li>Fast response to load changes</li>
+<li>Multiple metrics consideration</li>
+<li>Stabilization windows</li>
+</ul>
+<h3 id="3-cost-optimization"><a class="header" href="#3-cost-optimization">3. <strong>Cost Optimization</strong></a></h3>
+<ul>
+<li>Right-size resource requests</li>
+<li>Use spot instances for non-critical workloads</li>
+<li>Implement cluster autoscaling</li>
+<li>Monitor and optimize</li>
+</ul>
+<h3 id="4-performance-tuning"><a class="header" href="#4-performance-tuning">4. <strong>Performance Tuning</strong></a></h3>
+<ul>
+<li>Optimize application code</li>
+<li>Use connection pooling</li>
+<li>Implement caching</li>
+<li>Database query optimization</li>
+</ul>
+<h2 id="capacity-planning"><a class="header" href="#capacity-planning">Capacity Planning</a></h2>
+<h3 id="resource-calculation"><a class="header" href="#resource-calculation">Resource Calculation</a></h3>
+<pre><code>Total CPU Required = (Requests per Pod × CPU per Request) × Desired Pods
+Total Memory Required = (Memory per Pod) × Desired Pods
+
+Node Capacity = Node CPU / Pod CPU Request
+Max Pods per Node = min(Node Capacity, Pod Limit)
+</code></pre>
+<h3 id="scaling-triggers"><a class="header" href="#scaling-triggers">Scaling Triggers</a></h3>
+<ul>
+<li><strong>CPU Utilization</strong>: &gt; 70% average</li>
+<li><strong>Memory Utilization</strong>: &gt; 80% average</li>
+<li><strong>Request Rate</strong>: &gt; Threshold</li>
+<li><strong>Queue Depth</strong>: &gt; Limit</li>
+<li><strong>Custom Metrics</strong>: Business-specific</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../kubernetes-gitops-platform/security.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../kubernetes-gitops-platform/introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../kubernetes-gitops-platform/troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -347,11 +475,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../kubernetes-gitops-platform/security.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../kubernetes-gitops-platform/introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../kubernetes-gitops-platform/troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

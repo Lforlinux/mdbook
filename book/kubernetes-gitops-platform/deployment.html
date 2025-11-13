@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Technical Q&amp;A - Projects Portfolio</title>
+        <title>Deployment - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -178,166 +178,280 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="opensource-llm-rag-stack-technical-qa"><a class="header" href="#opensource-llm-rag-stack-technical-qa">Opensource-LLM-RAG-Stack Technical Q&amp;A</a></h1>
-<h2 id="architecture--design-questions"><a class="header" href="#architecture--design-questions">Architecture &amp; Design Questions</a></h2>
-<h3 id="q1-walk-me-through-the-rag-stack-architecture"><a class="header" href="#q1-walk-me-through-the-rag-stack-architecture">Q1: "Walk me through the RAG stack architecture."</a></h3>
-<p><strong>Answer:</strong>
-"The RAG stack is a containerized microservices architecture:</p>
+                        <h1 id="kubernetes-gitops-platform-deployment"><a class="header" href="#kubernetes-gitops-platform-deployment">Kubernetes GitOps Platform Deployment</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<h3 id="aws-account-setup"><a class="header" href="#aws-account-setup">AWS Account Setup</a></h3>
 <ul>
-<li><strong>Open WebUI</strong>: User interface for chat and document management</li>
-<li><strong>Ollama</strong>: LLM inference engine for text generation</li>
-<li><strong>Chroma</strong>: Vector database for semantic search</li>
-<li><strong>PostgreSQL</strong>: Relational database for chat history</li>
-<li><strong>Prometheus</strong>: Metrics collection</li>
-<li><strong>Grafana</strong>: Visualization and dashboards</li>
+<li>AWS account with programmatic access</li>
+<li>IAM user with required policies:
+<ul>
+<li><code>AmazonEC2FullAccess</code></li>
+<li><code>IAMFullAccess</code></li>
+<li><code>AutoScalingFullAccess</code></li>
+<li><code>AmazonEKSClusterPolicy</code></li>
+<li><code>AmazonEKSWorkerNodePolicy</code></li>
+<li><code>AmazonVPCFullAccess</code></li>
+<li><code>AmazonEKSServicePolicy</code></li>
+<li><code>AmazonEKS_CNI_Policy</code></li>
 </ul>
-<p>The architecture enables retrieval-augmented generation by combining vector search with LLM inference."</p>
-<h3 id="q2-why-did-you-choose-chroma-over-other-vector-databases"><a class="header" href="#q2-why-did-you-choose-chroma-over-other-vector-databases">Q2: "Why did you choose Chroma over other vector databases?"</a></h3>
-<p><strong>Answer:</strong>
-"Chroma was chosen for several reasons:</p>
+</li>
+</ul>
+<h3 id="local-requirements"><a class="header" href="#local-requirements">Local Requirements</a></h3>
+<ul>
+<li>Docker installed and running</li>
+<li>AWS CLI configured with credentials</li>
+<li>Git for cloning repositories</li>
+</ul>
+<h2 id="quick-start-deployment"><a class="header" href="#quick-start-deployment">Quick Start Deployment</a></h2>
+<h3 id="1-clone-infrastructure-repository"><a class="header" href="#1-clone-infrastructure-repository">1. Clone Infrastructure Repository</a></h3>
+<pre><code class="language-bash">git clone https://github.com/Lforlinux/k8s-infrastructure-as-code.git
+cd k8s-infrastructure-as-code
+</code></pre>
+<h3 id="2-configure-aws-credentials"><a class="header" href="#2-configure-aws-credentials">2. Configure AWS Credentials</a></h3>
+<pre><code class="language-bash"># Option 1: AWS CLI configuration
+aws configure
+
+# Option 2: Environment variable
+export AWS_PROFILE=your-profile
+</code></pre>
+<h3 id="3-deploy-entire-stack"><a class="header" href="#3-deploy-entire-stack">3. Deploy Entire Stack</a></h3>
+<pre><code class="language-bash">make deploy
+</code></pre>
+<p>This single command:</p>
 <ol>
-<li><strong>Simplicity</strong>: Easy to set up and use</li>
-<li><strong>Open Source</strong>: Free and community-driven</li>
-<li><strong>Docker Support</strong>: Containerized deployment</li>
-<li><strong>Performance</strong>: Efficient for small to medium datasets</li>
-<li><strong>Integration</strong>: Works well with Python ecosystem</li>
+<li>Initializes Terraform</li>
+<li>Plans infrastructure changes</li>
+<li>Applies infrastructure (VPC, EKS, ArgoCD)</li>
+<li>Displays access information</li>
 </ol>
-<p>For this use case, Chroma provides the right balance of features and simplicity."</p>
-<h3 id="q3-how-does-the-rag-pipeline-work"><a class="header" href="#q3-how-does-the-rag-pipeline-work">Q3: "How does the RAG pipeline work?"</a></h3>
-<p><strong>Answer:</strong>
-"RAG pipeline steps:</p>
+<h3 id="4-review-deployment-output"><a class="header" href="#4-review-deployment-output">4. Review Deployment Output</a></h3>
+<p>After deployment, you'll see:</p>
+<ul>
+<li>Kubernetes cluster access command</li>
+<li>ArgoCD server URL</li>
+<li>ArgoCD username and password</li>
+</ul>
+<h2 id="deployment-workflow"><a class="header" href="#deployment-workflow">Deployment Workflow</a></h2>
+<h3 id="infrastructure-deployment"><a class="header" href="#infrastructure-deployment">Infrastructure Deployment</a></h3>
+<pre><code>1. Terraform Init
+   ↓
+2. Terraform Plan (Review changes)
+   ↓
+3. Terraform Apply (Create resources)
+   ↓
+4. EKS Cluster Created
+   ↓
+5. ArgoCD Installed via Helm
+   ↓
+6. App-of-Apps Pattern Configured
+</code></pre>
+<h3 id="platform-toolkit-deployment"><a class="header" href="#platform-toolkit-deployment">Platform Toolkit Deployment</a></h3>
+<pre><code>1. ArgoCD Detects App-of-Apps
+   ↓
+2. References k8s-platform-toolkit Repository
+   ↓
+3. Deploys Applications in Sync Waves
+   ↓
+4. Monitoring Stack (Wave 3)
+   ↓
+5. Logging Stack (Wave 4-5)
+   ↓
+6. Testing Applications (Wave 1)
+   ↓
+7. Demo Applications (Wave 2)
+</code></pre>
+<h2 id="accessing-the-cluster"><a class="header" href="#accessing-the-cluster">Accessing the Cluster</a></h2>
+<h3 id="kubernetes-access"><a class="header" href="#kubernetes-access">Kubernetes Access</a></h3>
+<pre><code class="language-bash"># Get cluster name and region from Terraform
+aws eks --region $(terraform output -raw region) \
+  update-kubeconfig --name $(terraform output -raw cluster_name)
+
+# Verify access
+kubectl get nodes
+</code></pre>
+<h3 id="argocd-access"><a class="header" href="#argocd-access">ArgoCD Access</a></h3>
+<pre><code class="language-bash"># Get ArgoCD LoadBalancer URL
+kubectl get svc -n argocd argocd-server
+
+# Get admin password
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+</code></pre>
+<h3 id="application-access"><a class="header" href="#application-access">Application Access</a></h3>
+<pre><code class="language-bash"># List all LoadBalancer services
+kubectl get svc --all-namespaces -o wide | grep LoadBalancer
+
+# Access specific services
+# Grafana: http://&lt;grafana-lb-url&gt;
+# Prometheus: http://&lt;prometheus-lb-url&gt;
+# Online Boutique: http://&lt;frontend-lb-url&gt;
+</code></pre>
+<h2 id="gitops-workflow"><a class="header" href="#gitops-workflow">GitOps Workflow</a></h2>
+<h3 id="making-changes"><a class="header" href="#making-changes">Making Changes</a></h3>
 <ol>
-<li><strong>Document Ingestion</strong>: Upload and chunk documents</li>
-<li><strong>Embedding Generation</strong>: Create vector embeddings</li>
-<li><strong>Vector Storage</strong>: Store in Chroma database</li>
-<li><strong>Query Processing</strong>: Convert user query to embedding</li>
-<li><strong>Retrieval</strong>: Find relevant document chunks</li>
-<li><strong>Context Augmentation</strong>: Add chunks to prompt</li>
-<li><strong>Generation</strong>: LLM generates response with context</li>
+<li>
+<p><strong>Update Application Code</strong></p>
+<pre><code class="language-bash"># Make changes to application
+vim k8s-platform-toolkit/application/online-boutique/online-boutique-manifest.yaml
+</code></pre>
+</li>
+<li>
+<p><strong>Commit and Push</strong></p>
+<pre><code class="language-bash">git add .
+git commit -m "Update application configuration"
+git push origin main
+</code></pre>
+</li>
+<li>
+<p><strong>ArgoCD Auto-Sync</strong></p>
+<ul>
+<li>ArgoCD detects Git changes</li>
+<li>Automatically syncs applications</li>
+<li>Performs rolling updates</li>
+</ul>
+</li>
+<li>
+<p><strong>Monitor Deployment</strong></p>
+<pre><code class="language-bash"># Watch ArgoCD applications
+kubectl get applications -n argocd -w
+
+# Check sync status
+argocd app get &lt;app-name&gt;
+</code></pre>
+</li>
 </ol>
-<p>This enables the LLM to answer questions based on uploaded documents."</p>
-<h2 id="technical-implementation-questions"><a class="header" href="#technical-implementation-questions">Technical Implementation Questions</a></h2>
-<h3 id="q4-how-do-you-handle-document-chunking"><a class="header" href="#q4-how-do-you-handle-document-chunking">Q4: "How do you handle document chunking?"</a></h3>
-<p><strong>Answer:</strong>
-"Document chunking strategy:</p>
+<h2 id="zero-downtime-deployments"><a class="header" href="#zero-downtime-deployments">Zero-Downtime Deployments</a></h2>
+<h3 id="rolling-update-strategy"><a class="header" href="#rolling-update-strategy">Rolling Update Strategy</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    spec:
+      containers:
+      - name: app
+        image: nodejs-app:v2.0.0
+</code></pre>
+<h3 id="deployment-process"><a class="header" href="#deployment-process">Deployment Process</a></h3>
 <ol>
-<li><strong>Size</strong>: 500-1000 tokens per chunk</li>
-<li><strong>Overlap</strong>: 100-200 tokens between chunks</li>
-<li><strong>Boundaries</strong>: Preserve sentence/paragraph boundaries</li>
-<li><strong>Metadata</strong>: Store source and position metadata</li>
-<li><strong>Indexing</strong>: Create full-text search indexes</li>
+<li>New pods created with new image</li>
+<li>Readiness probes verify health</li>
+<li>Old pods terminated after new pods ready</li>
+<li>Service continues serving traffic throughout</li>
 </ol>
-<p>This ensures relevant context is retrieved while maintaining coherence."</p>
-<h3 id="q5-how-would-you-scale-this-to-handle-more-documents"><a class="header" href="#q5-how-would-you-scale-this-to-handle-more-documents">Q5: "How would you scale this to handle more documents?"</a></h3>
-<p><strong>Answer:</strong>
-"Scaling strategies:</p>
+<h2 id="application-lifecycle"><a class="header" href="#application-lifecycle">Application Lifecycle</a></h2>
+<h3 id="adding-new-application"><a class="header" href="#adding-new-application">Adding New Application</a></h3>
 <ol>
-<li><strong>Horizontal Scaling</strong>: Multiple Chroma instances</li>
-<li><strong>Sharding</strong>: Partition documents by category</li>
-<li><strong>Caching</strong>: Cache frequent queries</li>
-<li><strong>Indexing</strong>: Optimize vector indexes</li>
-<li><strong>Load Balancing</strong>: Distribute queries across instances</li>
-<li><strong>Database Optimization</strong>: PostgreSQL read replicas</li>
+<li>
+<p><strong>Create Application Manifests</strong></p>
+<pre><code class="language-bash"># In k8s-platform-toolkit repository
+mkdir -p application/my-app
+# Create deployment.yaml, service.yaml, etc.
+</code></pre>
+</li>
+<li>
+<p><strong>Create ArgoCD Application Definition</strong></p>
+<pre><code class="language-yaml"># argocd/apps/my-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+spec:
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    path: application/my-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: my-app
+</code></pre>
+</li>
+<li>
+<p><strong>Commit and Push</strong></p>
+<pre><code class="language-bash">git add .
+git commit -m "Add new application"
+git push origin main
+</code></pre>
+</li>
+<li>
+<p><strong>ArgoCD Auto-Deploys</strong></p>
+<ul>
+<li>Detects new application definition</li>
+<li>Creates namespace</li>
+<li>Deploys application</li>
+</ul>
+</li>
 </ol>
-<p>The architecture supports horizontal scaling for increased capacity."</p>
-<h2 id="performance-questions"><a class="header" href="#performance-questions">Performance Questions</a></h2>
-<h3 id="q6-how-do-you-optimize-rag-performance"><a class="header" href="#q6-how-do-you-optimize-rag-performance">Q6: "How do you optimize RAG performance?"</a></h3>
-<p><strong>Answer:</strong>
-"Performance optimizations:</p>
+<h3 id="updating-applications"><a class="header" href="#updating-applications">Updating Applications</a></h3>
 <ol>
-<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
-<li><strong>Query Optimization</strong>: Efficient vector search</li>
-<li><strong>Reranking</strong>: Use cross-encoder for better results</li>
-<li><strong>Batch Processing</strong>: Process documents in batches</li>
-<li><strong>Connection Pooling</strong>: Optimize database connections</li>
-<li><strong>Caching</strong>: Cache frequent queries and responses</li>
+<li><strong>Update Manifests in Git</strong></li>
+<li><strong>ArgoCD Detects Changes</strong></li>
+<li><strong>Automatic Sync (if enabled)</strong></li>
+<li><strong>Rolling Update Performed</strong></li>
 </ol>
-<p>These optimizations reduce latency and improve user experience."</p>
-<h3 id="q7-what-are-the-bottlenecks-in-your-rag-system"><a class="header" href="#q7-what-are-the-bottlenecks-in-your-rag-system">Q7: "What are the bottlenecks in your RAG system?"</a></h3>
-<p><strong>Answer:</strong>
-"Potential bottlenecks:</p>
+<h3 id="removing-applications"><a class="header" href="#removing-applications">Removing Applications</a></h3>
 <ol>
-<li><strong>Embedding Generation</strong>: Can be slow for large documents</li>
-<li><strong>Vector Search</strong>: Query time increases with database size</li>
-<li><strong>LLM Inference</strong>: Model generation time</li>
-<li><strong>Database Queries</strong>: PostgreSQL query performance</li>
-<li><strong>Network Latency</strong>: Inter-service communication</li>
+<li>
+<p><strong>Delete ArgoCD Application</strong></p>
+<pre><code class="language-bash">kubectl delete application my-app -n argocd
+</code></pre>
+</li>
+<li>
+<p><strong>Or Remove from Git</strong></p>
+<ul>
+<li>Delete application definition</li>
+<li>ArgoCD removes application</li>
+<li>Resources cleaned up</li>
+</ul>
+</li>
 </ol>
-<p>Mitigation strategies include caching, optimization, and scaling."</p>
-<h2 id="monitoring-questions"><a class="header" href="#monitoring-questions">Monitoring Questions</a></h2>
-<h3 id="q8-how-do-you-monitor-the-rag-stack"><a class="header" href="#q8-how-do-you-monitor-the-rag-stack">Q8: "How do you monitor the RAG stack?"</a></h3>
-<p><strong>Answer:</strong>
-"Comprehensive monitoring:</p>
-<ol>
-<li><strong>Prometheus</strong>: Collect metrics from all services</li>
-<li><strong>Grafana</strong>: Visualize metrics and create dashboards</li>
-<li><strong>Logs</strong>: Centralized logging for all services</li>
-<li><strong>Health Checks</strong>: Service availability monitoring</li>
-<li><strong>Custom Metrics</strong>: Track RAG-specific metrics</li>
-</ol>
-<p>Key metrics include request rate, latency, error rate, and resource usage."</p>
-<h3 id="q9-what-metrics-do-you-track"><a class="header" href="#q9-what-metrics-do-you-track">Q9: "What metrics do you track?"</a></h3>
-<p><strong>Answer:</strong>
-"Key metrics:</p>
-<ol>
-<li><strong>Request Metrics</strong>: Total requests, success rate</li>
-<li><strong>Latency</strong>: P50, P95, P99 response times</li>
-<li><strong>Error Rate</strong>: Percentage of failed requests</li>
-<li><strong>Resource Usage</strong>: CPU, memory, disk per service</li>
-<li><strong>Database Metrics</strong>: Query performance, connections</li>
-<li><strong>Vector DB</strong>: Document count, query performance</li>
-<li><strong>LLM Metrics</strong>: Token usage, generation time</li>
-</ol>
-<p>These metrics provide visibility into system health and performance."</p>
-<h2 id="security-questions"><a class="header" href="#security-questions">Security Questions</a></h2>
-<h3 id="q10-how-do-you-secure-the-rag-stack"><a class="header" href="#q10-how-do-you-secure-the-rag-stack">Q10: "How do you secure the RAG stack?"</a></h3>
-<p><strong>Answer:</strong>
-"Security measures:</p>
-<ol>
-<li><strong>Network Isolation</strong>: Docker networks for service isolation</li>
-<li><strong>Authentication</strong>: User authentication for API access</li>
-<li><strong>Encryption</strong>: Data encryption at rest and in transit</li>
-<li><strong>Secrets Management</strong>: Secure handling of credentials</li>
-<li><strong>Access Control</strong>: Role-based access control</li>
-<li><strong>Audit Logging</strong>: Track all access and changes</li>
-</ol>
-<p>Security is implemented at multiple layers for defense in depth."</p>
-<h3 id="q11-how-do-you-handle-sensitive-documents"><a class="header" href="#q11-how-do-you-handle-sensitive-documents">Q11: "How do you handle sensitive documents?"</a></h3>
-<p><strong>Answer:</strong>
-"Sensitive document handling:</p>
-<ol>
-<li><strong>Access Control</strong>: Restrict document access by user/role</li>
-<li><strong>Encryption</strong>: Encrypt sensitive documents</li>
-<li><strong>Audit Trail</strong>: Log all document access</li>
-<li><strong>Data Retention</strong>: Implement retention policies</li>
-<li><strong>Compliance</strong>: Follow data protection regulations</li>
-<li><strong>Secure Deletion</strong>: Properly delete sensitive data</li>
-</ol>
-<p>Multiple safeguards protect sensitive information."</p>
-<h2 id="advanced-questions"><a class="header" href="#advanced-questions">Advanced Questions</a></h2>
-<h3 id="q12-how-would-you-improve-the-rag-system"><a class="header" href="#q12-how-would-you-improve-the-rag-system">Q12: "How would you improve the RAG system?"</a></h3>
-<p><strong>Answer:</strong>
-"Improvement strategies:</p>
-<ol>
-<li><strong>Better Embeddings</strong>: Use larger embedding models</li>
-<li><strong>Reranking</strong>: Implement cross-encoder reranking</li>
-<li><strong>Hybrid Search</strong>: Combine vector and keyword search</li>
-<li><strong>Query Expansion</strong>: Expand queries for better retrieval</li>
-<li><strong>Fine-tuning</strong>: Fine-tune LLM for domain-specific tasks</li>
-<li><strong>Evaluation</strong>: Implement RAG evaluation metrics</li>
-<li><strong>A/B Testing</strong>: Test different configurations</li>
-</ol>
-<p>Continuous improvement based on user feedback and metrics."</p>
+<h2 id="troubleshooting-deployment"><a class="header" href="#troubleshooting-deployment">Troubleshooting Deployment</a></h2>
+<h3 id="check-terraform-state"><a class="header" href="#check-terraform-state">Check Terraform State</a></h3>
+<pre><code class="language-bash"># View current state
+terraform show
+
+# List resources
+terraform state list
+
+# Inspect specific resource
+terraform state show module.eks.aws_eks_cluster.this[0]
+</code></pre>
+<h3 id="check-argocd-sync-status"><a class="header" href="#check-argocd-sync-status">Check ArgoCD Sync Status</a></h3>
+<pre><code class="language-bash"># List all applications
+kubectl get applications -n argocd
+
+# Describe application
+kubectl describe application &lt;app-name&gt; -n argocd
+
+# Check sync status
+argocd app sync &lt;app-name&gt;
+</code></pre>
+<h3 id="verify-pod-status"><a class="header" href="#verify-pod-status">Verify Pod Status</a></h3>
+<pre><code class="language-bash"># Check all pods
+kubectl get pods --all-namespaces
+
+# Check specific namespace
+kubectl get pods -n monitoring
+
+# View pod logs
+kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt;
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../kubernetes-gitops-platform/technical-implementation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../kubernetes-gitops-platform/introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../kubernetes-gitops-platform/monitoring.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -347,11 +461,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../kubernetes-gitops-platform/technical-implementation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../kubernetes-gitops-platform/introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../kubernetes-gitops-platform/monitoring.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

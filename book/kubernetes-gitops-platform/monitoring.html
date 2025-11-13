@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Technical Q&amp;A - Projects Portfolio</title>
+        <title>Monitoring &amp; Observability - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -178,166 +178,241 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="opensource-llm-rag-stack-technical-qa"><a class="header" href="#opensource-llm-rag-stack-technical-qa">Opensource-LLM-RAG-Stack Technical Q&amp;A</a></h1>
-<h2 id="architecture--design-questions"><a class="header" href="#architecture--design-questions">Architecture &amp; Design Questions</a></h2>
-<h3 id="q1-walk-me-through-the-rag-stack-architecture"><a class="header" href="#q1-walk-me-through-the-rag-stack-architecture">Q1: "Walk me through the RAG stack architecture."</a></h3>
-<p><strong>Answer:</strong>
-"The RAG stack is a containerized microservices architecture:</p>
+                        <h1 id="kubernetes-gitops-platform-monitoring--observability"><a class="header" href="#kubernetes-gitops-platform-monitoring--observability">Kubernetes GitOps Platform Monitoring &amp; Observability</a></h1>
+<h2 id="monitoring-stack"><a class="header" href="#monitoring-stack">Monitoring Stack</a></h2>
+<h3 id="prometheus-configuration"><a class="header" href="#prometheus-configuration">Prometheus Configuration</a></h3>
+<p>Prometheus collects metrics from:</p>
 <ul>
-<li><strong>Open WebUI</strong>: User interface for chat and document management</li>
-<li><strong>Ollama</strong>: LLM inference engine for text generation</li>
-<li><strong>Chroma</strong>: Vector database for semantic search</li>
-<li><strong>PostgreSQL</strong>: Relational database for chat history</li>
-<li><strong>Prometheus</strong>: Metrics collection</li>
-<li><strong>Grafana</strong>: Visualization and dashboards</li>
+<li><strong>Kubernetes Pods</strong>: Application metrics via annotations</li>
+<li><strong>Kubernetes Nodes</strong>: Node-level metrics via node-exporter</li>
+<li><strong>Kubernetes Objects</strong>: Cluster state via kube-state-metrics</li>
+<li><strong>Services</strong>: Service discovery and scraping</li>
 </ul>
-<p>The architecture enables retrieval-augmented generation by combining vector search with LLM inference."</p>
-<h3 id="q2-why-did-you-choose-chroma-over-other-vector-databases"><a class="header" href="#q2-why-did-you-choose-chroma-over-other-vector-databases">Q2: "Why did you choose Chroma over other vector databases?"</a></h3>
-<p><strong>Answer:</strong>
-"Chroma was chosen for several reasons:</p>
-<ol>
-<li><strong>Simplicity</strong>: Easy to set up and use</li>
-<li><strong>Open Source</strong>: Free and community-driven</li>
-<li><strong>Docker Support</strong>: Containerized deployment</li>
-<li><strong>Performance</strong>: Efficient for small to medium datasets</li>
-<li><strong>Integration</strong>: Works well with Python ecosystem</li>
-</ol>
-<p>For this use case, Chroma provides the right balance of features and simplicity."</p>
-<h3 id="q3-how-does-the-rag-pipeline-work"><a class="header" href="#q3-how-does-the-rag-pipeline-work">Q3: "How does the RAG pipeline work?"</a></h3>
-<p><strong>Answer:</strong>
-"RAG pipeline steps:</p>
-<ol>
-<li><strong>Document Ingestion</strong>: Upload and chunk documents</li>
-<li><strong>Embedding Generation</strong>: Create vector embeddings</li>
-<li><strong>Vector Storage</strong>: Store in Chroma database</li>
-<li><strong>Query Processing</strong>: Convert user query to embedding</li>
-<li><strong>Retrieval</strong>: Find relevant document chunks</li>
-<li><strong>Context Augmentation</strong>: Add chunks to prompt</li>
-<li><strong>Generation</strong>: LLM generates response with context</li>
-</ol>
-<p>This enables the LLM to answer questions based on uploaded documents."</p>
-<h2 id="technical-implementation-questions"><a class="header" href="#technical-implementation-questions">Technical Implementation Questions</a></h2>
-<h3 id="q4-how-do-you-handle-document-chunking"><a class="header" href="#q4-how-do-you-handle-document-chunking">Q4: "How do you handle document chunking?"</a></h3>
-<p><strong>Answer:</strong>
-"Document chunking strategy:</p>
-<ol>
-<li><strong>Size</strong>: 500-1000 tokens per chunk</li>
-<li><strong>Overlap</strong>: 100-200 tokens between chunks</li>
-<li><strong>Boundaries</strong>: Preserve sentence/paragraph boundaries</li>
-<li><strong>Metadata</strong>: Store source and position metadata</li>
-<li><strong>Indexing</strong>: Create full-text search indexes</li>
-</ol>
-<p>This ensures relevant context is retrieved while maintaining coherence."</p>
-<h3 id="q5-how-would-you-scale-this-to-handle-more-documents"><a class="header" href="#q5-how-would-you-scale-this-to-handle-more-documents">Q5: "How would you scale this to handle more documents?"</a></h3>
-<p><strong>Answer:</strong>
-"Scaling strategies:</p>
-<ol>
-<li><strong>Horizontal Scaling</strong>: Multiple Chroma instances</li>
-<li><strong>Sharding</strong>: Partition documents by category</li>
-<li><strong>Caching</strong>: Cache frequent queries</li>
-<li><strong>Indexing</strong>: Optimize vector indexes</li>
-<li><strong>Load Balancing</strong>: Distribute queries across instances</li>
-<li><strong>Database Optimization</strong>: PostgreSQL read replicas</li>
-</ol>
-<p>The architecture supports horizontal scaling for increased capacity."</p>
-<h2 id="performance-questions"><a class="header" href="#performance-questions">Performance Questions</a></h2>
-<h3 id="q6-how-do-you-optimize-rag-performance"><a class="header" href="#q6-how-do-you-optimize-rag-performance">Q6: "How do you optimize RAG performance?"</a></h3>
-<p><strong>Answer:</strong>
-"Performance optimizations:</p>
-<ol>
-<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
-<li><strong>Query Optimization</strong>: Efficient vector search</li>
-<li><strong>Reranking</strong>: Use cross-encoder for better results</li>
-<li><strong>Batch Processing</strong>: Process documents in batches</li>
-<li><strong>Connection Pooling</strong>: Optimize database connections</li>
-<li><strong>Caching</strong>: Cache frequent queries and responses</li>
-</ol>
-<p>These optimizations reduce latency and improve user experience."</p>
-<h3 id="q7-what-are-the-bottlenecks-in-your-rag-system"><a class="header" href="#q7-what-are-the-bottlenecks-in-your-rag-system">Q7: "What are the bottlenecks in your RAG system?"</a></h3>
-<p><strong>Answer:</strong>
-"Potential bottlenecks:</p>
-<ol>
-<li><strong>Embedding Generation</strong>: Can be slow for large documents</li>
-<li><strong>Vector Search</strong>: Query time increases with database size</li>
-<li><strong>LLM Inference</strong>: Model generation time</li>
-<li><strong>Database Queries</strong>: PostgreSQL query performance</li>
-<li><strong>Network Latency</strong>: Inter-service communication</li>
-</ol>
-<p>Mitigation strategies include caching, optimization, and scaling."</p>
-<h2 id="monitoring-questions"><a class="header" href="#monitoring-questions">Monitoring Questions</a></h2>
-<h3 id="q8-how-do-you-monitor-the-rag-stack"><a class="header" href="#q8-how-do-you-monitor-the-rag-stack">Q8: "How do you monitor the RAG stack?"</a></h3>
-<p><strong>Answer:</strong>
-"Comprehensive monitoring:</p>
-<ol>
-<li><strong>Prometheus</strong>: Collect metrics from all services</li>
-<li><strong>Grafana</strong>: Visualize metrics and create dashboards</li>
-<li><strong>Logs</strong>: Centralized logging for all services</li>
-<li><strong>Health Checks</strong>: Service availability monitoring</li>
-<li><strong>Custom Metrics</strong>: Track RAG-specific metrics</li>
-</ol>
-<p>Key metrics include request rate, latency, error rate, and resource usage."</p>
-<h3 id="q9-what-metrics-do-you-track"><a class="header" href="#q9-what-metrics-do-you-track">Q9: "What metrics do you track?"</a></h3>
-<p><strong>Answer:</strong>
-"Key metrics:</p>
-<ol>
-<li><strong>Request Metrics</strong>: Total requests, success rate</li>
-<li><strong>Latency</strong>: P50, P95, P99 response times</li>
+<h3 id="key-metrics-collected"><a class="header" href="#key-metrics-collected">Key Metrics Collected</a></h3>
+<h4 id="application-metrics"><a class="header" href="#application-metrics">Application Metrics</a></h4>
+<ul>
+<li>Request rate and latency</li>
+<li>Error rates and status codes</li>
+<li>Resource utilization (CPU, memory)</li>
+<li>Custom business metrics</li>
+</ul>
+<h4 id="infrastructure-metrics"><a class="header" href="#infrastructure-metrics">Infrastructure Metrics</a></h4>
+<ul>
+<li>Node CPU, memory, disk usage</li>
+<li>Pod resource consumption</li>
+<li>Network traffic and bandwidth</li>
+<li>Storage utilization</li>
+</ul>
+<h4 id="kubernetes-metrics"><a class="header" href="#kubernetes-metrics">Kubernetes Metrics</a></h4>
+<ul>
+<li>Deployment status and replicas</li>
+<li>Pod status and restarts</li>
+<li>Service endpoints</li>
+<li>HPA scaling events</li>
+</ul>
+<h3 id="grafana-dashboards"><a class="header" href="#grafana-dashboards">Grafana Dashboards</a></h3>
+<h4 id="pre-configured-dashboards"><a class="header" href="#pre-configured-dashboards">Pre-configured Dashboards</a></h4>
+<ul>
+<li><strong>Kubernetes Cluster Overview</strong>: Cluster health and resource usage</li>
+<li><strong>Online Boutique Dashboard</strong>: Microservices metrics and performance</li>
+<li><strong>Node Exporter</strong>: Node-level system metrics</li>
+<li><strong>Kube State Metrics</strong>: Kubernetes object state</li>
+</ul>
+<h4 id="custom-dashboards"><a class="header" href="#custom-dashboards">Custom Dashboards</a></h4>
+<pre><code class="language-json">{
+  "dashboard": {
+    "title": "Online Boutique Metrics",
+    "panels": [
+      {
+        "title": "Request Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "{{service}}"
+          }
+        ]
+      },
+      {
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{status=~\"5..\"}[5m])",
+            "legendFormat": "{{service}}"
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<h2 id="logging-stack"><a class="header" href="#logging-stack">Logging Stack</a></h2>
+<h3 id="loki-configuration"><a class="header" href="#loki-configuration">Loki Configuration</a></h3>
+<p>Loki aggregates logs from all pods:</p>
+<ul>
+<li><strong>Efficient Storage</strong>: Indexed by labels, not log content</li>
+<li><strong>Prometheus-inspired</strong>: Similar query language</li>
+<li><strong>Grafana Integration</strong>: Native Grafana data source</li>
+</ul>
+<h3 id="promtail-configuration"><a class="header" href="#promtail-configuration">Promtail Configuration</a></h3>
+<p>Promtail collects logs:</p>
+<ul>
+<li><strong>DaemonSet</strong>: Runs on every node</li>
+<li><strong>Automatic Discovery</strong>: Discovers pods automatically</li>
+<li><strong>Metadata Enrichment</strong>: Adds Kubernetes labels</li>
+<li><strong>Log Shipping</strong>: Sends logs to Loki</li>
+</ul>
+<h3 id="log-queries"><a class="header" href="#log-queries">Log Queries</a></h3>
+<pre><code class="language-logql"># Query logs by service
+{namespace="online-boutique", service="cartservice"}
+
+# Filter by log level
+{namespace="online-boutique"} |= "error"
+
+# Count errors
+count_over_time({namespace="online-boutique"} |= "error" [5m])
+</code></pre>
+<h2 id="testing--validation"><a class="header" href="#testing--validation">Testing &amp; Validation</a></h2>
+<h3 id="sanity-test-monitoring"><a class="header" href="#sanity-test-monitoring">Sanity Test Monitoring</a></h3>
+<p><strong>Purpose</strong>: Automated health check testing</p>
+<ul>
+<li>Tests all microservices every 60 seconds</li>
+<li>Tracks response times and errors</li>
+<li>Provides REST API for status</li>
+<li>Web UI dashboard for results</li>
+</ul>
+<p><strong>Metrics Tracked</strong>:</p>
+<ul>
+<li>Total test runs</li>
+<li>Pass/fail counts</li>
+<li>Response times per service</li>
+<li>Error rates</li>
+</ul>
+<h3 id="availability-test-monitoring"><a class="header" href="#availability-test-monitoring">Availability Test Monitoring</a></h3>
+<p><strong>Purpose</strong>: SRE-style availability testing</p>
+<ul>
+<li>Real user workflow simulation</li>
+<li>Tests every 5 minutes</li>
+<li>Calculates uptime percentage</li>
+<li>Tracks consecutive failures</li>
+</ul>
+<p><strong>SRE Metrics</strong>:</p>
+<ul>
+<li><strong>Uptime %</strong>: Service availability percentage</li>
+<li><strong>MTTR</strong>: Mean Time To Recovery</li>
+<li><strong>MTBF</strong>: Mean Time Between Failures</li>
+<li><strong>Error Budget</strong>: Remaining error budget</li>
+</ul>
+<h2 id="alerting"><a class="header" href="#alerting">Alerting</a></h2>
+<h3 id="prometheus-alert-rules"><a class="header" href="#prometheus-alert-rules">Prometheus Alert Rules</a></h3>
+<pre><code class="language-yaml">groups:
+  - name: kubernetes
+    rules:
+      - alert: HighCPUUsage
+        expr: node_cpu_usage &gt; 80
+        for: 5m
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+      
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[5m]) &gt; 0
+        for: 5m
+        annotations:
+          summary: "Pod {{ $labels.pod }} is crash looping"
+      
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) &gt; 0.1
+        for: 5m
+        annotations:
+          summary: "High error rate for {{ $labels.service }}"
+</code></pre>
+<h3 id="alert-manager-configuration"><a class="header" href="#alert-manager-configuration">Alert Manager Configuration</a></h3>
+<pre><code class="language-yaml">route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+receivers:
+  - name: 'default'
+    webhook_configs:
+      - url: 'http://alertmanager:9093/api/v1/alerts'
+  - name: 'critical-alerts'
+    slack_configs:
+      - api_url: 'YOUR_SLACK_WEBHOOK_URL'
+        channel: '#alerts'
+</code></pre>
+<h2 id="observability-best-practices"><a class="header" href="#observability-best-practices">Observability Best Practices</a></h2>
+<h3 id="1-comprehensive-instrumentation"><a class="header" href="#1-comprehensive-instrumentation">1. <strong>Comprehensive Instrumentation</strong></a></h3>
+<ul>
+<li>Instrument all services with metrics</li>
+<li>Use consistent metric naming</li>
+<li>Include business metrics</li>
+<li>Track custom events</li>
+</ul>
+<h3 id="2-structured-logging"><a class="header" href="#2-structured-logging">2. <strong>Structured Logging</strong></a></h3>
+<ul>
+<li>Use structured log format (JSON)</li>
+<li>Include correlation IDs</li>
+<li>Log at appropriate levels</li>
+<li>Include context information</li>
+</ul>
+<h3 id="3-dashboard-design"><a class="header" href="#3-dashboard-design">3. <strong>Dashboard Design</strong></a></h3>
+<ul>
+<li>Create service-specific dashboards</li>
+<li>Include key SLIs and SLOs</li>
+<li>Show trends over time</li>
+<li>Enable drill-down capabilities</li>
+</ul>
+<h3 id="4-alert-tuning"><a class="header" href="#4-alert-tuning">4. <strong>Alert Tuning</strong></a></h3>
+<ul>
+<li>Set appropriate thresholds</li>
+<li>Avoid alert fatigue</li>
+<li>Use alert grouping</li>
+<li>Include runbook links</li>
+</ul>
+<h3 id="5-log-retention"><a class="header" href="#5-log-retention">5. <strong>Log Retention</strong></a></h3>
+<ul>
+<li>Configure retention policies</li>
+<li>Archive old logs</li>
+<li>Compress stored logs</li>
+<li>Monitor storage usage</li>
+</ul>
+<h2 id="key-performance-indicators-kpis"><a class="header" href="#key-performance-indicators-kpis">Key Performance Indicators (KPIs)</a></h2>
+<h3 id="application-kpis"><a class="header" href="#application-kpis">Application KPIs</a></h3>
+<ul>
+<li><strong>Request Rate</strong>: Requests per second</li>
 <li><strong>Error Rate</strong>: Percentage of failed requests</li>
-<li><strong>Resource Usage</strong>: CPU, memory, disk per service</li>
-<li><strong>Database Metrics</strong>: Query performance, connections</li>
-<li><strong>Vector DB</strong>: Document count, query performance</li>
-<li><strong>LLM Metrics</strong>: Token usage, generation time</li>
-</ol>
-<p>These metrics provide visibility into system health and performance."</p>
-<h2 id="security-questions"><a class="header" href="#security-questions">Security Questions</a></h2>
-<h3 id="q10-how-do-you-secure-the-rag-stack"><a class="header" href="#q10-how-do-you-secure-the-rag-stack">Q10: "How do you secure the RAG stack?"</a></h3>
-<p><strong>Answer:</strong>
-"Security measures:</p>
-<ol>
-<li><strong>Network Isolation</strong>: Docker networks for service isolation</li>
-<li><strong>Authentication</strong>: User authentication for API access</li>
-<li><strong>Encryption</strong>: Data encryption at rest and in transit</li>
-<li><strong>Secrets Management</strong>: Secure handling of credentials</li>
-<li><strong>Access Control</strong>: Role-based access control</li>
-<li><strong>Audit Logging</strong>: Track all access and changes</li>
-</ol>
-<p>Security is implemented at multiple layers for defense in depth."</p>
-<h3 id="q11-how-do-you-handle-sensitive-documents"><a class="header" href="#q11-how-do-you-handle-sensitive-documents">Q11: "How do you handle sensitive documents?"</a></h3>
-<p><strong>Answer:</strong>
-"Sensitive document handling:</p>
-<ol>
-<li><strong>Access Control</strong>: Restrict document access by user/role</li>
-<li><strong>Encryption</strong>: Encrypt sensitive documents</li>
-<li><strong>Audit Trail</strong>: Log all document access</li>
-<li><strong>Data Retention</strong>: Implement retention policies</li>
-<li><strong>Compliance</strong>: Follow data protection regulations</li>
-<li><strong>Secure Deletion</strong>: Properly delete sensitive data</li>
-</ol>
-<p>Multiple safeguards protect sensitive information."</p>
-<h2 id="advanced-questions"><a class="header" href="#advanced-questions">Advanced Questions</a></h2>
-<h3 id="q12-how-would-you-improve-the-rag-system"><a class="header" href="#q12-how-would-you-improve-the-rag-system">Q12: "How would you improve the RAG system?"</a></h3>
-<p><strong>Answer:</strong>
-"Improvement strategies:</p>
-<ol>
-<li><strong>Better Embeddings</strong>: Use larger embedding models</li>
-<li><strong>Reranking</strong>: Implement cross-encoder reranking</li>
-<li><strong>Hybrid Search</strong>: Combine vector and keyword search</li>
-<li><strong>Query Expansion</strong>: Expand queries for better retrieval</li>
-<li><strong>Fine-tuning</strong>: Fine-tune LLM for domain-specific tasks</li>
-<li><strong>Evaluation</strong>: Implement RAG evaluation metrics</li>
-<li><strong>A/B Testing</strong>: Test different configurations</li>
-</ol>
-<p>Continuous improvement based on user feedback and metrics."</p>
+<li><strong>Latency</strong>: P50, P95, P99 response times</li>
+<li><strong>Availability</strong>: Uptime percentage</li>
+</ul>
+<h3 id="infrastructure-kpis"><a class="header" href="#infrastructure-kpis">Infrastructure KPIs</a></h3>
+<ul>
+<li><strong>CPU Utilization</strong>: Average and peak usage</li>
+<li><strong>Memory Utilization</strong>: Memory consumption</li>
+<li><strong>Network Throughput</strong>: Bytes per second</li>
+<li><strong>Storage Usage</strong>: Disk space utilization</li>
+</ul>
+<h3 id="platform-kpis"><a class="header" href="#platform-kpis">Platform KPIs</a></h3>
+<ul>
+<li><strong>Deployment Frequency</strong>: Deployments per day</li>
+<li><strong>Lead Time</strong>: Time from commit to production</li>
+<li><strong>MTTR</strong>: Mean Time To Recovery</li>
+<li><strong>Change Failure Rate</strong>: Percentage of failed deployments</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../kubernetes-gitops-platform/deployment.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../kubernetes-gitops-platform/introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../kubernetes-gitops-platform/security.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -347,11 +422,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../kubernetes-gitops-platform/deployment.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../kubernetes-gitops-platform/introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../kubernetes-gitops-platform/security.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

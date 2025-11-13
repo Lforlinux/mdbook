@@ -19,6 +19,11 @@ A production-ready, containerized RAG (Retrieval-Augmented Generation) stack wit
 
 **Key Technologies:** Docker, Ollama, Chroma, PostgreSQL, Prometheus, Grafana, Open WebUI
 
+### [Kubernetes GitOps Platform](kubernetes-gitops-platform/introduction.md)
+A production-ready AWS EKS cluster with complete GitOps platform toolkit, automated deployment, monitoring, and observability. Combines infrastructure as code with ArgoCD for automated platform management.
+
+**Key Technologies:** Terraform, AWS EKS, Kubernetes, ArgoCD, Prometheus, Grafana, Loki, Helm
+
 ---
 
 ## 📚 Navigation
