@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Security &amp; Best Practices - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,164 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="opensource-llm-rag-stack-security--best-practices"><a class="header" href="#opensource-llm-rag-stack-security--best-practices">Opensource-LLM-RAG-Stack Security &amp; Best Practices</a></h1>
+<h2 id="container-security"><a class="header" href="#container-security">Container Security</a></h2>
+<h3 id="image-security"><a class="header" href="#image-security">Image Security</a></h3>
+<ul>
+<li><strong>Official Images</strong>: Use official, maintained images</li>
+<li><strong>Version Pinning</strong>: Pin specific image versions</li>
+<li><strong>Regular Updates</strong>: Keep images updated</li>
+<li><strong>Vulnerability Scanning</strong>: Scan images for vulnerabilities</li>
+</ul>
+<h3 id="network-security"><a class="header" href="#network-security">Network Security</a></h3>
+<pre><code class="language-yaml">networks:
+  rag-network:
+    driver: bridge
+    internal: false  # Set to true for isolated network
+
+# Service-specific network configuration
+services:
+  postgres:
+    networks:
+      - rag-network
+    # No external ports exposed
+</code></pre>
+<h2 id="data-security"><a class="header" href="#data-security">Data Security</a></h2>
+<h3 id="database-security"><a class="header" href="#database-security">Database Security</a></h3>
+<pre><code class="language-sql">-- Create read-only user
+CREATE USER readonly_user WITH PASSWORD 'secure_password';
+GRANT CONNECT ON DATABASE chatdb TO readonly_user;
+GRANT USAGE ON SCHEMA public TO readonly_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly_user;
+
+-- Encrypt sensitive data
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Encrypt password column
+ALTER TABLE users ADD COLUMN password_encrypted BYTEA;
+</code></pre>
+<h3 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h3>
+<pre><code class="language-yaml"># Use Docker secrets for sensitive data
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+</code></pre>
+<h2 id="access-control"><a class="header" href="#access-control">Access Control</a></h2>
+<h3 id="api-security"><a class="header" href="#api-security">API Security</a></h3>
+<pre><code class="language-python">from functools import wraps
+from flask import request, jsonify
+import jwt
+
+def require_auth(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+        
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        except:
+            return jsonify({'error': 'Invalid token'}), 401
+        
+        return f(*args, **kwargs)
+    return decorated_function
+</code></pre>
+<h3 id="rate-limiting"><a class="header" href="#rate-limiting">Rate Limiting</a></h3>
+<pre><code class="language-python">from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
+
+@app.route('/api/chat')
+@limiter.limit("10 per minute")
+@require_auth
+def chat():
+    # Chat endpoint with rate limiting
+    pass
+</code></pre>
+<h2 id="security-best-practices"><a class="header" href="#security-best-practices">Security Best Practices</a></h2>
+<h3 id="1-secrets-management"><a class="header" href="#1-secrets-management">1. <strong>Secrets Management</strong></a></h3>
+<ul>
+<li>Use Docker secrets or environment files</li>
+<li>Never commit secrets to Git</li>
+<li>Rotate secrets regularly</li>
+<li>Use different secrets per environment</li>
+</ul>
+<h3 id="2-network-isolation"><a class="header" href="#2-network-isolation">2. <strong>Network Isolation</strong></a></h3>
+<ul>
+<li>Isolate services in Docker networks</li>
+<li>Limit exposed ports</li>
+<li>Use reverse proxy for external access</li>
+<li>Implement firewall rules</li>
+</ul>
+<h3 id="3-data-encryption"><a class="header" href="#3-data-encryption">3. <strong>Data Encryption</strong></a></h3>
+<ul>
+<li>Encrypt data at rest (PostgreSQL)</li>
+<li>Encrypt data in transit (TLS/SSL)</li>
+<li>Encrypt sensitive fields in database</li>
+<li>Use secure key management</li>
+</ul>
+<h3 id="4-access-control"><a class="header" href="#4-access-control">4. <strong>Access Control</strong></a></h3>
+<ul>
+<li>Implement authentication</li>
+<li>Use role-based access control (RBAC)</li>
+<li>Enforce least privilege principle</li>
+<li>Audit access logs</li>
+</ul>
+<h3 id="5-vulnerability-management"><a class="header" href="#5-vulnerability-management">5. <strong>Vulnerability Management</strong></a></h3>
+<ul>
+<li>Regular security updates</li>
+<li>Scan for vulnerabilities</li>
+<li>Patch promptly</li>
+<li>Monitor security advisories</li>
+</ul>
+<h2 id="production-security-checklist"><a class="header" href="#production-security-checklist">Production Security Checklist</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Change all default passwords</li>
+<li><input disabled="" type="checkbox"/>
+Enable TLS/SSL for all services</li>
+<li><input disabled="" type="checkbox"/>
+Configure firewall rules</li>
+<li><input disabled="" type="checkbox"/>
+Set up authentication</li>
+<li><input disabled="" type="checkbox"/>
+Enable audit logging</li>
+<li><input disabled="" type="checkbox"/>
+Configure backup encryption</li>
+<li><input disabled="" type="checkbox"/>
+Implement rate limiting</li>
+<li><input disabled="" type="checkbox"/>
+Set up intrusion detection</li>
+<li><input disabled="" type="checkbox"/>
+Regular security audits</li>
+<li><input disabled="" type="checkbox"/>
+Incident response plan</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../opensource-llm-rag-stack/technical-implementation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../opensource-llm-rag-stack/scaling.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +343,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../opensource-llm-rag-stack/technical-implementation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../opensource-llm-rag-stack/scaling.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +378,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

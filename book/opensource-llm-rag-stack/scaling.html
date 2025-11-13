@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Scaling &amp; Performance - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,176 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="opensource-llm-rag-stack-scaling--performance"><a class="header" href="#opensource-llm-rag-stack-scaling--performance">Opensource-LLM-RAG-Stack Scaling &amp; Performance</a></h1>
+<h2 id="horizontal-scaling"><a class="header" href="#horizontal-scaling">Horizontal Scaling</a></h2>
+<h3 id="load-balancing"><a class="header" href="#load-balancing">Load Balancing</a></h3>
+<pre><code class="language-yaml"># Multiple Ollama instances behind load balancer
+services:
+  ollama-1:
+    image: ollama/ollama:latest
+    deploy:
+      replicas: 3
+  
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "11434:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+</code></pre>
+<h3 id="database-scaling"><a class="header" href="#database-scaling">Database Scaling</a></h3>
+<pre><code class="language-yaml"># PostgreSQL with read replicas
+services:
+  postgres-primary:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_REPLICATION_MODE: master
+  
+  postgres-replica:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_REPLICATION_MODE: slave
+    depends_on:
+      - postgres-primary
+</code></pre>
+<h2 id="vector-database-scaling"><a class="header" href="#vector-database-scaling">Vector Database Scaling</a></h2>
+<h3 id="chroma-clustering"><a class="header" href="#chroma-clustering">Chroma Clustering</a></h3>
+<pre><code class="language-python"># Distributed Chroma setup
+from chromadb.config import Settings
+
+# Primary Chroma instance
+primary_client = chromadb.Client(Settings(
+    chroma_db_impl="duckdb+parquet",
+    persist_directory="/chroma/primary"
+))
+
+# Replica instances for read scaling
+replica_clients = [
+    chromadb.Client(Settings(
+        chroma_db_impl="duckdb+parquet",
+        persist_directory=f"/chroma/replica-{i}"
+    )) for i in range(3)
+]
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="caching-strategy"><a class="header" href="#caching-strategy">Caching Strategy</a></h3>
+<pre><code class="language-python">from functools import lru_cache
+import redis
+
+redis_client = redis.Redis(host='redis', port=6379, db=0)
+
+@lru_cache(maxsize=1000)
+def get_cached_embedding(text):
+    """Cache embeddings to avoid recomputation"""
+    cache_key = f"embedding:{hash(text)}"
+    cached = redis_client.get(cache_key)
+    
+    if cached:
+        return pickle.loads(cached)
+    
+    embedding = embedding_model.encode(text)
+    redis_client.setex(cache_key, 3600, pickle.dumps(embedding))
+    return embedding
+</code></pre>
+<h3 id="query-optimization"><a class="header" href="#query-optimization">Query Optimization</a></h3>
+<pre><code class="language-python"># Optimize RAG retrieval
+def optimized_retrieve(query, top_k=5, rerank=True):
+    # Initial retrieval
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=top_k * 2  # Retrieve more for reranking
+    )
+    
+    if rerank:
+        # Rerank using cross-encoder
+        reranked = rerank_results(query, results)
+        return reranked[:top_k]
+    
+    return results[:top_k]
+</code></pre>
+<h2 id="resource-management"><a class="header" href="#resource-management">Resource Management</a></h2>
+<h3 id="resource-limits"><a class="header" href="#resource-limits">Resource Limits</a></h3>
+<pre><code class="language-yaml">services:
+  ollama:
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+  
+  postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+</code></pre>
+<h3 id="auto-scaling"><a class="header" href="#auto-scaling">Auto-Scaling</a></h3>
+<pre><code class="language-yaml"># Docker Swarm auto-scaling
+services:
+  open-webui:
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+</code></pre>
+<h2 id="monitoring-scaling-metrics"><a class="header" href="#monitoring-scaling-metrics">Monitoring Scaling Metrics</a></h2>
+<h3 id="key-metrics"><a class="header" href="#key-metrics">Key Metrics</a></h3>
+<ul>
+<li><strong>Request Rate</strong>: Requests per second</li>
+<li><strong>Response Time</strong>: P50, P95, P99 latencies</li>
+<li><strong>Error Rate</strong>: Percentage of failed requests</li>
+<li><strong>Resource Usage</strong>: CPU, memory, disk</li>
+<li><strong>Database Connections</strong>: Active connections</li>
+<li><strong>Vector DB Size</strong>: Number of documents</li>
+</ul>
+<h3 id="scaling-triggers"><a class="header" href="#scaling-triggers">Scaling Triggers</a></h3>
+<pre><code class="language-yaml"># Auto-scaling based on metrics
+scaling:
+  triggers:
+    - metric: cpu_usage
+      threshold: 70
+      action: scale_up
+    - metric: memory_usage
+      threshold: 80
+      action: scale_up
+    - metric: request_latency
+      threshold: 1000ms
+      action: scale_up
+</code></pre>
+<h2 id="cost-optimization"><a class="header" href="#cost-optimization">Cost Optimization</a></h2>
+<h3 id="resource-right-sizing"><a class="header" href="#resource-right-sizing">Resource Right-Sizing</a></h3>
+<ul>
+<li><strong>Ollama</strong>: Adjust based on model size</li>
+<li><strong>PostgreSQL</strong>: Optimize connection pool</li>
+<li><strong>Chroma</strong>: Tune index parameters</li>
+<li><strong>Monitoring</strong>: Use efficient exporters</li>
+</ul>
+<h3 id="caching-strategy-1"><a class="header" href="#caching-strategy-1">Caching Strategy</a></h3>
+<ul>
+<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
+<li><strong>Query Cache</strong>: Cache frequent queries</li>
+<li><strong>Response Cache</strong>: Cache LLM responses</li>
+<li><strong>CDN</strong>: Use CDN for static assets</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../opensource-llm-rag-stack/security.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../opensource-llm-rag-stack/troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +355,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../opensource-llm-rag-stack/security.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../opensource-llm-rag-stack/troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +390,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

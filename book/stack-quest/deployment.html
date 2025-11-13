@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Deployment &amp; CI/CD - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,133 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="stack-quest-deployment--cicd"><a class="header" href="#stack-quest-deployment--cicd">Stack-Quest Deployment &amp; CI/CD</a></h1>
+<h2 id="github-pages-deployment"><a class="header" href="#github-pages-deployment">GitHub Pages Deployment</a></h2>
+<h3 id="automatic-deployment"><a class="header" href="#automatic-deployment">Automatic Deployment</a></h3>
+<pre><code class="language-yaml">name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+</code></pre>
+<h2 id="deployment-process"><a class="header" href="#deployment-process">Deployment Process</a></h2>
+<ol>
+<li><strong>Code Push</strong>: Developer pushes to main branch</li>
+<li><strong>Trigger</strong>: GitHub Actions workflow starts</li>
+<li><strong>Build</strong>: No build step needed (static site)</li>
+<li><strong>Deploy</strong>: Files uploaded to GitHub Pages</li>
+<li><strong>Live</strong>: Site available immediately</li>
+</ol>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<h3 id="github-pages-settings"><a class="header" href="#github-pages-settings">GitHub Pages Settings</a></h3>
+<ul>
+<li><strong>Source</strong>: Deploy from branch (main)</li>
+<li><strong>Branch</strong>: / (root)</li>
+<li><strong>Custom Domain</strong>: Optional</li>
+<li><strong>HTTPS</strong>: Automatically enabled</li>
+</ul>
+<h3 id="repository-structure"><a class="header" href="#repository-structure">Repository Structure</a></h3>
+<pre><code>stack-quest/
+├── index.html
+├── script.js
+├── styles.css
+├── Random-Questions/
+│   ├── linux.md
+│   ├── aws.md
+│   └── ...
+├── Challenge/
+│   ├── devops-challenges.md
+│   └── ...
+└── .github/
+    └── workflows/
+        └── deploy.yml
+</code></pre>
+<h2 id="custom-domain-setup"><a class="header" href="#custom-domain-setup">Custom Domain Setup</a></h2>
+<h3 id="dns-configuration"><a class="header" href="#dns-configuration">DNS Configuration</a></h3>
+<ol>
+<li>Add CNAME record pointing to GitHub Pages</li>
+<li>Configure custom domain in repository settings</li>
+<li>Enable HTTPS (automatic)</li>
+<li>Wait for DNS propagation</li>
+</ol>
+<h3 id="example-dns-records"><a class="header" href="#example-dns-records">Example DNS Records</a></h3>
+<pre><code>Type: CNAME
+Name: www
+Value: username.github.io
+</code></pre>
+<h2 id="rollback-strategy"><a class="header" href="#rollback-strategy">Rollback Strategy</a></h2>
+<h3 id="version-control"><a class="header" href="#version-control">Version Control</a></h3>
+<ul>
+<li><strong>Git History</strong>: All versions tracked</li>
+<li><strong>Branch Strategy</strong>: Feature branches for changes</li>
+<li><strong>Tagging</strong>: Tag releases for easy rollback</li>
+<li><strong>Revert Commits</strong>: Quick rollback via git revert</li>
+</ul>
+<h3 id="rollback-process"><a class="header" href="#rollback-process">Rollback Process</a></h3>
+<ol>
+<li>Identify problematic commit</li>
+<li>Revert commit or checkout previous version</li>
+<li>Push to main branch</li>
+<li>GitHub Actions redeploys automatically</li>
+</ol>
+<h2 id="monitoring-deployment"><a class="header" href="#monitoring-deployment">Monitoring Deployment</a></h2>
+<h3 id="github-actions-logs"><a class="header" href="#github-actions-logs">GitHub Actions Logs</a></h3>
+<ul>
+<li><strong>Workflow Runs</strong>: View deployment history</li>
+<li><strong>Build Logs</strong>: Check for errors</li>
+<li><strong>Deployment Status</strong>: Monitor deployment progress</li>
+</ul>
+<h3 id="health-checks"><a class="header" href="#health-checks">Health Checks</a></h3>
+<pre><code class="language-bash"># Check site availability
+curl -I https://username.github.io/stack-quest/
+
+# Verify content loading
+curl https://username.github.io/stack-quest/Random-Questions/linux.md
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Test Locally</strong>: Verify changes before pushing</li>
+<li><strong>Review Changes</strong>: Use pull requests for review</li>
+<li><strong>Monitor Deployments</strong>: Check GitHub Actions status</li>
+<li><strong>Version Control</strong>: Commit frequently with clear messages</li>
+<li><strong>Documentation</strong>: Keep README updated</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../stack-quest/architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../stack-quest/performance.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +312,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../stack-quest/architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../stack-quest/performance.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +347,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

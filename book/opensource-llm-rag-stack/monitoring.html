@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Monitoring &amp; Observability - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,97 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="opensource-llm-rag-stack-monitoring"><a class="header" href="#opensource-llm-rag-stack-monitoring">Opensource-LLM-RAG-Stack Monitoring</a></h1>
+<h2 id="monitoring--observability"><a class="header" href="#monitoring--observability">Monitoring &amp; Observability</a></h2>
+<h3 id="prometheus-metrics"><a class="header" href="#prometheus-metrics">Prometheus Metrics</a></h3>
+<p>Prometheus collects metrics from all services:</p>
+<ul>
+<li><strong>Service Health</strong>: <code>up{job=~"prometheus|postgres_exporter"}</code></li>
+<li><strong>Database Performance</strong>: PostgreSQL exporter metrics</li>
+<li><strong>Request Rates</strong>: HTTP request monitoring</li>
+<li><strong>Resource Usage</strong>: Container and system metrics</li>
+</ul>
+<h3 id="grafana-dashboards"><a class="header" href="#grafana-dashboards">Grafana Dashboards</a></h3>
+<p>Pre-configured dashboards include:</p>
+<ul>
+<li><strong>RAG Stack Overview</strong>: Service health and performance</li>
+<li><strong>Database Metrics</strong>: PostgreSQL performance monitoring</li>
+<li><strong>System Resources</strong>: CPU, memory, and disk usage</li>
+<li><strong>Request Analytics</strong>: API call patterns and response times</li>
+</ul>
+<h2 id="rag-stack-monitoring-dashboard"><a class="header" href="#rag-stack-monitoring-dashboard">RAG Stack Monitoring Dashboard</a></h2>
+<p><img src="../images/rag-dashboard.png" alt="RAG Stack Monitoring Dashboard" /></p>
+<p>The dashboard provides real-time insights into:</p>
+<ul>
+<li><strong>Service Health Status</strong>: Live monitoring of all stack components</li>
+<li><strong>Active Services Count</strong>: Overview of running services</li>
+<li><strong>Request Rate Monitoring</strong>: API performance metrics</li>
+<li><strong>Database Performance</strong>: PostgreSQL metrics and health</li>
+</ul>
+<h2 id="auto-provisioning"><a class="header" href="#auto-provisioning">Auto-Provisioning</a></h2>
+<p>Grafana automatically configures:</p>
+<pre><code class="language-yaml"># Datasources
+datasources:
+  - name: Prometheus
+    type: prometheus
+    url: http://prometheus:9090
+    isDefault: true
+
+# Dashboards auto-loaded from:
+# monitoring/grafana/dashboards/
+</code></pre>
+<h2 id="production-deployment"><a class="header" href="#production-deployment">Production Deployment</a></h2>
+<h3 id="environment-configuration"><a class="header" href="#environment-configuration">Environment Configuration</a></h3>
+<pre><code class="language-bash"># Production environment variables
+export POSTGRES_PASSWORD=secure_password
+export GRAFANA_ADMIN_PASSWORD=secure_admin_password
+export OLLAMA_API_BASE_URL=https://your-ollama-instance.com
+</code></pre>
+<h3 id="scaling-considerations"><a class="header" href="#scaling-considerations">Scaling Considerations</a></h3>
+<ul>
+<li><strong>Horizontal Scaling</strong>: Multiple Ollama instances behind load balancer</li>
+<li><strong>Database Scaling</strong>: PostgreSQL read replicas for query performance</li>
+<li><strong>Vector DB Scaling</strong>: Chroma clustering for high availability</li>
+<li><strong>Monitoring</strong>: Prometheus federation for multi-instance monitoring</li>
+</ul>
+<h3 id="security-best-practices"><a class="header" href="#security-best-practices">Security Best Practices</a></h3>
+<ul>
+<li>Change default passwords in production</li>
+<li>Use Docker secrets for sensitive data</li>
+<li>Configure network security policies</li>
+<li>Enable SSL/TLS for all services</li>
+<li>Implement proper backup strategies</li>
+</ul>
+<h2 id="enterprise-features"><a class="header" href="#enterprise-features">Enterprise Features</a></h2>
+<h3 id="devops-best-practices"><a class="header" href="#devops-best-practices">DevOps Best Practices</a></h3>
+<ul>
+<li><strong>Infrastructure as Code</strong>: Docker Compose for reproducible deployments</li>
+<li><strong>Monitoring</strong>: Comprehensive observability with Prometheus and Grafana</li>
+<li><strong>Data Management</strong>: Optimized PostgreSQL schema with full-text search</li>
+<li><strong>Security</strong>: Network isolation and environment-based configuration</li>
+<li><strong>Scalability</strong>: Microservices architecture for horizontal scaling</li>
+</ul>
+<h3 id="aiml-capabilities"><a class="header" href="#aiml-capabilities">AI/ML Capabilities</a></h3>
+<ul>
+<li><strong>Vector Search</strong>: Chroma for semantic similarity search</li>
+<li><strong>Containerized LLM</strong>: Ollama in Docker for reproducible model inference</li>
+<li><strong>RAG Pipeline</strong>: Complete retrieval-augmented generation workflow</li>
+<li><strong>Document Processing</strong>: Automatic chunking and embedding generation</li>
+<li><strong>Chat History</strong>: Persistent conversation management</li>
+<li><strong>Model Management</strong>: Easy model switching and versioning with Docker volumes</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../opensource-llm-rag-stack/rag-guide.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../opensource-llm-rag-stack/technical-implementation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +276,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../opensource-llm-rag-stack/rag-guide.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../opensource-llm-rag-stack/technical-implementation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +311,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

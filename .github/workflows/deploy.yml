@@ -40,6 +40,7 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+        continue-on-error: true
       - name: Build with mdBook
         run: mdbook build
       - name: Upload artifact

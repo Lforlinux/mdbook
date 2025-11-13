@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Local Development with LocalStack - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,129 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="cloud-cv-local-development-with-localstack"><a class="header" href="#cloud-cv-local-development-with-localstack">Cloud-CV Local Development with LocalStack</a></h1>
+<h2 id="what-is-localstack"><a class="header" href="#what-is-localstack">What is LocalStack?</a></h2>
+<p>LocalStack is a fully functional local AWS cloud stack that runs on your machine. It provides:</p>
+<ul>
+<li><strong>Real AWS APIs</strong>: Use actual AWS SDKs and CLI commands</li>
+<li><strong>Cost-Free Development</strong>: No AWS charges during development</li>
+<li><strong>Offline Development</strong>: Works without internet connection</li>
+<li><strong>Terraform Compatibility</strong>: Works seamlessly with existing Terraform code</li>
+<li><strong>Realistic Testing</strong>: Closer to production environment than mocks</li>
+</ul>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
+<h3 id="1-start-localstack"><a class="header" href="#1-start-localstack">1. Start LocalStack</a></h3>
+<pre><code class="language-bash"># Start LocalStack development environment
+./scripts/local-dev-start.sh start
+
+# Or simply (start is the default)
+./scripts/local-dev-start.sh
+</code></pre>
+<h3 id="2-upload-frontend-files"><a class="header" href="#2-upload-frontend-files">2. Upload Frontend Files</a></h3>
+<pre><code class="language-bash"># Upload frontend files to S3
+./scripts/local-dev-start.sh upload
+</code></pre>
+<h3 id="3-check-status"><a class="header" href="#3-check-status">3. Check Status</a></h3>
+<pre><code class="language-bash"># Check LocalStack status
+./scripts/local-dev-start.sh status
+</code></pre>
+<h3 id="4-stop-localstack"><a class="header" href="#4-stop-localstack">4. Stop LocalStack</a></h3>
+<pre><code class="language-bash"># Stop LocalStack when done
+./scripts/local-dev-start.sh stop
+</code></pre>
+<h2 id="localstack-architecture"><a class="header" href="#localstack-architecture">LocalStack Architecture</a></h2>
+<h3 id="services-included"><a class="header" href="#services-included">Services Included</a></h3>
+<ul>
+<li><strong>S3</strong>: Static website hosting</li>
+<li><strong>DynamoDB</strong>: NoSQL database for visitor counter</li>
+<li><strong>Lambda</strong>: Serverless visitor counter function</li>
+<li><strong>API Gateway</strong>: REST API endpoint</li>
+<li><strong>IAM</strong>: Identity and access management</li>
+<li><strong>CloudWatch</strong>: Monitoring and logging</li>
+</ul>
+<h3 id="access-urls"><a class="header" href="#access-urls">Access URLs</a></h3>
+<ul>
+<li><strong>Main Website</strong>: http://localhost:4566/cloud-cv-local/index.html</li>
+<li><strong>S3 Browser</strong>: http://localhost:4566/cloud-cv-local/</li>
+<li><strong>Health Check</strong>: http://localhost:4566/_localstack/health</li>
+</ul>
+<h2 id="development-workflow"><a class="header" href="#development-workflow">Development Workflow</a></h2>
+<h3 id="1-start-development-environment"><a class="header" href="#1-start-development-environment">1. Start Development Environment</a></h3>
+<pre><code class="language-bash"># Start LocalStack
+./scripts/local-dev-start.sh start
+</code></pre>
+<h3 id="2-make-changes"><a class="header" href="#2-make-changes">2. Make Changes</a></h3>
+<pre><code class="language-bash"># Edit frontend files
+nano frontend/index.html
+nano frontend/styles.css
+nano frontend/script.js
+</code></pre>
+<h3 id="3-upload-changes"><a class="header" href="#3-upload-changes">3. Upload Changes</a></h3>
+<pre><code class="language-bash"># Upload updated files
+./scripts/local-dev-start.sh upload
+</code></pre>
+<h3 id="4-test-changes"><a class="header" href="#4-test-changes">4. Test Changes</a></h3>
+<pre><code class="language-bash"># Open browser
+open http://localhost:4566/cloud-cv-local/index.html
+</code></pre>
+<h3 id="5-stop-when-done"><a class="header" href="#5-stop-when-done">5. Stop When Done</a></h3>
+<pre><code class="language-bash"># Stop LocalStack
+./scripts/local-dev-start.sh stop
+</code></pre>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="localstack-not-starting"><a class="header" href="#localstack-not-starting">LocalStack Not Starting</a></h3>
+<pre><code class="language-bash"># Check if port 4566 is in use
+lsof -i :4566
+
+# Kill process using port
+sudo kill -9 $(lsof -t -i:4566)
+
+# Start LocalStack again
+./scripts/local-dev-start.sh start
+</code></pre>
+<h3 id="container-conflicts"><a class="header" href="#container-conflicts">Container Conflicts</a></h3>
+<pre><code class="language-bash"># Remove existing containers
+docker rm -f localstack
+
+# Start fresh
+./scripts/local-dev-start.sh start
+</code></pre>
+<h3 id="aws-cli-issues"><a class="header" href="#aws-cli-issues">AWS CLI Issues</a></h3>
+<pre><code class="language-bash"># Check AWS credentials
+aws configure list
+
+# Set LocalStack endpoint
+export AWS_ENDPOINT_URL=http://localhost:4566
+
+# Test S3 access
+aws s3 ls --endpoint-url=http://localhost:4566
+</code></pre>
+<h2 id="security"><a class="header" href="#security">Security</a></h2>
+<h3 id="localstack-credentials"><a class="header" href="#localstack-credentials">LocalStack Credentials</a></h3>
+<pre><code class="language-bash"># Default LocalStack credentials
+AWS_ACCESS_KEY_ID=test
+AWS_SECRET_ACCESS_KEY=test
+AWS_DEFAULT_REGION=us-east-1
+</code></pre>
+<h3 id="network-isolation"><a class="header" href="#network-isolation">Network Isolation</a></h3>
+<ul>
+<li>LocalStack runs in Docker container</li>
+<li>Isolated from host network</li>
+<li>No external access required</li>
+<li>Safe for development</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../cloud-cv/deployment.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../cloud-cv/technical-implementation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +308,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../cloud-cv/deployment.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../cloud-cv/technical-implementation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +343,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

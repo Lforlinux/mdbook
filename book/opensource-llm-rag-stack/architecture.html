@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Architecture - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,170 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="opensource-llm-rag-stack-architecture"><a class="header" href="#opensource-llm-rag-stack-architecture">Opensource-LLM-RAG-Stack Architecture</a></h1>
+<h2 id="system-architecture"><a class="header" href="#system-architecture">System Architecture</a></h2>
+<p><img src="../images/RAG-LLM-stack.png" alt="OpenSource RAG LLM Stack Architecture" /></p>
+<p>This diagram illustrates the complete architecture of the OpenSource RAG LLM Stack, showing the interaction between all components for retrieval-augmented generation, chat history management, and comprehensive monitoring.</p>
+<h2 id="rag-flow"><a class="header" href="#rag-flow">RAG Flow</a></h2>
+<p><strong>RAG Flow:</strong> User → Open WebUI → Chroma (retrieve) → Open WebUI → Ollama (generate) → Open WebUI → User</p>
+<h2 id="core-components"><a class="header" href="#core-components">Core Components</a></h2>
+<h3 id="open-webui"><a class="header" href="#open-webui">Open WebUI</a></h3>
+<ul>
+<li><strong>Purpose</strong>: User interface for chat and document management</li>
+<li><strong>Port</strong>: 3000</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Chat interface</li>
+<li>Document upload and processing</li>
+<li>RAG integration</li>
+<li>Chat history management</li>
+</ul>
+</li>
+</ul>
+<h3 id="ollama"><a class="header" href="#ollama">Ollama</a></h3>
+<ul>
+<li><strong>Purpose</strong>: LLM inference engine</li>
+<li><strong>Port</strong>: 11434</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Model management</li>
+<li>Text generation</li>
+<li>Embedding generation</li>
+<li>Containerized deployment</li>
+</ul>
+</li>
+</ul>
+<h3 id="chroma"><a class="header" href="#chroma">Chroma</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Vector database for embeddings</li>
+<li><strong>Port</strong>: 8000</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Semantic search</li>
+<li>Embedding storage</li>
+<li>Collection management</li>
+<li>Similarity search</li>
+</ul>
+</li>
+</ul>
+<h3 id="postgresql"><a class="header" href="#postgresql">PostgreSQL</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Relational database for chat history and metadata</li>
+<li><strong>Port</strong>: 5432</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Chat session storage</li>
+<li>Message history</li>
+<li>Document metadata</li>
+<li>Full-text search</li>
+</ul>
+</li>
+</ul>
+<h2 id="monitoring-stack"><a class="header" href="#monitoring-stack">Monitoring Stack</a></h2>
+<h3 id="prometheus"><a class="header" href="#prometheus">Prometheus</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Metrics collection and storage</li>
+<li><strong>Port</strong>: 9090</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Time-series database</li>
+<li>Service health monitoring</li>
+<li>Performance metrics</li>
+<li>Alert rule evaluation</li>
+</ul>
+</li>
+</ul>
+<h3 id="grafana"><a class="header" href="#grafana">Grafana</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Visualization and dashboards</li>
+<li><strong>Port</strong>: 3001</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Real-time dashboards</li>
+<li>Service health visualization</li>
+<li>Performance analytics</li>
+<li>Custom dashboard creation</li>
+</ul>
+</li>
+</ul>
+<h2 id="data-flow"><a class="header" href="#data-flow">Data Flow</a></h2>
+<h3 id="document-processing-flow"><a class="header" href="#document-processing-flow">Document Processing Flow</a></h3>
+<ol>
+<li>User uploads document via Open WebUI</li>
+<li>Document is chunked into smaller pieces</li>
+<li>Chunks are converted to embeddings via Ollama</li>
+<li>Embeddings are stored in Chroma vector database</li>
+<li>Metadata is stored in PostgreSQL</li>
+</ol>
+<h3 id="query-flow-rag"><a class="header" href="#query-flow-rag">Query Flow (RAG)</a></h3>
+<ol>
+<li>User asks question in Open WebUI</li>
+<li>Question is converted to embedding</li>
+<li>Chroma performs similarity search</li>
+<li>Relevant document chunks are retrieved</li>
+<li>Chunks are added to prompt context</li>
+<li>Ollama generates response using context</li>
+<li>Response is displayed to user</li>
+<li>Conversation is saved to PostgreSQL</li>
+</ol>
+<h2 id="infrastructure-as-code"><a class="header" href="#infrastructure-as-code">Infrastructure as Code</a></h2>
+<p>The entire stack is defined in Docker Compose:</p>
+<pre><code class="language-yaml">services:
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    volumes:
+      - ollama-data:/root/.ollama
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports: ["3000:8080"]
+    environment:
+      - OLLAMA_API_BASE_URL=http://ollama:11434
+      - VECTOR_DB=chroma
+      - DATABASE_URL=postgresql://user:password@postgres:5432/chatdb
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    ports: ["8000:8000"]
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chatdb
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports: ["9090:9090"]
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    ports: ["3001:3000"]
+</code></pre>
+<h2 id="data-persistence"><a class="header" href="#data-persistence">Data Persistence</a></h2>
+<p>All data is persisted in Docker volumes:</p>
+<ul>
+<li><code>ollama-data</code>: LLM models and Ollama configurations</li>
+<li><code>openwebui-data</code>: WebUI configurations and user data</li>
+<li><code>chroma-data</code>: Vector embeddings and collections</li>
+<li><code>pgdata</code>: PostgreSQL database files</li>
+<li><code>grafana-data</code>: Dashboard configurations and user settings</li>
+<li><code>prometheus-data</code>: Metrics time-series data</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../opensource-llm-rag-stack/introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../opensource-llm-rag-stack/setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +349,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../opensource-llm-rag-stack/introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../opensource-llm-rag-stack/setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +384,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

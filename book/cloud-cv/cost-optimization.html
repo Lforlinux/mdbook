@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Cost Optimization - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,126 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="cloud-cv-cost-optimization"><a class="header" href="#cloud-cv-cost-optimization">Cloud-CV Cost Optimization</a></h1>
+<h2 id="s3-costs"><a class="header" href="#s3-costs">S3 Costs</a></h2>
+<ul>
+<li><strong>Storage Class</strong>: Standard for active content</li>
+<li><strong>Lifecycle</strong>: Move to IA after 30 days</li>
+<li><strong>Compression</strong>: Gzip compression enabled</li>
+<li><strong>CDN</strong>: CloudFront reduces S3 requests</li>
+</ul>
+<h3 id="cost-breakdown"><a class="header" href="#cost-breakdown">Cost Breakdown</a></h3>
+<ul>
+<li><strong>Storage</strong>: ~$0.023 per GB/month</li>
+<li><strong>Requests</strong>: ~$0.0004 per 1,000 GET requests</li>
+<li><strong>Data Transfer</strong>: ~$0.09 per GB (first 10 TB)</li>
+</ul>
+<h2 id="lambda-costs"><a class="header" href="#lambda-costs">Lambda Costs</a></h2>
+<ul>
+<li><strong>Memory</strong>: Optimized for 128MB</li>
+<li><strong>Timeout</strong>: 30-second limit</li>
+<li><strong>Cold Start</strong>: Minimized with provisioned concurrency</li>
+<li><strong>Monitoring</strong>: Cost tracking enabled</li>
+</ul>
+<h3 id="cost-breakdown-1"><a class="header" href="#cost-breakdown-1">Cost Breakdown</a></h3>
+<ul>
+<li><strong>Requests</strong>: First 1M requests free, then $0.20 per 1M</li>
+<li><strong>Compute</strong>: $0.0000166667 per GB-second</li>
+<li><strong>Example</strong>: 1M requests at 128MB, 100ms = ~$0.21</li>
+</ul>
+<h2 id="dynamodb-costs"><a class="header" href="#dynamodb-costs">DynamoDB Costs</a></h2>
+<ul>
+<li><strong>Billing</strong>: Pay-per-request model</li>
+<li><strong>Capacity</strong>: No provisioned capacity</li>
+<li><strong>Indexes</strong>: No GSI required</li>
+<li><strong>Backup</strong>: Point-in-time recovery</li>
+</ul>
+<h3 id="cost-breakdown-2"><a class="header" href="#cost-breakdown-2">Cost Breakdown</a></h3>
+<ul>
+<li><strong>On-Demand</strong>: $1.25 per million write units, $0.25 per million read units</li>
+<li><strong>Storage</strong>: $0.25 per GB/month</li>
+<li><strong>Backup</strong>: $0.20 per GB/month</li>
+</ul>
+<h2 id="cloudfront-costs"><a class="header" href="#cloudfront-costs">CloudFront Costs</a></h2>
+<ul>
+<li><strong>Edge Locations</strong>: Global distribution</li>
+<li><strong>Cache</strong>: Optimized cache policies</li>
+<li><strong>Compression</strong>: Gzip compression</li>
+<li><strong>HTTPS</strong>: Free SSL certificates</li>
+</ul>
+<h3 id="cost-breakdown-3"><a class="header" href="#cost-breakdown-3">Cost Breakdown</a></h3>
+<ul>
+<li><strong>Data Transfer Out</strong>: $0.085 per GB (first 10 TB)</li>
+<li><strong>Requests</strong>: $0.0075 per 10,000 HTTPS requests</li>
+<li><strong>Invalidation</strong>: First 1,000 paths/month free</li>
+</ul>
+<h2 id="total-monthly-cost-estimate"><a class="header" href="#total-monthly-cost-estimate">Total Monthly Cost Estimate</a></h2>
+<h3 id="low-traffic-scenario-1000-visitorsmonth"><a class="header" href="#low-traffic-scenario-1000-visitorsmonth">Low Traffic Scenario (1,000 visitors/month)</a></h3>
+<ul>
+<li><strong>S3</strong>: ~$0.50 (storage + requests)</li>
+<li><strong>Lambda</strong>: ~$0.10 (executions)</li>
+<li><strong>DynamoDB</strong>: ~$0.25 (requests)</li>
+<li><strong>CloudFront</strong>: ~$1.00 (data transfer)</li>
+<li><strong>Total</strong>: ~$1.85/month</li>
+</ul>
+<h3 id="medium-traffic-scenario-10000-visitorsmonth"><a class="header" href="#medium-traffic-scenario-10000-visitorsmonth">Medium Traffic Scenario (10,000 visitors/month)</a></h3>
+<ul>
+<li><strong>S3</strong>: ~$1.00</li>
+<li><strong>Lambda</strong>: ~$0.50</li>
+<li><strong>DynamoDB</strong>: ~$0.50</li>
+<li><strong>CloudFront</strong>: ~$2.00</li>
+<li><strong>Total</strong>: ~$4.00/month</li>
+</ul>
+<h3 id="high-traffic-scenario-100000-visitorsmonth"><a class="header" href="#high-traffic-scenario-100000-visitorsmonth">High Traffic Scenario (100,000 visitors/month)</a></h3>
+<ul>
+<li><strong>S3</strong>: ~$2.00</li>
+<li><strong>Lambda</strong>: ~$2.00</li>
+<li><strong>DynamoDB</strong>: ~$2.00</li>
+<li><strong>CloudFront</strong>: ~$5.00</li>
+<li><strong>Total</strong>: ~$11.00/month</li>
+</ul>
+<h2 id="cost-optimization-strategies"><a class="header" href="#cost-optimization-strategies">Cost Optimization Strategies</a></h2>
+<ol>
+<li><strong>Right-Sizing</strong>: Optimize Lambda memory allocation</li>
+<li><strong>Caching</strong>: Maximize CloudFront cache hit ratio</li>
+<li><strong>Compression</strong>: Enable Gzip compression</li>
+<li><strong>Lifecycle Policies</strong>: Move old data to cheaper storage</li>
+<li><strong>Monitoring</strong>: Track costs with AWS Cost Explorer</li>
+<li><strong>Reserved Capacity</strong>: Not applicable for serverless</li>
+</ol>
+<h2 id="cost-monitoring"><a class="header" href="#cost-monitoring">Cost Monitoring</a></h2>
+<h3 id="aws-cost-explorer"><a class="header" href="#aws-cost-explorer">AWS Cost Explorer</a></h3>
+<ul>
+<li><strong>Daily Costs</strong>: Track spending trends</li>
+<li><strong>Service Breakdown</strong>: Per-service costs</li>
+<li><strong>Forecasting</strong>: Predict future costs</li>
+<li><strong>Budget Alerts</strong>: Set spending limits</li>
+</ul>
+<h3 id="cloudwatch-billing-alarms"><a class="header" href="#cloudwatch-billing-alarms">CloudWatch Billing Alarms</a></h3>
+<pre><code class="language-hcl">resource "aws_cloudwatch_metric_alarm" "billing" {
+  alarm_name          = "cloud-cv-billing-alert"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "EstimatedCharges"
+  namespace           = "AWS/Billing"
+  period              = 86400
+  statistic           = "Maximum"
+  threshold           = 10
+  alarm_description   = "Alert when monthly costs exceed $10"
+}
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../cloud-cv/monitoring.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../cloud-cv/troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +305,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../cloud-cv/monitoring.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../cloud-cv/troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +340,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

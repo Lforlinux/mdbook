@@ -1,0 +1,393 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Technical Q&amp;A - Projects Portfolio</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="A comprehensive portfolio showcasing DevOps, SRE, and Cloud engineering projects">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Projects Portfolio</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="opensource-llm-rag-stack-technical-qa"><a class="header" href="#opensource-llm-rag-stack-technical-qa">Opensource-LLM-RAG-Stack Technical Q&amp;A</a></h1>
+<h2 id="architecture--design-questions"><a class="header" href="#architecture--design-questions">Architecture &amp; Design Questions</a></h2>
+<h3 id="q1-walk-me-through-the-rag-stack-architecture"><a class="header" href="#q1-walk-me-through-the-rag-stack-architecture">Q1: "Walk me through the RAG stack architecture."</a></h3>
+<p><strong>Answer:</strong>
+"The RAG stack is a containerized microservices architecture:</p>
+<ul>
+<li><strong>Open WebUI</strong>: User interface for chat and document management</li>
+<li><strong>Ollama</strong>: LLM inference engine for text generation</li>
+<li><strong>Chroma</strong>: Vector database for semantic search</li>
+<li><strong>PostgreSQL</strong>: Relational database for chat history</li>
+<li><strong>Prometheus</strong>: Metrics collection</li>
+<li><strong>Grafana</strong>: Visualization and dashboards</li>
+</ul>
+<p>The architecture enables retrieval-augmented generation by combining vector search with LLM inference."</p>
+<h3 id="q2-why-did-you-choose-chroma-over-other-vector-databases"><a class="header" href="#q2-why-did-you-choose-chroma-over-other-vector-databases">Q2: "Why did you choose Chroma over other vector databases?"</a></h3>
+<p><strong>Answer:</strong>
+"Chroma was chosen for several reasons:</p>
+<ol>
+<li><strong>Simplicity</strong>: Easy to set up and use</li>
+<li><strong>Open Source</strong>: Free and community-driven</li>
+<li><strong>Docker Support</strong>: Containerized deployment</li>
+<li><strong>Performance</strong>: Efficient for small to medium datasets</li>
+<li><strong>Integration</strong>: Works well with Python ecosystem</li>
+</ol>
+<p>For this use case, Chroma provides the right balance of features and simplicity."</p>
+<h3 id="q3-how-does-the-rag-pipeline-work"><a class="header" href="#q3-how-does-the-rag-pipeline-work">Q3: "How does the RAG pipeline work?"</a></h3>
+<p><strong>Answer:</strong>
+"RAG pipeline steps:</p>
+<ol>
+<li><strong>Document Ingestion</strong>: Upload and chunk documents</li>
+<li><strong>Embedding Generation</strong>: Create vector embeddings</li>
+<li><strong>Vector Storage</strong>: Store in Chroma database</li>
+<li><strong>Query Processing</strong>: Convert user query to embedding</li>
+<li><strong>Retrieval</strong>: Find relevant document chunks</li>
+<li><strong>Context Augmentation</strong>: Add chunks to prompt</li>
+<li><strong>Generation</strong>: LLM generates response with context</li>
+</ol>
+<p>This enables the LLM to answer questions based on uploaded documents."</p>
+<h2 id="technical-implementation-questions"><a class="header" href="#technical-implementation-questions">Technical Implementation Questions</a></h2>
+<h3 id="q4-how-do-you-handle-document-chunking"><a class="header" href="#q4-how-do-you-handle-document-chunking">Q4: "How do you handle document chunking?"</a></h3>
+<p><strong>Answer:</strong>
+"Document chunking strategy:</p>
+<ol>
+<li><strong>Size</strong>: 500-1000 tokens per chunk</li>
+<li><strong>Overlap</strong>: 100-200 tokens between chunks</li>
+<li><strong>Boundaries</strong>: Preserve sentence/paragraph boundaries</li>
+<li><strong>Metadata</strong>: Store source and position metadata</li>
+<li><strong>Indexing</strong>: Create full-text search indexes</li>
+</ol>
+<p>This ensures relevant context is retrieved while maintaining coherence."</p>
+<h3 id="q5-how-would-you-scale-this-to-handle-more-documents"><a class="header" href="#q5-how-would-you-scale-this-to-handle-more-documents">Q5: "How would you scale this to handle more documents?"</a></h3>
+<p><strong>Answer:</strong>
+"Scaling strategies:</p>
+<ol>
+<li><strong>Horizontal Scaling</strong>: Multiple Chroma instances</li>
+<li><strong>Sharding</strong>: Partition documents by category</li>
+<li><strong>Caching</strong>: Cache frequent queries</li>
+<li><strong>Indexing</strong>: Optimize vector indexes</li>
+<li><strong>Load Balancing</strong>: Distribute queries across instances</li>
+<li><strong>Database Optimization</strong>: PostgreSQL read replicas</li>
+</ol>
+<p>The architecture supports horizontal scaling for increased capacity."</p>
+<h2 id="performance-questions"><a class="header" href="#performance-questions">Performance Questions</a></h2>
+<h3 id="q6-how-do-you-optimize-rag-performance"><a class="header" href="#q6-how-do-you-optimize-rag-performance">Q6: "How do you optimize RAG performance?"</a></h3>
+<p><strong>Answer:</strong>
+"Performance optimizations:</p>
+<ol>
+<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
+<li><strong>Query Optimization</strong>: Efficient vector search</li>
+<li><strong>Reranking</strong>: Use cross-encoder for better results</li>
+<li><strong>Batch Processing</strong>: Process documents in batches</li>
+<li><strong>Connection Pooling</strong>: Optimize database connections</li>
+<li><strong>Caching</strong>: Cache frequent queries and responses</li>
+</ol>
+<p>These optimizations reduce latency and improve user experience."</p>
+<h3 id="q7-what-are-the-bottlenecks-in-your-rag-system"><a class="header" href="#q7-what-are-the-bottlenecks-in-your-rag-system">Q7: "What are the bottlenecks in your RAG system?"</a></h3>
+<p><strong>Answer:</strong>
+"Potential bottlenecks:</p>
+<ol>
+<li><strong>Embedding Generation</strong>: Can be slow for large documents</li>
+<li><strong>Vector Search</strong>: Query time increases with database size</li>
+<li><strong>LLM Inference</strong>: Model generation time</li>
+<li><strong>Database Queries</strong>: PostgreSQL query performance</li>
+<li><strong>Network Latency</strong>: Inter-service communication</li>
+</ol>
+<p>Mitigation strategies include caching, optimization, and scaling."</p>
+<h2 id="monitoring-questions"><a class="header" href="#monitoring-questions">Monitoring Questions</a></h2>
+<h3 id="q8-how-do-you-monitor-the-rag-stack"><a class="header" href="#q8-how-do-you-monitor-the-rag-stack">Q8: "How do you monitor the RAG stack?"</a></h3>
+<p><strong>Answer:</strong>
+"Comprehensive monitoring:</p>
+<ol>
+<li><strong>Prometheus</strong>: Collect metrics from all services</li>
+<li><strong>Grafana</strong>: Visualize metrics and create dashboards</li>
+<li><strong>Logs</strong>: Centralized logging for all services</li>
+<li><strong>Health Checks</strong>: Service availability monitoring</li>
+<li><strong>Custom Metrics</strong>: Track RAG-specific metrics</li>
+</ol>
+<p>Key metrics include request rate, latency, error rate, and resource usage."</p>
+<h3 id="q9-what-metrics-do-you-track"><a class="header" href="#q9-what-metrics-do-you-track">Q9: "What metrics do you track?"</a></h3>
+<p><strong>Answer:</strong>
+"Key metrics:</p>
+<ol>
+<li><strong>Request Metrics</strong>: Total requests, success rate</li>
+<li><strong>Latency</strong>: P50, P95, P99 response times</li>
+<li><strong>Error Rate</strong>: Percentage of failed requests</li>
+<li><strong>Resource Usage</strong>: CPU, memory, disk per service</li>
+<li><strong>Database Metrics</strong>: Query performance, connections</li>
+<li><strong>Vector DB</strong>: Document count, query performance</li>
+<li><strong>LLM Metrics</strong>: Token usage, generation time</li>
+</ol>
+<p>These metrics provide visibility into system health and performance."</p>
+<h2 id="security-questions"><a class="header" href="#security-questions">Security Questions</a></h2>
+<h3 id="q10-how-do-you-secure-the-rag-stack"><a class="header" href="#q10-how-do-you-secure-the-rag-stack">Q10: "How do you secure the RAG stack?"</a></h3>
+<p><strong>Answer:</strong>
+"Security measures:</p>
+<ol>
+<li><strong>Network Isolation</strong>: Docker networks for service isolation</li>
+<li><strong>Authentication</strong>: User authentication for API access</li>
+<li><strong>Encryption</strong>: Data encryption at rest and in transit</li>
+<li><strong>Secrets Management</strong>: Secure handling of credentials</li>
+<li><strong>Access Control</strong>: Role-based access control</li>
+<li><strong>Audit Logging</strong>: Track all access and changes</li>
+</ol>
+<p>Security is implemented at multiple layers for defense in depth."</p>
+<h3 id="q11-how-do-you-handle-sensitive-documents"><a class="header" href="#q11-how-do-you-handle-sensitive-documents">Q11: "How do you handle sensitive documents?"</a></h3>
+<p><strong>Answer:</strong>
+"Sensitive document handling:</p>
+<ol>
+<li><strong>Access Control</strong>: Restrict document access by user/role</li>
+<li><strong>Encryption</strong>: Encrypt sensitive documents</li>
+<li><strong>Audit Trail</strong>: Log all document access</li>
+<li><strong>Data Retention</strong>: Implement retention policies</li>
+<li><strong>Compliance</strong>: Follow data protection regulations</li>
+<li><strong>Secure Deletion</strong>: Properly delete sensitive data</li>
+</ol>
+<p>Multiple safeguards protect sensitive information."</p>
+<h2 id="advanced-questions"><a class="header" href="#advanced-questions">Advanced Questions</a></h2>
+<h3 id="q12-how-would-you-improve-the-rag-system"><a class="header" href="#q12-how-would-you-improve-the-rag-system">Q12: "How would you improve the RAG system?"</a></h3>
+<p><strong>Answer:</strong>
+"Improvement strategies:</p>
+<ol>
+<li><strong>Better Embeddings</strong>: Use larger embedding models</li>
+<li><strong>Reranking</strong>: Implement cross-encoder reranking</li>
+<li><strong>Hybrid Search</strong>: Combine vector and keyword search</li>
+<li><strong>Query Expansion</strong>: Expand queries for better retrieval</li>
+<li><strong>Fine-tuning</strong>: Fine-tune LLM for domain-specific tasks</li>
+<li><strong>Evaluation</strong>: Implement RAG evaluation metrics</li>
+<li><strong>A/B Testing</strong>: Test different configurations</li>
+</ol>
+<p>Continuous improvement based on user feedback and metrics."</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../opensource-llm-rag-stack/troubleshooting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

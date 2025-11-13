@@ -3,13 +3,13 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>ChaosHub</title>
+        <title>Projects Portfolio</title>
         <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
 
-        <meta name="description" content="Empowering SREs to Build Resilient Systems with Controlled Chaos">
+        <meta name="description" content="A comprehensive portfolio showcasing DevOps, SRE, and Cloud engineering projects">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
@@ -139,7 +139,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">ChaosHub</h1>
+                    <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -179,211 +179,3899 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+                        <h1 id="projects-portfolio"><a class="header" href="#projects-portfolio">Projects Portfolio</a></h1>
+<p>Welcome to my projects portfolio! This documentation showcases three major projects I've developed, each demonstrating different aspects of modern DevOps, SRE, and cloud engineering practices.</p>
+<h2 id="-projects-overview"><a class="header" href="#-projects-overview">🚀 Projects Overview</a></h2>
+<h3 id="cloud-cv"><a class="header" href="#cloud-cv"><a href="cloud-cv/introduction.html">Cloud-CV</a></a></h3>
+<p>A modern, cloud-hosted resume showcasing SRE/DevOps expertise with AWS best practices. Features infrastructure as code with Terraform, CI/CD pipelines, serverless architecture, and comprehensive monitoring.</p>
+<p><strong>Key Technologies:</strong> AWS, Terraform, GitHub Actions, Lambda, CloudFront, S3, LocalStack</p>
+<h3 id="stack-quest"><a class="header" href="#stack-quest"><a href="stack-quest/introduction.html">Stack-Quest</a></a></h3>
+<p>A comprehensive knowledge base and challenge platform for DevOps, SRE, and Cloud engineering. Features curated questions across 12+ categories and hands-on challenges for practical learning.</p>
+<p><strong>Key Technologies:</strong> GitHub Pages, JavaScript, Markdown, Responsive Design</p>
+<h3 id="opensource-llm-rag-stack"><a class="header" href="#opensource-llm-rag-stack"><a href="opensource-llm-rag-stack/introduction.html">Opensource-LLM-RAG-Stack</a></a></h3>
+<p>A production-ready, containerized RAG (Retrieval-Augmented Generation) stack with comprehensive monitoring, observability, and enterprise-grade DevOps practices.</p>
+<p><strong>Key Technologies:</strong> Docker, Ollama, Chroma, PostgreSQL, Prometheus, Grafana, Open WebUI</p>
+<hr />
+<h2 id="-navigation"><a class="header" href="#-navigation">📚 Navigation</a></h2>
+<p>Use the sidebar to navigate through each project's detailed documentation, including:</p>
+<ul>
+<li>Architecture diagrams</li>
+<li>Setup and deployment guides</li>
+<li>Feature documentation</li>
+<li>Technical implementation details</li>
+<li>Best practices and troubleshooting</li>
+</ul>
+<hr />
+<p><em>This portfolio demonstrates modern DevOps practices, cloud-native architecture, and production-ready system design.</em></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-1"><a class="header" href="#cloud-cv-1">Cloud-CV</a></h1>
+<p>A modern, cloud-hosted resume showcasing SRE/DevOps expertise with AWS best practices.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>ChaosHub is a sophisticated Chaos Engineering Platform designed to help Site Reliability Engineers (SREs) and DevOps teams test and enhance the resilience of distributed systems. By orchestrating controlled failure scenarios (e.g., pod crashes, network latency, resource exhaustion) on a mock microservices-based application, ChaosHub provides real-time insights into system behavior under stress. The platform features a web-based dashboard for experiment management, observability integrations for monitoring, and a scalable cloud-native infrastructure. It serves as a powerful demonstration of modern DevOps and SRE practices, leveraging CI/CD, ArgoCD, Prometheus, Grafana, OpenTelemetry, AWS, Terraform, and Helm, with LitmusChaos as the chaos engineering engine.</p>
-<h2 id="problem-statement"><a class="header" href="#problem-statement">Problem Statement</a></h2>
-<p>In modern cloud-native environments, distributed systems face unpredictable failures—network outages, pod crashes, or resource bottlenecks—that can disrupt services. SREs need tools to proactively test system resilience, identify weak points, and ensure high availability. Existing chaos engineering tools like LitmusChaos provide robust failure injection but lack a comprehensive, production-like platform that integrates a target application, real-time analytics, and a full DevOps toolchain. ChaosHub addresses this by offering an end-to-end platform to simulate failures, monitor impacts, and analyze resilience, all while showcasing best-in-class DevOps practices.</p>
-<h2 id="objectives"><a class="header" href="#objectives">Objectives</a></h2>
+<p>Cloud-CV is a serverless, cloud-hosted portfolio website that demonstrates enterprise-grade DevOps practices. The project showcases infrastructure as code, CI/CD automation, serverless architecture, and comprehensive cloud security.</p>
+<p><img src="cloud-cv/../images/Cloud-CV.png" alt="Cloud CV Architecture" /></p>
+<h2 id="key-features"><a class="header" href="#key-features">Key Features</a></h2>
 <ul>
-<li><strong>Demonstrate Resilience Testing</strong>: Enable SREs to run controlled chaos experiments (e.g., pod termination, CPU spikes) on a mock distributed application, simulating real-world failure scenarios.</li>
-<li><strong>Showcase DevOps Toolchain</strong>: Highlight a production-grade setup with CI/CD automation, GitOps deployments (ArgoCD), observability (Prometheus, Grafana, OpenTelemetry), and infrastructure as code (Terraform, Helm).</li>
-<li><strong>Provide Actionable Insights</strong>: Deliver real-time metrics, traces, and analytics to identify system weaknesses and improve resilience.</li>
-<li><strong>Engage DevOps/SRE Audiences</strong>: Create a compelling demo for technical teams, showing how chaos engineering integrates with modern cloud-native workflows.</li>
+<li><strong>Infrastructure as Code</strong>: Terraform for reproducible infrastructure</li>
+<li><strong>CI/CD Pipeline</strong>: GitHub Actions for automated deployment</li>
+<li><strong>Serverless</strong>: AWS Lambda for visitor counter</li>
+<li><strong>CDN</strong>: CloudFront for global content delivery</li>
+<li><strong>Security</strong>: SSL/TLS, IAM roles, least privilege access</li>
+<li><strong>Monitoring</strong>: CloudWatch for observability</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="system-architecture"><a class="header" href="#system-architecture">System Architecture</a></h1>
-<p>ChaosHub is a microservices-based platform deployed on AWS EKS, with a mock target application and a chaos orchestrator built around LitmusChaos. The architecture includes:</p>
-<h2 id="chaos-orchestrator"><a class="header" href="#chaos-orchestrator">Chaos Orchestrator</a></h2>
+<h2 id="project-highlights"><a class="header" href="#project-highlights">Project Highlights</a></h2>
+<p>This project demonstrates:</p>
 <ul>
-<li>Built on LitmusChaos (ChaosCenter for UI and engine).</li>
-<li>Schedules and executes chaos experiments (e.g., pod deletion, network delay) via REST APIs or cron jobs.</li>
-<li>Integrates with the ChaosCenter Dashboard for user-friendly experiment configuration.</li>
+<li>Modern cloud architecture patterns</li>
+<li>Infrastructure automation</li>
+<li>DevOps best practices</li>
+<li>Cost-effective serverless solutions</li>
+<li>Security-first design principles</li>
 </ul>
-<h2 id="target-application"><a class="header" href="#target-application">Target Application</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-architecture"><a class="header" href="#cloud-cv-architecture">Cloud-CV Architecture</a></h1>
+<h2 id="system-architecture"><a class="header" href="#system-architecture">System Architecture</a></h2>
+<p><img src="cloud-cv/../images/Cloud-CV.png" alt="Cloud CV Architecture" /></p>
+<p>The Cloud-CV architecture is built on AWS serverless services, providing a scalable, cost-effective solution for hosting a static portfolio website.</p>
+<h2 id="components"><a class="header" href="#components">Components</a></h2>
+<h3 id="frontend"><a class="header" href="#frontend">Frontend</a></h3>
 <ul>
-<li>A mock e-commerce app with microservices (e.g., user, order, inventory) deployed on Kubernetes.</li>
-<li>Simulates a production-like system to test resilience under chaos (e.g., HTTP errors, database failures).</li>
+<li><strong>Static Website</strong>: HTML, CSS, and JavaScript files</li>
+<li><strong>Hosting</strong>: AWS S3 bucket with static website hosting enabled</li>
+<li><strong>CDN</strong>: CloudFront distribution for global content delivery</li>
+<li><strong>SSL/TLS</strong>: Automatic HTTPS via CloudFront</li>
 </ul>
-<h2 id="analytics-service"><a class="header" href="#analytics-service">Analytics Service</a></h2>
+<h3 id="backend-services"><a class="header" href="#backend-services">Backend Services</a></h3>
 <ul>
-<li>Processes experiment results, calculating metrics like mean time to recovery (MTTR) and failure blast radius.</li>
-<li>Stores data in AWS RDS and generates resilience reports.</li>
+<li><strong>Visitor Counter</strong>: AWS Lambda function for tracking page views</li>
+<li><strong>Database</strong>: DynamoDB table for storing visitor count data</li>
+<li><strong>API Gateway</strong>: REST API endpoint for Lambda function</li>
 </ul>
-<h2 id="alerting-service"><a class="header" href="#alerting-service">Alerting Service</a></h2>
+<h3 id="infrastructure"><a class="header" href="#infrastructure">Infrastructure</a></h3>
 <ul>
-<li>Sends notifications (e.g., via Slack or PagerDuty) for experiment outcomes or critical failures.</li>
-<li>Integrates with Prometheus for alert rules.</li>
-</ul>
-<h2 id="frontend-dashboard"><a class="header" href="#frontend-dashboard">Frontend Dashboard</a></h2>
-<ul>
-<li>A React-based web interface for SREs to configure chaos experiments, monitor system health, and view analytics.</li>
-<li>Embeds Grafana panels for real-time visualizations (e.g., latency spikes, pod health).</li>
-</ul>
-<h2 id="infrastructure"><a class="header" href="#infrastructure">Infrastructure</a></h2>
-<ul>
-<li>Deployed on AWS EKS with RDS for data storage, S3 for logs/artifacts, and Elastic Load Balancer for traffic routing.</li>
-<li>Managed by Terraform for infrastructure as code and Helm for Kubernetes deployments.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="features"><a class="header" href="#features">Features</a></h1>
-<h2 id="chaos-experiment-management"><a class="header" href="#chaos-experiment-management">Chaos Experiment Management</a></h2>
-<ul>
-<li>Schedule and run chaos workflows (e.g., pod crashes, network latency) using LitmusChaos's ChaosCenter UI or APIs.</li>
-<li>Support for custom chaos scenarios via scripts or predefined Litmus experiments.</li>
-</ul>
-<h2 id="real-time-observability"><a class="header" href="#real-time-observability">Real-Time Observability</a></h2>
-<ul>
-<li>Monitor experiment impacts (e.g., error rates, latency) with Prometheus and visualize in Grafana.</li>
-<li>Trace request flows across microservices with OpenTelemetry to pinpoint failure propagation.</li>
-</ul>
-<h2 id="resilience-analytics"><a class="header" href="#resilience-analytics">Resilience Analytics</a></h2>
-<ul>
-<li>Analyze system behavior under chaos (e.g., recovery time, service degradation).</li>
-<li>Generate reports suggesting improvements (e.g., auto-scaling policies, retry mechanisms).</li>
-</ul>
-<h2 id="user-friendly-dashboard"><a class="header" href="#user-friendly-dashboard">User-Friendly Dashboard</a></h2>
-<ul>
-<li>Configure experiments, view live metrics, and explore historical data via a React-based UI.</li>
-<li>Embed Grafana dashboards for time-series visualizations (e.g., CPU usage, API response times).</li>
-</ul>
-<h2 id="automated-notifications"><a class="header" href="#automated-notifications">Automated Notifications</a></h2>
-<ul>
-<li>Alert SREs on experiment outcomes or system failures via webhooks to Slack/PagerDuty.</li>
-<li>Configurable alert rules based on Prometheus metrics.</li>
-</ul>
-<h2 id="scalable-deployment"><a class="header" href="#scalable-deployment">Scalable Deployment</a></h2>
-<ul>
-<li>Auto-scale EKS nodes and microservices during high-load experiments.</li>
-<li>Use ArgoCD for GitOps-driven deployments and rollbacks.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="technical-implementation"><a class="header" href="#technical-implementation">Technical Implementation</a></h1>
-<h2 id="components-and-tools"><a class="header" href="#components-and-tools">Components and Tools</a></h2>
-<h3 id="cicd-pipeline-github-actions"><a class="header" href="#cicd-pipeline-github-actions">CI/CD Pipeline (GitHub Actions)</a></h3>
-<ul>
-<li>Automates building, testing, and deploying microservices and the frontend.</li>
-<li>Example: A commit to the chaos orchestrator triggers tests, builds a Docker image, pushes to Amazon ECR, and updates the Helm chart.</li>
-</ul>
-<h3 id="argocd"><a class="header" href="#argocd">ArgoCD</a></h3>
-<ul>
-<li>Manages Kubernetes deployments via GitOps.</li>
-<li>Each microservice (orchestrator, target app, analytics, frontend) is packaged as a Helm chart in a Git repository.</li>
-<li>Supports canary rollouts and rollbacks (e.g., for new chaos scenarios).</li>
-</ul>
-<h3 id="prometheus"><a class="header" href="#prometheus">Prometheus</a></h3>
-<ul>
-<li>Collects metrics from:
-<ul>
-<li>Target app (e.g., API latency, error rates).</li>
-<li>Chaos orchestrator (e.g., experiment success rate).</li>
-<li>EKS infrastructure (e.g., node CPU/memory).</li>
-</ul>
-</li>
-<li>Defines alerts for anomalies (e.g., high error rates during chaos).</li>
-</ul>
-<h3 id="grafana"><a class="header" href="#grafana">Grafana</a></h3>
-<ul>
-<li>Visualizes:
-<ul>
-<li>Experiment results (e.g., latency spikes, recovery times).</li>
-<li>System health (e.g., pod status, resource usage).</li>
-<li>OpenTelemetry traces for failure analysis.</li>
-</ul>
-</li>
-<li>Embeds dashboards in the ChaosHub UI for seamless monitoring.</li>
-</ul>
-<h3 id="opentelemetry"><a class="header" href="#opentelemetry">OpenTelemetry</a></h3>
-<ul>
-<li>Instruments microservices to trace requests (e.g., from dashboard to orchestrator to target app).</li>
-<li>Exports traces to Jaeger or AWS X-Ray, visualized in Grafana.</li>
-<li>Tracks failure propagation (e.g., how a pod crash impacts downstream services).</li>
-</ul>
-<h3 id="aws-and-terraform"><a class="header" href="#aws-and-terraform">AWS and Terraform</a></h3>
-<ul>
-<li>Terraform provisions:
-<ul>
-<li>EKS cluster for microservices and LitmusChaos.</li>
-<li>RDS for experiment data and metadata.</li>
-<li>S3 for logs and artifacts (e.g., experiment reports).</li>
-<li>Elastic Load Balancer for routing traffic.</li>
-<li>IAM roles for secure access.</li>
-</ul>
-</li>
-<li>Supports infrastructure versioning and scaling (e.g., adding nodes during load tests).</li>
-</ul>
-<h3 id="helm-charts"><a class="header" href="#helm-charts">Helm Charts</a></h3>
-<ul>
-<li>Packages microservices and LitmusChaos components.</li>
-<li>Manages dependencies (e.g., Redis for caching, Kafka for event streaming).</li>
-<li>Customizes deployments for dev/staging/prod environments.</li>
-</ul>
-<h3 id="litmuschaos"><a class="header" href="#litmuschaos">LitmusChaos</a></h3>
-<ul>
-<li>Provides the chaos engineering engine via ChaosCenter.</li>
-<li>Executes experiments like pod termination, network latency, or CPU hog.</li>
-<li>Offers a web-based UI (ChaosCenter Dashboard) for experiment configuration and monitoring.</li>
+<li><strong>Infrastructure as Code</strong>: Terraform for all AWS resources</li>
+<li><strong>CI/CD</strong>: GitHub Actions for automated deployment</li>
+<li><strong>Monitoring</strong>: CloudWatch for logs and metrics</li>
 </ul>
 <h2 id="data-flow"><a class="header" href="#data-flow">Data Flow</a></h2>
 <ol>
-<li><strong>Experiment Initiation</strong>: Users configure chaos workflows via the ChaosHub dashboard or ChaosCenter UI.</li>
-<li><strong>Chaos Execution</strong>: The orchestrator (LitmusChaos) injects failures into the target app (e.g., kills an inventory service pod).</li>
-<li><strong>Data Collection</strong>: Metrics (Prometheus) and traces (OpenTelemetry) are collected from all services.</li>
-<li><strong>Analysis</strong>: The analytics service processes data, stores results in RDS, and generates resilience reports.</li>
-<li><strong>Visualization and Alerts</strong>: The frontend displays live metrics via Grafana embeds; the alerting service notifies SREs of outcomes.</li>
+<li>User accesses website via CloudFront</li>
+<li>CloudFront serves static content from S3</li>
+<li>Frontend JavaScript calls API Gateway endpoint</li>
+<li>API Gateway invokes Lambda function</li>
+<li>Lambda updates DynamoDB with visitor count</li>
+<li>Response returned to frontend for display</li>
 </ol>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="why-chaoshub-is-ideal-for-demonstration"><a class="header" href="#why-chaoshub-is-ideal-for-demonstration">Why ChaosHub is Ideal for Demonstration</a></h1>
+<h2 id="security-features"><a class="header" href="#security-features">Security Features</a></h2>
 <ul>
-<li><strong>Complexity</strong>: Combines a chaos orchestrator, target app, analytics, and frontend, creating a realistic distributed system to test resilience.</li>
-<li><strong>SRE Relevance</strong>: Chaos engineering is a core SRE practice, making the platform highly relevant for DevOps/SRE audiences.</li>
-<li><strong>Tool Showcase</strong>:
+<li><strong>IAM Roles</strong>: Least privilege access for Lambda function</li>
+<li><strong>S3 Bucket Policies</strong>: Restrictive access controls</li>
+<li><strong>CloudFront OAC</strong>: Origin Access Control for S3</li>
+<li><strong>HTTPS Only</strong>: Enforced SSL/TLS encryption</li>
+<li><strong>No Public S3 Access</strong>: All access through CloudFront</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-deployment"><a class="header" href="#cloud-cv-deployment">Cloud-CV Deployment</a></h1>
+<h2 id="production-deployment"><a class="header" href="#production-deployment">Production Deployment</a></h2>
+<h3 id="infrastructure-as-code-terraform"><a class="header" href="#infrastructure-as-code-terraform">Infrastructure as Code (Terraform)</a></h3>
+<p>The project uses Terraform to provision AWS resources:</p>
+<pre><code class="language-hcl"># S3 Bucket for static website hosting
+resource "aws_s3_bucket" "website" {
+  bucket = "cloud-cv-${random_id.bucket_suffix.hex}"
+}
+
+# CloudFront distribution for CDN
+resource "aws_cloudfront_distribution" "website" {
+  origin {
+    domain_name = aws_s3_bucket.website.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.website.id
+  }
+}
+
+# Lambda function for visitor counter
+resource "aws_lambda_function" "visitor_counter" {
+  filename         = "../lambda/visitor_counter.zip"
+  function_name    = "cloud-cv-visitor-counter"
+  runtime         = "python3.11"
+}
+
+# DynamoDB table for visitor data
+resource "aws_dynamodb_table" "visitor_counter" {
+  name           = "visitor-counter"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "id"
+}
+</code></pre>
+<h3 id="github-actions-cicd-pipeline"><a class="header" href="#github-actions-cicd-pipeline">GitHub Actions CI/CD Pipeline</a></h3>
+<p>The project uses GitHub Actions for automated deployment:</p>
+<pre><code class="language-yaml">name: Deploy Cloud CV
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Deploy Infrastructure
+        run: |
+          cd infra/terraform
+          terraform init
+          terraform plan
+          terraform apply -auto-approve
+      
+      - name: Upload Frontend Files
+        run: |
+          aws s3 cp frontend/index.html s3://$(terraform output -raw bucket_name)/
+          aws s3 cp frontend/styles.css s3://$(terraform output -raw bucket_name)/
+          aws s3 cp frontend/script.js s3://$(terraform output -raw bucket_name)/
+          aws s3 cp cv.pdf s3://$(terraform output -raw bucket_name)/
+      
+      - name: Invalidate CloudFront Cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id $(terraform output -raw cloudfront_distribution_id) --paths "/*"
+</code></pre>
+<h3 id="deployment-process"><a class="header" href="#deployment-process">Deployment Process</a></h3>
+<ol>
+<li><strong>Push to main branch</strong> triggers GitHub Actions</li>
+<li><strong>Terraform applies</strong> infrastructure changes</li>
+<li><strong>Frontend files</strong> are uploaded to S3</li>
+<li><strong>CloudFront cache</strong> is invalidated</li>
+<li><strong>Website</strong> is live with latest changes</li>
+</ol>
+<h3 id="required-github-secrets"><a class="header" href="#required-github-secrets">Required GitHub Secrets</a></h3>
 <ul>
-<li><strong>CI/CD</strong>: Automates testing and deployment of microservices.</li>
-<li><strong>ArgoCD</strong>: Demonstrates GitOps with Helm chart deployments.</li>
-<li><strong>Prometheus/Grafana</strong>: Monitors experiment impacts and system health.</li>
-<li><strong>OpenTelemetry</strong>: Traces failure propagation across services.</li>
-<li><strong>Terraform/Helm</strong>: Manages cloud-native infrastructure and Kubernetes resources.</li>
-<li><strong>LitmusChaos</strong>: Provides a production-ready chaos engine with a user-friendly UI.</li>
+<li><code>AWS_ACCESS_KEY_ID</code></li>
+<li><code>AWS_SECRET_ACCESS_KEY</code></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-local-development-with-localstack"><a class="header" href="#cloud-cv-local-development-with-localstack">Cloud-CV Local Development with LocalStack</a></h1>
+<h2 id="what-is-localstack"><a class="header" href="#what-is-localstack">What is LocalStack?</a></h2>
+<p>LocalStack is a fully functional local AWS cloud stack that runs on your machine. It provides:</p>
+<ul>
+<li><strong>Real AWS APIs</strong>: Use actual AWS SDKs and CLI commands</li>
+<li><strong>Cost-Free Development</strong>: No AWS charges during development</li>
+<li><strong>Offline Development</strong>: Works without internet connection</li>
+<li><strong>Terraform Compatibility</strong>: Works seamlessly with existing Terraform code</li>
+<li><strong>Realistic Testing</strong>: Closer to production environment than mocks</li>
+</ul>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
+<h3 id="1-start-localstack"><a class="header" href="#1-start-localstack">1. Start LocalStack</a></h3>
+<pre><code class="language-bash"># Start LocalStack development environment
+./scripts/local-dev-start.sh start
+
+# Or simply (start is the default)
+./scripts/local-dev-start.sh
+</code></pre>
+<h3 id="2-upload-frontend-files"><a class="header" href="#2-upload-frontend-files">2. Upload Frontend Files</a></h3>
+<pre><code class="language-bash"># Upload frontend files to S3
+./scripts/local-dev-start.sh upload
+</code></pre>
+<h3 id="3-check-status"><a class="header" href="#3-check-status">3. Check Status</a></h3>
+<pre><code class="language-bash"># Check LocalStack status
+./scripts/local-dev-start.sh status
+</code></pre>
+<h3 id="4-stop-localstack"><a class="header" href="#4-stop-localstack">4. Stop LocalStack</a></h3>
+<pre><code class="language-bash"># Stop LocalStack when done
+./scripts/local-dev-start.sh stop
+</code></pre>
+<h2 id="localstack-architecture"><a class="header" href="#localstack-architecture">LocalStack Architecture</a></h2>
+<h3 id="services-included"><a class="header" href="#services-included">Services Included</a></h3>
+<ul>
+<li><strong>S3</strong>: Static website hosting</li>
+<li><strong>DynamoDB</strong>: NoSQL database for visitor counter</li>
+<li><strong>Lambda</strong>: Serverless visitor counter function</li>
+<li><strong>API Gateway</strong>: REST API endpoint</li>
+<li><strong>IAM</strong>: Identity and access management</li>
+<li><strong>CloudWatch</strong>: Monitoring and logging</li>
+</ul>
+<h3 id="access-urls"><a class="header" href="#access-urls">Access URLs</a></h3>
+<ul>
+<li><strong>Main Website</strong>: http://localhost:4566/cloud-cv-local/index.html</li>
+<li><strong>S3 Browser</strong>: http://localhost:4566/cloud-cv-local/</li>
+<li><strong>Health Check</strong>: http://localhost:4566/_localstack/health</li>
+</ul>
+<h2 id="development-workflow"><a class="header" href="#development-workflow">Development Workflow</a></h2>
+<h3 id="1-start-development-environment"><a class="header" href="#1-start-development-environment">1. Start Development Environment</a></h3>
+<pre><code class="language-bash"># Start LocalStack
+./scripts/local-dev-start.sh start
+</code></pre>
+<h3 id="2-make-changes"><a class="header" href="#2-make-changes">2. Make Changes</a></h3>
+<pre><code class="language-bash"># Edit frontend files
+nano frontend/index.html
+nano frontend/styles.css
+nano frontend/script.js
+</code></pre>
+<h3 id="3-upload-changes"><a class="header" href="#3-upload-changes">3. Upload Changes</a></h3>
+<pre><code class="language-bash"># Upload updated files
+./scripts/local-dev-start.sh upload
+</code></pre>
+<h3 id="4-test-changes"><a class="header" href="#4-test-changes">4. Test Changes</a></h3>
+<pre><code class="language-bash"># Open browser
+open http://localhost:4566/cloud-cv-local/index.html
+</code></pre>
+<h3 id="5-stop-when-done"><a class="header" href="#5-stop-when-done">5. Stop When Done</a></h3>
+<pre><code class="language-bash"># Stop LocalStack
+./scripts/local-dev-start.sh stop
+</code></pre>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="localstack-not-starting"><a class="header" href="#localstack-not-starting">LocalStack Not Starting</a></h3>
+<pre><code class="language-bash"># Check if port 4566 is in use
+lsof -i :4566
+
+# Kill process using port
+sudo kill -9 $(lsof -t -i:4566)
+
+# Start LocalStack again
+./scripts/local-dev-start.sh start
+</code></pre>
+<h3 id="container-conflicts"><a class="header" href="#container-conflicts">Container Conflicts</a></h3>
+<pre><code class="language-bash"># Remove existing containers
+docker rm -f localstack
+
+# Start fresh
+./scripts/local-dev-start.sh start
+</code></pre>
+<h3 id="aws-cli-issues"><a class="header" href="#aws-cli-issues">AWS CLI Issues</a></h3>
+<pre><code class="language-bash"># Check AWS credentials
+aws configure list
+
+# Set LocalStack endpoint
+export AWS_ENDPOINT_URL=http://localhost:4566
+
+# Test S3 access
+aws s3 ls --endpoint-url=http://localhost:4566
+</code></pre>
+<h2 id="security"><a class="header" href="#security">Security</a></h2>
+<h3 id="localstack-credentials"><a class="header" href="#localstack-credentials">LocalStack Credentials</a></h3>
+<pre><code class="language-bash"># Default LocalStack credentials
+AWS_ACCESS_KEY_ID=test
+AWS_SECRET_ACCESS_KEY=test
+AWS_DEFAULT_REGION=us-east-1
+</code></pre>
+<h3 id="network-isolation"><a class="header" href="#network-isolation">Network Isolation</a></h3>
+<ul>
+<li>LocalStack runs in Docker container</li>
+<li>Isolated from host network</li>
+<li>No external access required</li>
+<li>Safe for development</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-technical-implementation"><a class="header" href="#cloud-cv-technical-implementation">Cloud-CV Technical Implementation</a></h1>
+<h2 id="frontend-implementation"><a class="header" href="#frontend-implementation">Frontend Implementation</a></h2>
+<h3 id="html-structure"><a class="header" href="#html-structure">HTML Structure</a></h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Lekshmi Kolappan - Site Reliability Engineer&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;!-- Header with profile information --&gt;
+        &lt;header class="header"&gt;
+            &lt;div class="profile-section"&gt;
+                &lt;div class="profile-image"&gt;
+                    &lt;img src="profile.jpg" alt="Lekshmi Kolappan"&gt;
+                &lt;/div&gt;
+                &lt;div class="profile-info"&gt;
+                    &lt;h1 class="name"&gt;Lekshmi Kolappan&lt;/h1&gt;
+                    &lt;p class="title"&gt;SRE/DevOps Engineer&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/header&gt;
+        
+        &lt;!-- Main content sections --&gt;
+        &lt;main class="main-content"&gt;
+            &lt;!-- About, Skills, Experience, Education sections --&gt;
+        &lt;/main&gt;
+        
+        &lt;!-- Visitor counter section --&gt;
+        &lt;section class="section"&gt;
+            &lt;h2&gt;Website Statistics&lt;/h2&gt;
+            &lt;div class="stats-container"&gt;
+                &lt;div class="stat-item"&gt;
+                    &lt;div class="stat-number" id="visitor-count"&gt;Loading...&lt;/div&gt;
+                    &lt;div class="stat-label"&gt;Total Visitors&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="javascript-api-integration"><a class="header" href="#javascript-api-integration">JavaScript API Integration</a></h3>
+<pre><code class="language-javascript">class CloudCV {
+    constructor() {
+        this.apiUrl = 'https://api-gateway-url/visitor-count';
+        this.visitorCount = 0;
+        this.init();
+    }
+
+    async loadVisitorCount() {
+        try {
+            const response = await fetch(this.apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors'
+            });
+
+            if (!response.ok) {
+                throw new Error('HTTP error! status: ' + response.status);
+            }
+
+            const data = await response.json();
+            this.updateVisitorCount(data.visitor_count);
+        } catch (error) {
+            console.error('Error loading visitor count:', error);
+            this.updateVisitorCount(0);
+        }
+    }
+
+    updateVisitorCount(count) {
+        this.visitorCount = count;
+        const countElement = document.getElementById('visitor-count');
+        if (countElement) {
+            countElement.textContent = count.toLocaleString();
+        }
+    }
+}
+</code></pre>
+<h2 id="backend-implementation"><a class="header" href="#backend-implementation">Backend Implementation</a></h2>
+<h3 id="lambda-function-python"><a class="header" href="#lambda-function-python">Lambda Function (Python)</a></h3>
+<pre><code class="language-python">import json
+import boto3
+import os
+from datetime import datetime
+from decimal import Decimal
+
+# Initialize DynamoDB client
+dynamodb = boto3.resource('dynamodb')
+table_name = os.environ.get('DYNAMODB_TABLE', 'visitor-counter')
+table = dynamodb.Table(table_name)
+
+def decimal_default(obj):
+    """Convert Decimal objects to int/float for JSON serialization"""
+    if isinstance(obj, Decimal):
+        return int(obj) if obj % 1 == 0 else float(obj)
+    raise TypeError
+
+def lambda_handler(event, context):
+    """
+    Lambda handler for visitor counter API
+    """
+    try:
+        # Handle CORS preflight request
+        if event.get('httpMethod') == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+                },
+                'body': json.dumps({'message': 'CORS preflight'})
+            }
+        
+        # Get current visitor count
+        response = table.get_item(Key={'id': 'visitor_count'})
+        
+        if 'Item' in response:
+            current_count = int(response['Item']['count'])
+        else:
+            current_count = 0
+        
+        # Increment visitor count
+        new_count = current_count + 1
+        
+        # Update DynamoDB
+        table.put_item(
+            Item={
+                'id': 'visitor_count',
+                'count': new_count,
+                'last_updated': datetime.utcnow().isoformat(),
+                'timestamp': int(datetime.utcnow().timestamp())
+            }
+        )
+        
+        # Return response
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({
+                'visitor_count': new_count,
+                'timestamp': datetime.utcnow().isoformat(),
+                'status': 'success'
+            }, default=decimal_default)
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({
+                'error': 'Internal server error',
+                'message': str(e),
+                'status': 'error'
+            }, default=decimal_default)
+        }
+</code></pre>
+<h2 id="infrastructure-as-code"><a class="header" href="#infrastructure-as-code">Infrastructure as Code</a></h2>
+<h3 id="terraform-configuration"><a class="header" href="#terraform-configuration">Terraform Configuration</a></h3>
+<pre><code class="language-hcl"># S3 Bucket for static website hosting
+resource "aws_s3_bucket" "website" {
+  bucket = "cloud-cv-${random_id.bucket_suffix.hex}"
+  
+  tags = {
+    Project     = "Cloud-CV"
+    Environment = "production"
+    Owner       = "SRE-DevOps-Engineer"
+    ManagedBy   = "Terraform"
+  }
+}
+
+# S3 Bucket versioning
+resource "aws_s3_bucket_versioning" "website" {
+  bucket = aws_s3_bucket.website.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# S3 Bucket server-side encryption
+resource "aws_s3_bucket_server_side_encryption_configuration" "website" {
+  bucket = aws_s3_bucket.website.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = true
+  }
+}
+
+# CloudFront Distribution
+resource "aws_cloudfront_distribution" "website" {
+  origin {
+    domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.website.id
+    origin_id                = "S3-${aws_s3_bucket.website.bucket}"
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "Cloud CV Website Distribution"
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods        = ["GET", "HEAD"]
+    target_origin_id       = "S3-${aws_s3_bucket.website.bucket}"
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl     = 0
+    default_ttl = 3600
+    max_ttl     = 86400
+  }
+
+  # Error pages
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+}
+
+# DynamoDB table for visitor counter
+resource "aws_dynamodb_table" "visitor_counter" {
+  name           = "cloud-cv-visitor-counter"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+}
+
+# Lambda function for visitor counter
+resource "aws_lambda_function" "visitor_counter" {
+  filename         = "../lambda/visitor_counter.zip"
+  function_name    = "cloud-cv-visitor-counter"
+  role            = aws_iam_role.lambda_role.arn
+  handler         = "lambda_function.lambda_handler"
+  runtime         = "python3.11"
+  timeout         = 30
+
+  environment {
+    variables = {
+      DYNAMODB_TABLE = aws_dynamodb_table.visitor_counter.name
+    }
+  }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-security--best-practices"><a class="header" href="#cloud-cv-security--best-practices">Cloud-CV Security &amp; Best Practices</a></h1>
+<h2 id="s3-security"><a class="header" href="#s3-security">S3 Security</a></h2>
+<ul>
+<li><strong>Public Access Block</strong>: All public access blocked</li>
+<li><strong>Encryption</strong>: Server-side encryption with AES256</li>
+<li><strong>Versioning</strong>: Enabled for data protection</li>
+<li><strong>Access Control</strong>: CloudFront OAC for secure access</li>
+</ul>
+<h2 id="lambda-security"><a class="header" href="#lambda-security">Lambda Security</a></h2>
+<ul>
+<li><strong>IAM Roles</strong>: Least privilege access</li>
+<li><strong>Environment Variables</strong>: Secure configuration</li>
+<li><strong>VPC</strong>: Not required for this use case</li>
+<li><strong>Timeout</strong>: 30-second timeout limit</li>
+</ul>
+<h2 id="api-gateway-security"><a class="header" href="#api-gateway-security">API Gateway Security</a></h2>
+<ul>
+<li><strong>CORS</strong>: Properly configured</li>
+<li><strong>HTTPS</strong>: Enforced redirect</li>
+<li><strong>Rate Limiting</strong>: Built-in throttling</li>
+<li><strong>Authentication</strong>: None required for public API</li>
+</ul>
+<h2 id="dynamodb-security"><a class="header" href="#dynamodb-security">DynamoDB Security</a></h2>
+<ul>
+<li><strong>Encryption</strong>: At rest encryption enabled</li>
+<li><strong>Access Control</strong>: IAM-based permissions</li>
+<li><strong>Backup</strong>: Point-in-time recovery</li>
+<li><strong>Monitoring</strong>: CloudWatch integration</li>
+</ul>
+<h2 id="infrastructure-security"><a class="header" href="#infrastructure-security">Infrastructure Security</a></h2>
+<h3 id="iam-roles-and-policies"><a class="header" href="#iam-roles-and-policies">IAM Roles and Policies</a></h3>
+<pre><code class="language-hcl"># Lambda execution role
+resource "aws_iam_role" "lambda_role" {
+  name = "cloud-cv-lambda-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# Lambda permissions for DynamoDB
+resource "aws_iam_role_policy" "lambda_dynamodb" {
+  name = "lambda-dynamodb-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem"
+        ]
+        Resource = aws_dynamodb_table.visitor_counter.arn
+      }
+    ]
+  })
+}
+</code></pre>
+<h2 id="security-best-practices"><a class="header" href="#security-best-practices">Security Best Practices</a></h2>
+<ol>
+<li><strong>Defense in Depth</strong>: Multiple security layers</li>
+<li><strong>Least Privilege</strong>: Minimal IAM permissions</li>
+<li><strong>Encryption</strong>: Data at rest and in transit</li>
+<li><strong>Monitoring</strong>: Security event logging</li>
+<li><strong>Compliance</strong>: Follow AWS security guidelines</li>
+<li><strong>Regular Audits</strong>: Review access and permissions</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-monitoring--observability"><a class="header" href="#cloud-cv-monitoring--observability">Cloud-CV Monitoring &amp; Observability</a></h1>
+<h2 id="cloudwatch-metrics"><a class="header" href="#cloudwatch-metrics">CloudWatch Metrics</a></h2>
+<h3 id="lambda-metrics"><a class="header" href="#lambda-metrics">Lambda Metrics</a></h3>
+<ul>
+<li><strong>Invocations</strong>: Number of function invocations</li>
+<li><strong>Errors</strong>: Error count and error rate</li>
+<li><strong>Duration</strong>: Execution time</li>
+<li><strong>Throttles</strong>: Concurrent execution limits</li>
+</ul>
+<h3 id="dynamodb-metrics"><a class="header" href="#dynamodb-metrics">DynamoDB Metrics</a></h3>
+<ul>
+<li><strong>Read/Write Capacity</strong>: Throughput metrics</li>
+<li><strong>Throttling</strong>: Throttled requests</li>
+<li><strong>Consistent Reads</strong>: Strongly consistent reads</li>
+<li><strong>Item Count</strong>: Table size metrics</li>
+</ul>
+<h3 id="cloudfront-metrics"><a class="header" href="#cloudfront-metrics">CloudFront Metrics</a></h3>
+<ul>
+<li><strong>Requests</strong>: Total request count</li>
+<li><strong>Cache Hit Ratio</strong>: CDN efficiency</li>
+<li><strong>Data Transfer</strong>: Bandwidth usage</li>
+<li><strong>Error Rates</strong>: 4xx and 5xx errors</li>
+</ul>
+<h3 id="s3-metrics"><a class="header" href="#s3-metrics">S3 Metrics</a></h3>
+<ul>
+<li><strong>Request Metrics</strong>: GET, PUT, DELETE requests</li>
+<li><strong>Storage Metrics</strong>: Bucket size</li>
+<li><strong>Data Transfer</strong>: Bandwidth usage</li>
+</ul>
+<h2 id="custom-metrics"><a class="header" href="#custom-metrics">Custom Metrics</a></h2>
+<pre><code class="language-python"># Lambda function with custom metrics
+import boto3
+from datetime import datetime
+
+cloudwatch = boto3.client('cloudwatch')
+
+def put_custom_metric(metric_name, value, unit='Count'):
+    cloudwatch.put_metric_data(
+        Namespace='CloudCV/VisitorCounter',
+        MetricData=[
+            {
+                'MetricName': metric_name,
+                'Value': value,
+                'Unit': unit,
+                'Timestamp': datetime.utcnow()
+            }
+        ]
+    )
+
+# Usage in Lambda
+def lambda_handler(event, context):
+    # ... visitor counter logic ...
+    
+    # Send custom metric
+    put_custom_metric('VisitorCount', new_count)
+    put_custom_metric('APIResponseTime', response_time, 'Milliseconds')
+    
+    return response
+</code></pre>
+<h2 id="logging-strategy"><a class="header" href="#logging-strategy">Logging Strategy</a></h2>
+<h3 id="lambda-logs"><a class="header" href="#lambda-logs">Lambda Logs</a></h3>
+<ul>
+<li><strong>CloudWatch Logs</strong>: Automatic log collection</li>
+<li><strong>Log Levels</strong>: INFO, WARNING, ERROR</li>
+<li><strong>Structured Logging</strong>: JSON format</li>
+<li><strong>Log Retention</strong>: 30 days default</li>
+</ul>
+<h3 id="api-gateway-logs"><a class="header" href="#api-gateway-logs">API Gateway Logs</a></h3>
+<ul>
+<li><strong>Access Logs</strong>: Request/response logging</li>
+<li><strong>Execution Logs</strong>: API execution details</li>
+<li><strong>Error Logs</strong>: Error tracking</li>
+</ul>
+<h3 id="cloudfront-logs"><a class="header" href="#cloudfront-logs">CloudFront Logs</a></h3>
+<ul>
+<li><strong>Access Logs</strong>: Request logging</li>
+<li><strong>Real-time Logs</strong>: Stream to CloudWatch</li>
+<li><strong>Log Analysis</strong>: Query with CloudWatch Insights</li>
+</ul>
+<h2 id="alerting"><a class="header" href="#alerting">Alerting</a></h2>
+<h3 id="cloudwatch-alarms"><a class="header" href="#cloudwatch-alarms">CloudWatch Alarms</a></h3>
+<pre><code class="language-hcl"># Lambda error rate alarm
+resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
+  alarm_name          = "cloud-cv-lambda-errors"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 5
+  alarm_description   = "Alert when Lambda errors exceed 5"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+}
+</code></pre>
+<h3 id="alert-conditions"><a class="header" href="#alert-conditions">Alert Conditions</a></h3>
+<ul>
+<li><strong>Error Rate</strong>: &gt; 5% error rate</li>
+<li><strong>Latency</strong>: &gt; 1 second response time</li>
+<li><strong>Availability</strong>: &lt; 99% uptime</li>
+<li><strong>Cost</strong>: Unusual cost spikes</li>
+</ul>
+<h2 id="dashboards"><a class="header" href="#dashboards">Dashboards</a></h2>
+<h3 id="cloudwatch-dashboard"><a class="header" href="#cloudwatch-dashboard">CloudWatch Dashboard</a></h3>
+<ul>
+<li><strong>Service Health</strong>: Overall system status</li>
+<li><strong>Performance Metrics</strong>: Response times and throughput</li>
+<li><strong>Error Tracking</strong>: Error rates and types</li>
+<li><strong>Cost Monitoring</strong>: Resource usage and costs</li>
+</ul>
+<h3 id="key-metrics-to-monitor"><a class="header" href="#key-metrics-to-monitor">Key Metrics to Monitor</a></h3>
+<ol>
+<li>Lambda invocation count and errors</li>
+<li>DynamoDB read/write capacity</li>
+<li>CloudFront cache hit ratio</li>
+<li>API Gateway latency</li>
+<li>S3 request metrics</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-cost-optimization"><a class="header" href="#cloud-cv-cost-optimization">Cloud-CV Cost Optimization</a></h1>
+<h2 id="s3-costs"><a class="header" href="#s3-costs">S3 Costs</a></h2>
+<ul>
+<li><strong>Storage Class</strong>: Standard for active content</li>
+<li><strong>Lifecycle</strong>: Move to IA after 30 days</li>
+<li><strong>Compression</strong>: Gzip compression enabled</li>
+<li><strong>CDN</strong>: CloudFront reduces S3 requests</li>
+</ul>
+<h3 id="cost-breakdown"><a class="header" href="#cost-breakdown">Cost Breakdown</a></h3>
+<ul>
+<li><strong>Storage</strong>: ~$0.023 per GB/month</li>
+<li><strong>Requests</strong>: ~$0.0004 per 1,000 GET requests</li>
+<li><strong>Data Transfer</strong>: ~$0.09 per GB (first 10 TB)</li>
+</ul>
+<h2 id="lambda-costs"><a class="header" href="#lambda-costs">Lambda Costs</a></h2>
+<ul>
+<li><strong>Memory</strong>: Optimized for 128MB</li>
+<li><strong>Timeout</strong>: 30-second limit</li>
+<li><strong>Cold Start</strong>: Minimized with provisioned concurrency</li>
+<li><strong>Monitoring</strong>: Cost tracking enabled</li>
+</ul>
+<h3 id="cost-breakdown-1"><a class="header" href="#cost-breakdown-1">Cost Breakdown</a></h3>
+<ul>
+<li><strong>Requests</strong>: First 1M requests free, then $0.20 per 1M</li>
+<li><strong>Compute</strong>: $0.0000166667 per GB-second</li>
+<li><strong>Example</strong>: 1M requests at 128MB, 100ms = ~$0.21</li>
+</ul>
+<h2 id="dynamodb-costs"><a class="header" href="#dynamodb-costs">DynamoDB Costs</a></h2>
+<ul>
+<li><strong>Billing</strong>: Pay-per-request model</li>
+<li><strong>Capacity</strong>: No provisioned capacity</li>
+<li><strong>Indexes</strong>: No GSI required</li>
+<li><strong>Backup</strong>: Point-in-time recovery</li>
+</ul>
+<h3 id="cost-breakdown-2"><a class="header" href="#cost-breakdown-2">Cost Breakdown</a></h3>
+<ul>
+<li><strong>On-Demand</strong>: $1.25 per million write units, $0.25 per million read units</li>
+<li><strong>Storage</strong>: $0.25 per GB/month</li>
+<li><strong>Backup</strong>: $0.20 per GB/month</li>
+</ul>
+<h2 id="cloudfront-costs"><a class="header" href="#cloudfront-costs">CloudFront Costs</a></h2>
+<ul>
+<li><strong>Edge Locations</strong>: Global distribution</li>
+<li><strong>Cache</strong>: Optimized cache policies</li>
+<li><strong>Compression</strong>: Gzip compression</li>
+<li><strong>HTTPS</strong>: Free SSL certificates</li>
+</ul>
+<h3 id="cost-breakdown-3"><a class="header" href="#cost-breakdown-3">Cost Breakdown</a></h3>
+<ul>
+<li><strong>Data Transfer Out</strong>: $0.085 per GB (first 10 TB)</li>
+<li><strong>Requests</strong>: $0.0075 per 10,000 HTTPS requests</li>
+<li><strong>Invalidation</strong>: First 1,000 paths/month free</li>
+</ul>
+<h2 id="total-monthly-cost-estimate"><a class="header" href="#total-monthly-cost-estimate">Total Monthly Cost Estimate</a></h2>
+<h3 id="low-traffic-scenario-1000-visitorsmonth"><a class="header" href="#low-traffic-scenario-1000-visitorsmonth">Low Traffic Scenario (1,000 visitors/month)</a></h3>
+<ul>
+<li><strong>S3</strong>: ~$0.50 (storage + requests)</li>
+<li><strong>Lambda</strong>: ~$0.10 (executions)</li>
+<li><strong>DynamoDB</strong>: ~$0.25 (requests)</li>
+<li><strong>CloudFront</strong>: ~$1.00 (data transfer)</li>
+<li><strong>Total</strong>: ~$1.85/month</li>
+</ul>
+<h3 id="medium-traffic-scenario-10000-visitorsmonth"><a class="header" href="#medium-traffic-scenario-10000-visitorsmonth">Medium Traffic Scenario (10,000 visitors/month)</a></h3>
+<ul>
+<li><strong>S3</strong>: ~$1.00</li>
+<li><strong>Lambda</strong>: ~$0.50</li>
+<li><strong>DynamoDB</strong>: ~$0.50</li>
+<li><strong>CloudFront</strong>: ~$2.00</li>
+<li><strong>Total</strong>: ~$4.00/month</li>
+</ul>
+<h3 id="high-traffic-scenario-100000-visitorsmonth"><a class="header" href="#high-traffic-scenario-100000-visitorsmonth">High Traffic Scenario (100,000 visitors/month)</a></h3>
+<ul>
+<li><strong>S3</strong>: ~$2.00</li>
+<li><strong>Lambda</strong>: ~$2.00</li>
+<li><strong>DynamoDB</strong>: ~$2.00</li>
+<li><strong>CloudFront</strong>: ~$5.00</li>
+<li><strong>Total</strong>: ~$11.00/month</li>
+</ul>
+<h2 id="cost-optimization-strategies"><a class="header" href="#cost-optimization-strategies">Cost Optimization Strategies</a></h2>
+<ol>
+<li><strong>Right-Sizing</strong>: Optimize Lambda memory allocation</li>
+<li><strong>Caching</strong>: Maximize CloudFront cache hit ratio</li>
+<li><strong>Compression</strong>: Enable Gzip compression</li>
+<li><strong>Lifecycle Policies</strong>: Move old data to cheaper storage</li>
+<li><strong>Monitoring</strong>: Track costs with AWS Cost Explorer</li>
+<li><strong>Reserved Capacity</strong>: Not applicable for serverless</li>
+</ol>
+<h2 id="cost-monitoring"><a class="header" href="#cost-monitoring">Cost Monitoring</a></h2>
+<h3 id="aws-cost-explorer"><a class="header" href="#aws-cost-explorer">AWS Cost Explorer</a></h3>
+<ul>
+<li><strong>Daily Costs</strong>: Track spending trends</li>
+<li><strong>Service Breakdown</strong>: Per-service costs</li>
+<li><strong>Forecasting</strong>: Predict future costs</li>
+<li><strong>Budget Alerts</strong>: Set spending limits</li>
+</ul>
+<h3 id="cloudwatch-billing-alarms"><a class="header" href="#cloudwatch-billing-alarms">CloudWatch Billing Alarms</a></h3>
+<pre><code class="language-hcl">resource "aws_cloudwatch_metric_alarm" "billing" {
+  alarm_name          = "cloud-cv-billing-alert"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "EstimatedCharges"
+  namespace           = "AWS/Billing"
+  period              = 86400
+  statistic           = "Maximum"
+  threshold           = 10
+  alarm_description   = "Alert when monthly costs exceed $10"
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-troubleshooting-scenarios"><a class="header" href="#cloud-cv-troubleshooting-scenarios">Cloud-CV Troubleshooting Scenarios</a></h1>
+<h2 id="lambda-function-issues"><a class="header" href="#lambda-function-issues">Lambda Function Issues</a></h2>
+<h3 id="problem-lambda-timeout"><a class="header" href="#problem-lambda-timeout">Problem: Lambda Timeout</a></h3>
+<pre><code class="language-bash"># Check CloudWatch logs
+aws logs describe-log-groups --log-group-name-prefix /aws/lambda/cloud-cv
+
+# Check function configuration
+aws lambda get-function --function-name cloud-cv-visitor-counter
+
+# View recent logs
+aws logs tail /aws/lambda/cloud-cv-visitor-counter --follow
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Increase timeout in Terraform configuration</li>
+<li>Optimize code performance</li>
+<li>Check DynamoDB connection</li>
+<li>Review function memory allocation</li>
+</ul>
+<h3 id="problem-lambda-memory-issues"><a class="header" href="#problem-lambda-memory-issues">Problem: Lambda Memory Issues</a></h3>
+<pre><code class="language-bash"># Check memory usage
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/Lambda \
+  --metric-name MemoryUtilization \
+  --dimensions Name=FunctionName,Value=cloud-cv-visitor-counter \
+  --start-time 2024-01-01T00:00:00Z \
+  --end-time 2024-01-02T00:00:00Z \
+  --period 3600 \
+  --statistics Maximum
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Increase Lambda memory allocation</li>
+<li>Optimize code to reduce memory usage</li>
+<li>Check for memory leaks</li>
+</ul>
+<h2 id="api-gateway-issues"><a class="header" href="#api-gateway-issues">API Gateway Issues</a></h2>
+<h3 id="problem-cors-errors"><a class="header" href="#problem-cors-errors">Problem: CORS Errors</a></h3>
+<pre><code class="language-javascript">// Check browser console for CORS errors
+// Verify API Gateway CORS configuration
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Update API Gateway CORS settings</li>
+<li>Check Lambda response headers</li>
+<li>Verify preflight OPTIONS method</li>
+<li>Ensure proper Access-Control-Allow-Origin header</li>
+</ul>
+<h3 id="problem-502-bad-gateway"><a class="header" href="#problem-502-bad-gateway">Problem: 502 Bad Gateway</a></h3>
+<pre><code class="language-bash"># Check API Gateway logs
+aws apigateway get-rest-apis
+
+# Test endpoint directly
+curl -X GET https://api-gateway-url/visitor-count
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify Lambda function is deployed</li>
+<li>Check Lambda function permissions</li>
+<li>Review API Gateway integration settings</li>
+<li>Check Lambda function logs</li>
+</ul>
+<h2 id="cloudfront-issues"><a class="header" href="#cloudfront-issues">CloudFront Issues</a></h2>
+<h3 id="problem-cache-not-updating"><a class="header" href="#problem-cache-not-updating">Problem: Cache Not Updating</a></h3>
+<pre><code class="language-bash"># Create cache invalidation
+aws cloudfront create-invalidation \
+  --distribution-id DISTRIBUTION_ID \
+  --paths "/*"
+
+# Check invalidation status
+aws cloudfront list-invalidations --distribution-id DISTRIBUTION_ID
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Invalidate CloudFront cache</li>
+<li>Check cache policies</li>
+<li>Verify origin settings</li>
+<li>Review TTL configurations</li>
+</ul>
+<h3 id="problem-403-forbidden-errors"><a class="header" href="#problem-403-forbidden-errors">Problem: 403 Forbidden Errors</a></h3>
+<pre><code class="language-bash"># Check S3 bucket policy
+aws s3api get-bucket-policy --bucket cloud-cv-bucket
+
+# Verify CloudFront OAC
+aws cloudfront get-distribution --id DISTRIBUTION_ID
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify S3 bucket permissions</li>
+<li>Check CloudFront Origin Access Control</li>
+<li>Review bucket policy</li>
+<li>Ensure proper IAM roles</li>
+</ul>
+<h2 id="dynamodb-issues"><a class="header" href="#dynamodb-issues">DynamoDB Issues</a></h2>
+<h3 id="problem-throttling-errors"><a class="header" href="#problem-throttling-errors">Problem: Throttling Errors</a></h3>
+<pre><code class="language-bash"># Check DynamoDB metrics
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/DynamoDB \
+  --metric-name ThrottledRequests \
+  --dimensions Name=TableName,Value=cloud-cv-visitor-counter \
+  --start-time 2024-01-01T00:00:00Z \
+  --end-time 2024-01-02T00:00:00Z \
+  --period 3600 \
+  --statistics Sum
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Enable auto-scaling</li>
+<li>Optimize read/write patterns</li>
+<li>Consider provisioned capacity</li>
+<li>Implement exponential backoff</li>
+</ul>
+<h3 id="problem-item-not-found"><a class="header" href="#problem-item-not-found">Problem: Item Not Found</a></h3>
+<pre><code class="language-bash"># Check table items
+aws dynamodb scan --table-name cloud-cv-visitor-counter
+
+# Verify table structure
+aws dynamodb describe-table --table-name cloud-cv-visitor-counter
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify table name in Lambda environment</li>
+<li>Check item key structure</li>
+<li>Review DynamoDB permissions</li>
+<li>Ensure table exists</li>
+</ul>
+<h2 id="s3-issues"><a class="header" href="#s3-issues">S3 Issues</a></h2>
+<h3 id="problem-404-not-found"><a class="header" href="#problem-404-not-found">Problem: 404 Not Found</a></h3>
+<pre><code class="language-bash"># List bucket contents
+aws s3 ls s3://cloud-cv-bucket/
+
+# Check bucket configuration
+aws s3api get-bucket-website --bucket cloud-cv-bucket
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify files are uploaded</li>
+<li>Check file paths</li>
+<li>Review bucket website configuration</li>
+<li>Ensure index.html exists</li>
+</ul>
+<h3 id="problem-access-denied"><a class="header" href="#problem-access-denied">Problem: Access Denied</a></h3>
+<pre><code class="language-bash"># Check bucket policy
+aws s3api get-bucket-policy --bucket cloud-cv-bucket
+
+# Verify IAM permissions
+aws iam get-user-policy --user-name USER_NAME --policy-name POLICY_NAME
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Review bucket policy</li>
+<li>Check IAM permissions</li>
+<li>Verify CloudFront OAC</li>
+<li>Ensure proper access controls</li>
+</ul>
+<h2 id="common-debugging-commands"><a class="header" href="#common-debugging-commands">Common Debugging Commands</a></h2>
+<pre><code class="language-bash"># Check all resources
+aws cloudformation describe-stacks
+
+# View Lambda logs
+aws logs tail /aws/lambda/cloud-cv-visitor-counter --follow
+
+# Test API endpoint
+curl -X GET https://api-gateway-url/visitor-count
+
+# Check CloudFront distribution
+aws cloudfront get-distribution --id DISTRIBUTION_ID
+
+# Verify DynamoDB table
+aws dynamodb describe-table --table-name cloud-cv-visitor-counter
+
+# Check S3 bucket
+aws s3 ls s3://cloud-cv-bucket/ --recursive
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-technical-qa"><a class="header" href="#cloud-cv-technical-qa">Cloud-CV Technical Q&amp;A</a></h1>
+<h2 id="architecture--design-questions"><a class="header" href="#architecture--design-questions">Architecture &amp; Design Questions</a></h2>
+<h3 id="q1-walk-me-through-the-architecture-of-your-cloud-cv-project"><a class="header" href="#q1-walk-me-through-the-architecture-of-your-cloud-cv-project">Q1: "Walk me through the architecture of your Cloud CV project."</a></h3>
+<p><strong>Answer:</strong>
+"The Cloud CV project follows a serverless, event-driven architecture. The frontend is hosted on S3 with CloudFront for global distribution. The visitor counter uses a Lambda function triggered by API Gateway, which stores data in DynamoDB. This design provides scalability, cost-effectiveness, and high availability.</p>
+<p>Key components:</p>
+<ul>
+<li><strong>Frontend</strong>: S3 + CloudFront for static hosting</li>
+<li><strong>API</strong>: API Gateway for REST endpoints</li>
+<li><strong>Compute</strong>: Lambda for serverless processing</li>
+<li><strong>Database</strong>: DynamoDB for NoSQL storage</li>
+<li><strong>Infrastructure</strong>: Terraform for IaC</li>
+<li><strong>CI/CD</strong>: GitHub Actions for automation"</li>
+</ul>
+<h3 id="q2-why-did-you-choose-serverless-over-containers"><a class="header" href="#q2-why-did-you-choose-serverless-over-containers">Q2: "Why did you choose serverless over containers?"</a></h3>
+<p><strong>Answer:</strong>
+"Serverless was chosen for several reasons:</p>
+<ol>
+<li><strong>Cost</strong>: Pay only for actual usage, not idle time</li>
+<li><strong>Scalability</strong>: Automatic scaling based on demand</li>
+<li><strong>Maintenance</strong>: No server management required</li>
+<li><strong>Performance</strong>: Cold start latency is acceptable for this use case</li>
+<li><strong>Simplicity</strong>: Easier deployment and monitoring</li>
+</ol>
+<p>For a simple visitor counter, serverless provides the right balance of cost, performance, and operational overhead."</p>
+<h3 id="q3-how-would-you-handle-high-traffic-spikes"><a class="header" href="#q3-how-would-you-handle-high-traffic-spikes">Q3: "How would you handle high traffic spikes?"</a></h3>
+<p><strong>Answer:</strong>
+"Several strategies:</p>
+<ol>
+<li><strong>CloudFront</strong>: Global CDN with edge caching</li>
+<li><strong>Lambda</strong>: Auto-scaling up to 1000 concurrent executions</li>
+<li><strong>DynamoDB</strong>: On-demand billing with auto-scaling</li>
+<li><strong>API Gateway</strong>: Built-in throttling and caching</li>
+<li><strong>Monitoring</strong>: CloudWatch alarms for proactive scaling</li>
+</ol>
+<p>The architecture is designed to handle traffic spikes automatically without manual intervention."</p>
+<h2 id="infrastructure-questions"><a class="header" href="#infrastructure-questions">Infrastructure Questions</a></h2>
+<h3 id="q4-explain-your-terraform-configuration"><a class="header" href="#q4-explain-your-terraform-configuration">Q4: "Explain your Terraform configuration."</a></h3>
+<p><strong>Answer:</strong>
+"The Terraform configuration follows best practices:</p>
+<ul>
+<li><strong>Modularity</strong>: Reusable components</li>
+<li><strong>State Management</strong>: Local state with backup</li>
+<li><strong>Security</strong>: IAM roles with least privilege</li>
+<li><strong>Tagging</strong>: Consistent resource tagging</li>
+<li><strong>Variables</strong>: Environment-specific configurations</li>
+</ul>
+<p>Key resources:</p>
+<ul>
+<li>S3 bucket with versioning and encryption</li>
+<li>CloudFront distribution with OAC</li>
+<li>Lambda function with IAM role</li>
+<li>DynamoDB table with on-demand billing</li>
+<li>API Gateway with CORS configuration"</li>
+</ul>
+<h3 id="q5-how-do-you-ensure-infrastructure-security"><a class="header" href="#q5-how-do-you-ensure-infrastructure-security">Q5: "How do you ensure infrastructure security?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple security layers:</p>
+<ol>
+<li><strong>S3</strong>: Public access blocked, encryption at rest</li>
+<li><strong>CloudFront</strong>: OAC for secure S3 access</li>
+<li><strong>Lambda</strong>: IAM roles with minimal permissions</li>
+<li><strong>DynamoDB</strong>: Encryption and access control</li>
+<li><strong>API Gateway</strong>: HTTPS enforcement and CORS</li>
+<li><strong>Terraform</strong>: State file security and access control"</li>
+</ol>
+<h2 id="devops-questions"><a class="header" href="#devops-questions">DevOps Questions</a></h2>
+<h3 id="q6-describe-your-cicd-pipeline"><a class="header" href="#q6-describe-your-cicd-pipeline">Q6: "Describe your CI/CD pipeline."</a></h3>
+<p><strong>Answer:</strong>
+"The pipeline uses GitHub Actions:</p>
+<ol>
+<li><strong>Trigger</strong>: Push to main branch</li>
+<li><strong>Infrastructure</strong>: Terraform plan and apply</li>
+<li><strong>Deployment</strong>: S3 file upload</li>
+<li><strong>Cache</strong>: CloudFront invalidation</li>
+<li><strong>Monitoring</strong>: Health checks and alerts</li>
+</ol>
+<p>Benefits:</p>
+<ul>
+<li>Automated deployment</li>
+<li>Infrastructure consistency</li>
+<li>Rollback capability</li>
+<li>Cost tracking"</li>
+</ul>
+<h3 id="q7-how-do-you-handle-rollbacks"><a class="header" href="#q7-how-do-you-handle-rollbacks">Q7: "How do you handle rollbacks?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple rollback strategies:</p>
+<ol>
+<li><strong>Infrastructure</strong>: Terraform state management</li>
+<li><strong>Application</strong>: S3 versioning for file rollback</li>
+<li><strong>Database</strong>: DynamoDB point-in-time recovery</li>
+<li><strong>Cache</strong>: CloudFront cache invalidation</li>
+<li><strong>Monitoring</strong>: CloudWatch for health checks</li>
+</ol>
+<p>The process is automated and can be triggered manually or automatically based on health metrics."</p>
+<h2 id="monitoring-questions"><a class="header" href="#monitoring-questions">Monitoring Questions</a></h2>
+<h3 id="q8-how-do-you-monitor-the-application"><a class="header" href="#q8-how-do-you-monitor-the-application">Q8: "How do you monitor the application?"</a></h3>
+<p><strong>Answer:</strong>
+"Comprehensive monitoring strategy:</p>
+<ol>
+<li><strong>Metrics</strong>: CloudWatch for all services</li>
+<li><strong>Logs</strong>: Centralized logging with CloudWatch</li>
+<li><strong>Alerts</strong>: Proactive alerting for issues</li>
+<li><strong>Dashboards</strong>: Real-time monitoring</li>
+<li><strong>Tracing</strong>: X-Ray for distributed tracing</li>
+</ol>
+<p>Key metrics:</p>
+<ul>
+<li>Lambda invocations and errors</li>
+<li>DynamoDB read/write capacity</li>
+<li>CloudFront cache hit ratio</li>
+<li>API Gateway latency and errors"</li>
+</ul>
+<h3 id="q9-what-would-you-do-if-the-visitor-counter-stopped-working"><a class="header" href="#q9-what-would-you-do-if-the-visitor-counter-stopped-working">Q9: "What would you do if the visitor counter stopped working?"</a></h3>
+<p><strong>Answer:</strong>
+"Troubleshooting steps:</p>
+<ol>
+<li><strong>Check CloudWatch</strong>: Lambda logs and metrics</li>
+<li><strong>Verify API</strong>: Test API Gateway endpoint</li>
+<li><strong>Database</strong>: Check DynamoDB connectivity</li>
+<li><strong>Permissions</strong>: Verify IAM roles</li>
+<li><strong>Network</strong>: Check VPC and security groups</li>
+</ol>
+<p>Common issues:</p>
+<ul>
+<li>Lambda timeout or memory issues</li>
+<li>DynamoDB throttling</li>
+<li>API Gateway CORS problems</li>
+<li>IAM permission errors"</li>
+</ul>
+<h2 id="cost-optimization-questions"><a class="header" href="#cost-optimization-questions">Cost Optimization Questions</a></h2>
+<h3 id="q10-how-do-you-optimize-costs"><a class="header" href="#q10-how-do-you-optimize-costs">Q10: "How do you optimize costs?"</a></h3>
+<p><strong>Answer:</strong>
+"Cost optimization strategies:</p>
+<ol>
+<li><strong>S3</strong>: Lifecycle policies and compression</li>
+<li><strong>Lambda</strong>: Memory optimization and timeout tuning</li>
+<li><strong>DynamoDB</strong>: On-demand billing and efficient queries</li>
+<li><strong>CloudFront</strong>: Cache optimization and compression</li>
+<li><strong>Monitoring</strong>: Cost alerts and budget tracking</li>
+</ol>
+<p>Expected monthly costs:</p>
+<ul>
+<li>S3: ~$1-2 for storage</li>
+<li>Lambda: ~$0.50 for executions</li>
+<li>DynamoDB: ~$0.25 for requests</li>
+<li>CloudFront: ~$1-2 for data transfer</li>
+<li>Total: ~$3-5 per month"</li>
+</ul>
+<h2 id="advanced-questions"><a class="header" href="#advanced-questions">Advanced Questions</a></h2>
+<h3 id="q11-how-would-you-scale-this-to-handle-1-million-visitors-per-day"><a class="header" href="#q11-how-would-you-scale-this-to-handle-1-million-visitors-per-day">Q11: "How would you scale this to handle 1 million visitors per day?"</a></h3>
+<p><strong>Answer:</strong>
+"Scaling strategies:</p>
+<ol>
+<li><strong>Lambda</strong>: Increase concurrency limits</li>
+<li><strong>DynamoDB</strong>: Enable auto-scaling</li>
+<li><strong>CloudFront</strong>: Optimize cache policies</li>
+<li><strong>Monitoring</strong>: Enhanced alerting</li>
+<li><strong>Architecture</strong>: Consider read replicas</li>
+</ol>
+<p>Additional considerations:</p>
+<ul>
+<li>Database sharding for high write loads</li>
+<li>Caching strategies for read-heavy workloads</li>
+<li>CDN optimization for global distribution</li>
+<li>Cost analysis for high-traffic scenarios"</li>
+</ul>
+<h3 id="q12-how-would-you-implement-disaster-recovery"><a class="header" href="#q12-how-would-you-implement-disaster-recovery">Q12: "How would you implement disaster recovery?"</a></h3>
+<p><strong>Answer:</strong>
+"DR strategy:</p>
+<ol>
+<li><strong>Backup</strong>: S3 cross-region replication</li>
+<li><strong>Database</strong>: DynamoDB point-in-time recovery</li>
+<li><strong>Infrastructure</strong>: Multi-region Terraform</li>
+<li><strong>Monitoring</strong>: Cross-region health checks</li>
+<li><strong>Testing</strong>: Regular DR drills</li>
+</ol>
+<p>Recovery time objective: &lt; 1 hour
+Recovery point objective: &lt; 15 minutes"</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-advanced-topics"><a class="header" href="#cloud-cv-advanced-topics">Cloud-CV Advanced Topics</a></h1>
+<h2 id="multi-environment-strategy"><a class="header" href="#multi-environment-strategy">Multi-Environment Strategy</a></h2>
+<pre><code class="language-hcl"># Environment-specific configurations
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "production"
+}
+
+# Environment-specific tags
+locals {
+  common_tags = {
+    Environment = var.environment
+    Project     = "Cloud-CV"
+    Owner       = "SRE-DevOps-Engineer"
+  }
+}
+
+# Environment-specific resource naming
+resource "aws_s3_bucket" "website" {
+  bucket = "cloud-cv-${var.environment}-${random_id.bucket_suffix.hex}"
+  
+  tags = merge(local.common_tags, {
+    Name = "cloud-cv-${var.environment}"
+  })
+}
+</code></pre>
+<h2 id="blue-green-deployment"><a class="header" href="#blue-green-deployment">Blue-Green Deployment</a></h2>
+<pre><code class="language-yaml"># Blue-green deployment strategy
+- name: Deploy to Blue Environment
+  run: |
+    terraform apply -var="environment=blue"
+    
+- name: Test Blue Environment
+  run: |
+    curl -f https://blue.cloud-cv.com/health
+    
+- name: Switch to Blue
+  run: |
+    aws route53 change-resource-record-sets \
+      --hosted-zone-id ZONE_ID \
+      --change-batch file://blue-deployment.json
+</code></pre>
+<h2 id="canary-deployment"><a class="header" href="#canary-deployment">Canary Deployment</a></h2>
+<pre><code class="language-yaml"># Canary deployment with CloudFront
+- name: Deploy Canary
+  run: |
+    aws cloudfront create-distribution \
+      --distribution-config file://canary-config.json
+    
+- name: Monitor Canary
+  run: |
+    aws cloudwatch get-metric-statistics \
+      --namespace AWS/CloudFront \
+      --metric-name Requests \
+      --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
+      --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
+      --period 300 \
+      --statistics Sum
+</code></pre>
+<h2 id="chaos-engineering"><a class="header" href="#chaos-engineering">Chaos Engineering</a></h2>
+<pre><code class="language-python"># Chaos engineering for resilience testing
+import boto3
+import random
+import time
+
+def chaos_test():
+    """
+    Simulate various failure scenarios
+    """
+    lambda_client = boto3.client('lambda')
+    dynamodb = boto3.resource('dynamodb')
+    
+    # Simulate Lambda failures
+    def simulate_lambda_failure():
+        # Inject errors randomly
+        if random.random() &lt; 0.1:  # 10% failure rate
+            raise Exception("Simulated Lambda failure")
+    
+    # Test DynamoDB throttling
+    def test_dynamodb_throttling():
+        table = dynamodb.Table('cloud-cv-visitor-counter')
+        # Rapid requests to trigger throttling
+        for i in range(100):
+            try:
+                table.get_item(Key={'id': 'visitor_count'})
+            except Exception as e:
+                print(f"Throttling detected: {e}")
+    
+    # Verify CloudFront fallback
+    def verify_cloudfront_fallback():
+        # Test CDN behavior under load
+        pass
+    
+    # Check error handling
+    def check_error_handling():
+        # Verify graceful degradation
+        pass
+    
+    return {
+        'lambda_failures': simulate_lambda_failure(),
+        'dynamodb_throttling': test_dynamodb_throttling(),
+        'cloudfront_fallback': verify_cloudfront_fallback(),
+        'error_handling': check_error_handling()
+    }
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="frontend-optimization"><a class="header" href="#frontend-optimization">Frontend Optimization</a></h3>
+<pre><code class="language-javascript">// Frontend performance optimization
+class PerformanceOptimizer {
+    constructor() {
+        this.enableLazyLoading();
+        this.optimizeImages();
+        this.enableCaching();
+        this.minimizeRequests();
+    }
+    
+    enableLazyLoading() {
+        // Lazy load images and scripts
+        const images = document.querySelectorAll('img[data-src]');
+        const imageObserver = new IntersectionObserver((entries, observer) =&gt; {
+            entries.forEach(entry =&gt; {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    observer.unobserve(img);
+                }
+            });
+        });
+        
+        images.forEach(img =&gt; imageObserver.observe(img));
+    }
+    
+    optimizeImages() {
+        // WebP format with fallbacks
+        const supportsWebP = document.createElement('canvas')
+            .toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        
+        if (supportsWebP) {
+            // Use WebP images
+        }
+    }
+    
+    enableCaching() {
+        // Service worker for offline support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    }
+    
+    minimizeRequests() {
+        // Combine API calls
+        // Use request batching
+    }
+}
+</code></pre>
+<h3 id="backend-optimization"><a class="header" href="#backend-optimization">Backend Optimization</a></h3>
+<pre><code class="language-python"># Lambda optimization
+import json
+import boto3
+from functools import lru_cache
+
+# Cache DynamoDB client
+@lru_cache(maxsize=1)
+def get_dynamodb_table():
+    dynamodb = boto3.resource('dynamodb')
+    return dynamodb.Table('cloud-cv-visitor-counter')
+
+# Optimize Lambda handler
+def lambda_handler(event, context):
+    # Reuse connections
+    table = get_dynamodb_table()
+    
+    # Batch operations
+    # Minimize API calls
+    # Use connection pooling
+    
+    return response
+</code></pre>
+<h2 id="infrastructure-as-code-best-practices"><a class="header" href="#infrastructure-as-code-best-practices">Infrastructure as Code Best Practices</a></h2>
+<h3 id="module-structure"><a class="header" href="#module-structure">Module Structure</a></h3>
+<pre><code class="language-hcl"># modules/s3/main.tf
+resource "aws_s3_bucket" "this" {
+  bucket = var.bucket_name
+  
+  tags = var.tags
+}
+
+# modules/s3/variables.tf
+variable "bucket_name" {
+  description = "S3 bucket name"
+  type        = string
+}
+
+variable "tags" {
+  description = "Resource tags"
+  type        = map(string)
+  default     = {}
+}
+
+# modules/s3/outputs.tf
+output "bucket_id" {
+  description = "S3 bucket ID"
+  value       = aws_s3_bucket.this.id
+}
+</code></pre>
+<h3 id="state-management"><a class="header" href="#state-management">State Management</a></h3>
+<pre><code class="language-hcl"># backend.tf
+terraform {
+  backend "s3" {
+    bucket         = "cloud-cv-terraform-state"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "terraform-state-lock"
+  }
+}
+</code></pre>
+<h2 id="security-hardening"><a class="header" href="#security-hardening">Security Hardening</a></h2>
+<h3 id="secrets-management"><a class="header" href="#secrets-management">Secrets Management</a></h3>
+<pre><code class="language-hcl"># Use AWS Secrets Manager
+data "aws_secretsmanager_secret_version" "api_key" {
+  secret_id = "cloud-cv-api-key"
+}
+
+resource "aws_lambda_function" "visitor_counter" {
+  environment {
+    variables = {
+      API_KEY = data.aws_secretsmanager_secret_version.api_key.secret_string
+    }
+  }
+}
+</code></pre>
+<h3 id="network-security"><a class="header" href="#network-security">Network Security</a></h3>
+<pre><code class="language-hcl"># VPC configuration for Lambda (if needed)
+resource "aws_lambda_function" "visitor_counter" {
+  vpc_config {
+    subnet_ids         = var.subnet_ids
+    security_group_ids = [aws_security_group.lambda.id]
+  }
+}
+</code></pre>
+<h2 id="monitoring-and-alerting"><a class="header" href="#monitoring-and-alerting">Monitoring and Alerting</a></h2>
+<h3 id="advanced-monitoring"><a class="header" href="#advanced-monitoring">Advanced Monitoring</a></h3>
+<pre><code class="language-hcl"># Custom CloudWatch dashboard
+resource "aws_cloudwatch_dashboard" "main" {
+  dashboard_name = "cloud-cv-dashboard"
+
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type   = "metric"
+        properties = {
+          metrics = [
+            ["AWS/Lambda", "Invocations", {"stat": "Sum"}],
+            ["AWS/Lambda", "Errors", {"stat": "Sum"}],
+            ["AWS/DynamoDB", "ConsumedReadCapacityUnits", {"stat": "Sum"}],
+            ["AWS/DynamoDB", "ConsumedWriteCapacityUnits", {"stat": "Sum"}]
+          ]
+          period = 300
+          stat   = "Sum"
+          region = "us-east-1"
+          title  = "Cloud CV Metrics"
+        }
+      }
+    ]
+  })
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-1"><a class="header" href="#stack-quest-1">Stack-Quest</a></h1>
+<p>A quest for stack knowledge across DevOps, SRE, and Cloud engineering.</p>
+<p><img src="stack-quest/../images/stack-quest.png" alt="StackQuest Interface" /></p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>StackQuest is a comprehensive knowledge base and challenge platform designed for DevOps, SRE, and Cloud engineers. It provides curated questions across 12+ categories and hands-on challenges for practical learning.</p>
+<h2 id="key-features-1"><a class="header" href="#key-features-1">Key Features</a></h2>
+<ul>
+<li>📚 <strong>Curated Questions</strong>: High-quality questions across 12+ categories</li>
+<li>⚡ <strong>Hands-on Challenges</strong>: Practical DevOps scenarios</li>
+<li>🎯 <strong>Category Selection</strong>: Choose specific topics to focus on</li>
+<li>🔄 <strong>Session Tracking</strong>: Prevents question repetition</li>
+<li>📱 <strong>Responsive Design</strong>: Works on desktop and mobile</li>
+<li>🚀 <strong>Auto Deployment</strong>: GitHub Actions + GitHub Pages</li>
+</ul>
+<h2 id="project-highlights-1"><a class="header" href="#project-highlights-1">Project Highlights</a></h2>
+<p>This project demonstrates:</p>
+<ul>
+<li>Modern web development practices</li>
+<li>Responsive design principles</li>
+<li>Knowledge management systems</li>
+<li>Automated deployment workflows</li>
+<li>Educational content organization</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-features"><a class="header" href="#stack-quest-features">Stack-Quest Features</a></h1>
+<h2 id="core-features"><a class="header" href="#core-features">Core Features</a></h2>
+<h3 id="question-categories"><a class="header" href="#question-categories">Question Categories</a></h3>
+<p>StackQuest covers 12+ technical categories:</p>
+<ul>
+<li><strong>Linux</strong> 🐧 - System administration, shell scripting, process management</li>
+<li><strong>Networking</strong> 🌐 - TCP/IP, DNS, load balancing, network protocols</li>
+<li><strong>Git</strong> - Version control, branching strategies, workflows</li>
+<li><strong>Cloud</strong> ☁️ - AWS and Azure services, cloud architecture</li>
+<li><strong>Terraform</strong> 🏗️ - Infrastructure as code, state management</li>
+<li><strong>Docker</strong> 🐳 - Containerization, Dockerfiles, orchestration</li>
+<li><strong>Kubernetes</strong> 🎻 - Pods, services, deployments, cluster management</li>
+<li><strong>Config Management</strong> 🔧 - Ansible, Puppet, Chef</li>
+<li><strong>CI/CD</strong> 🔄 - Jenkins, GitHub Actions, GitLab CI</li>
+<li><strong>DevOps</strong> 🛠️ - Best practices, methodologies, tools</li>
+<li><strong>System Design</strong> 🍥 - Architecture patterns, scalability</li>
+<li><strong>Security</strong> 🔒 - Security best practices, vulnerabilities</li>
+</ul>
+<h3 id="challenge-types"><a class="header" href="#challenge-types">Challenge Types</a></h3>
+<h4 id="random-questions"><a class="header" href="#random-questions">Random Questions</a></h4>
+<ul>
+<li>Browse questions by category</li>
+<li>Randomized question selection</li>
+<li>Session-based tracking</li>
+<li>No repetition within session</li>
+</ul>
+<h4 id="hands-on-challenges"><a class="header" href="#hands-on-challenges">Hands-on Challenges</a></h4>
+<ul>
+<li><strong>DevOps Challenges</strong>: Real-world scenarios</li>
+<li><strong>SRE Challenges</strong>: Site reliability engineering tasks</li>
+<li><strong>AWS Challenges</strong>: Cloud infrastructure challenges</li>
+<li><strong>Kubernetes Challenges</strong>: Container orchestration tasks</li>
+</ul>
+<h2 id="user-experience"><a class="header" href="#user-experience">User Experience</a></h2>
+<h3 id="responsive-design"><a class="header" href="#responsive-design">Responsive Design</a></h3>
+<ul>
+<li>Works seamlessly on desktop and mobile devices</li>
+<li>Touch-friendly interface</li>
+<li>Adaptive layout for different screen sizes</li>
+</ul>
+<h3 id="session-management"><a class="header" href="#session-management">Session Management</a></h3>
+<ul>
+<li>Tracks questions shown in current session</li>
+<li>Prevents duplicate questions</li>
+<li>Session reset functionality</li>
+</ul>
+<h3 id="category-filtering"><a class="header" href="#category-filtering">Category Filtering</a></h3>
+<ul>
+<li>Select specific categories to focus on</li>
+<li>Multiple category selection</li>
+<li>Quick category switching</li>
+</ul>
+<h2 id="deployment"><a class="header" href="#deployment">Deployment</a></h2>
+<h3 id="automated-deployment"><a class="header" href="#automated-deployment">Automated Deployment</a></h3>
+<ul>
+<li>GitHub Actions for CI/CD</li>
+<li>Automatic deployment to GitHub Pages</li>
+<li>Zero-downtime updates</li>
+<li>Version control integration</li>
+</ul>
+<h3 id="static-site-generation"><a class="header" href="#static-site-generation">Static Site Generation</a></h3>
+<ul>
+<li>Pure HTML, CSS, and JavaScript</li>
+<li>No backend required</li>
+<li>Fast loading times</li>
+<li>SEO-friendly structure</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-content-structure"><a class="header" href="#stack-quest-content-structure">Stack-Quest Content Structure</a></h1>
+<h2 id="content-organization"><a class="header" href="#content-organization">Content Organization</a></h2>
+<p>StackQuest organizes content into two main sections:</p>
+<h3 id="random-questions-1"><a class="header" href="#random-questions-1">Random Questions</a></h3>
+<p>Browse questions by category with comprehensive coverage of DevOps, SRE, and Cloud engineering topics.</p>
+<h4 id="available-categories"><a class="header" href="#available-categories">Available Categories</a></h4>
+<ol>
+<li><strong>Linux</strong> - System administration, shell scripting, process management</li>
+<li><strong>Networking</strong> - TCP/IP, DNS, load balancing, network protocols</li>
+<li><strong>Git</strong> - Version control, branching strategies, workflows</li>
+<li><strong>AWS</strong> - Cloud services, architecture, best practices</li>
+<li><strong>Azure</strong> - Microsoft cloud platform services</li>
+<li><strong>Terraform</strong> - Infrastructure as code, state management</li>
+<li><strong>Docker</strong> - Containerization, Dockerfiles, orchestration</li>
+<li><strong>Kubernetes</strong> - Pods, services, deployments, cluster management</li>
+<li><strong>Config Management</strong> - Ansible, Puppet, Chef</li>
+<li><strong>CI/CD</strong> - Jenkins, GitHub Actions, GitLab CI</li>
+<li><strong>DevOps</strong> - Best practices, methodologies, tools</li>
+<li><strong>System Design</strong> - Architecture patterns, scalability</li>
+<li><strong>Security</strong> - Security best practices, vulnerabilities</li>
+</ol>
+<h3 id="challenges"><a class="header" href="#challenges">Challenges</a></h3>
+<p>Practice with hands-on challenges designed to test practical skills:</p>
+<h4 id="devops-challenges"><a class="header" href="#devops-challenges">DevOps Challenges</a></h4>
+<ul>
+<li>Infrastructure automation scenarios</li>
+<li>CI/CD pipeline design</li>
+<li>Monitoring and alerting setup</li>
+<li>Disaster recovery planning</li>
+</ul>
+<h4 id="sre-challenges"><a class="header" href="#sre-challenges">SRE Challenges</a></h4>
+<ul>
+<li>Service level objectives (SLOs)</li>
+<li>Error budget management</li>
+<li>Incident response procedures</li>
+<li>Capacity planning</li>
+</ul>
+<h4 id="aws-challenges"><a class="header" href="#aws-challenges">AWS Challenges</a></h4>
+<ul>
+<li>Cloud architecture design</li>
+<li>Cost optimization</li>
+<li>Security hardening</li>
+<li>Multi-region deployment</li>
+</ul>
+<h4 id="kubernetes-challenges"><a class="header" href="#kubernetes-challenges">Kubernetes Challenges</a></h4>
+<ul>
+<li>Cluster setup and configuration</li>
+<li>Application deployment</li>
+<li>Service mesh implementation</li>
+<li>Resource management</li>
+</ul>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
+<p>Help grow the knowledge base by:</p>
+<ul>
+<li>Adding new questions and answers to specific category files</li>
+<li>Adding new challenges to specific challenge files</li>
+<li>Improving existing content</li>
+<li>Creating new category files for additional topics</li>
+</ul>
+<p>Simply raise a Pull Request with your contributions.</p>
+<h2 id="content-quality"><a class="header" href="#content-quality">Content Quality</a></h2>
+<p>All content is:</p>
+<ul>
+<li><strong>Curated</strong>: Reviewed for accuracy and relevance</li>
+<li><strong>Practical</strong>: Focused on real-world scenarios</li>
+<li><strong>Up-to-date</strong>: Regularly updated with latest practices</li>
+<li><strong>Comprehensive</strong>: Covers beginner to advanced topics</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-technical-implementation"><a class="header" href="#stack-quest-technical-implementation">Stack-Quest Technical Implementation</a></h1>
+<h2 id="frontend-architecture"><a class="header" href="#frontend-architecture">Frontend Architecture</a></h2>
+<h3 id="html-structure-1"><a class="header" href="#html-structure-1">HTML Structure</a></h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;StackQuest - DevOps Knowledge Base&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;header class="header"&gt;
+            &lt;h1&gt;StackQuest 🚀&lt;/h1&gt;
+            &lt;p&gt;A quest for stack knowledge&lt;/p&gt;
+        &lt;/header&gt;
+        
+        &lt;main class="main-content"&gt;
+            &lt;!-- Category selection --&gt;
+            &lt;section class="categories"&gt;
+                &lt;!-- Category buttons --&gt;
+            &lt;/section&gt;
+            
+            &lt;!-- Question display --&gt;
+            &lt;section class="question-section"&gt;
+                &lt;div class="question-card"&gt;
+                    &lt;h2 id="question-title"&gt;Select a category to begin&lt;/h2&gt;
+                    &lt;div id="question-content"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/section&gt;
+        &lt;/main&gt;
+    &lt;/div&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="javascript-implementation"><a class="header" href="#javascript-implementation">JavaScript Implementation</a></h2>
+<h3 id="core-application-class"><a class="header" href="#core-application-class">Core Application Class</a></h3>
+<pre><code class="language-javascript">class StackQuest {
+    constructor() {
+        this.categories = [];
+        this.currentCategory = null;
+        this.questions = [];
+        this.shownQuestions = new Set();
+        this.currentQuestion = null;
+        this.init();
+    }
+
+    async init() {
+        await this.loadCategories();
+        await this.loadQuestions();
+        this.setupEventListeners();
+        this.renderCategories();
+    }
+
+    async loadCategories() {
+        // Load category definitions
+        this.categories = [
+            { id: 'linux', name: 'Linux 🐧', file: 'Random-Questions/linux.md' },
+            { id: 'networking', name: 'Networking 🌐', file: 'Random-Questions/networking.md' },
+            { id: 'git', name: 'Git', file: 'Random-Questions/git.md' },
+            { id: 'aws', name: 'AWS ☁️', file: 'Random-Questions/aws.md' },
+            { id: 'terraform', name: 'Terraform 🏗️', file: 'Random-Questions/terraform.md' },
+            { id: 'docker', name: 'Docker 🐳', file: 'Random-Questions/docker.md' },
+            { id: 'kubernetes', name: 'Kubernetes 🎻', file: 'Random-Questions/kubernetes.md' },
+            { id: 'cicd', name: 'CI/CD 🔄', file: 'Random-Questions/cicd.md' },
+            { id: 'devops', name: 'DevOps 🛠️', file: 'Random-Questions/devops.md' },
+            { id: 'system-design', name: 'System Design 🍥', file: 'Random-Questions/system-design.md' },
+            { id: 'security', name: 'Security 🔒', file: 'Random-Questions/security.md' }
+        ];
+    }
+
+    async loadQuestions() {
+        // Load questions from markdown files
+        const category = this.currentCategory;
+        if (!category) return;
+
+        try {
+            const response = await fetch(category.file);
+            const content = await response.text();
+            this.questions = this.parseQuestions(content, category.id);
+        } catch (error) {
+            console.error('Error loading questions:', error);
+        }
+    }
+
+    parseQuestions(content, category) {
+        // Parse markdown content to extract questions
+        const questions = [];
+        const lines = content.split('\n');
+        let currentQuestion = null;
+        let inDetails = false;
+
+        for (let i = 0; i &lt; lines.length; i++) {
+            const line = lines[i].trim();
+            
+            if (line === '&lt;details&gt;') {
+                inDetails = true;
+                currentQuestion = { category, content: [] };
+            } else if (line.startsWith('&lt;summary&gt;') &amp;&amp; line.endsWith('&lt;/summary&gt;')) {
+                currentQuestion.title = line.replace('&lt;summary&gt;', '').replace('&lt;/summary&gt;', '');
+            } else if (inDetails &amp;&amp; currentQuestion) {
+                if (line === '&lt;/details&gt;') {
+                    questions.push(currentQuestion);
+                    currentQuestion = null;
+                    inDetails = false;
+                } else if (line &amp;&amp; !line.startsWith('&lt;summary&gt;')) {
+                    currentQuestion.content.push(line);
+                }
+            }
+        }
+
+        return questions;
+    }
+
+    getRandomQuestion() {
+        const availableQuestions = this.questions.filter(
+            q =&gt; !this.shownQuestions.has(q.title)
+        );
+
+        if (availableQuestions.length === 0) {
+            // Reset shown questions if all have been shown
+            this.shownQuestions.clear();
+            return this.questions[Math.floor(Math.random() * this.questions.length)];
+        }
+
+        const question = availableQuestions[
+            Math.floor(Math.random() * availableQuestions.length)
+        ];
+        this.shownQuestions.add(question.title);
+        return question;
+    }
+
+    displayQuestion(question) {
+        const titleElement = document.getElementById('question-title');
+        const contentElement = document.getElementById('question-content');
+        
+        titleElement.textContent = question.title;
+        contentElement.innerHTML = this.formatQuestionContent(question.content);
+    }
+
+    formatQuestionContent(content) {
+        // Convert markdown-like content to HTML
+        return content.map(line =&gt; {
+            if (line.startsWith('**')) {
+                return `&lt;p&gt;&lt;strong&gt;${line.replace(/\*\*/g, '')}&lt;/strong&gt;&lt;/p&gt;`;
+            } else if (line.startsWith('- ')) {
+                return `&lt;li&gt;${line.substring(2)}&lt;/li&gt;`;
+            } else if (line.startsWith('```')) {
+                return '&lt;pre&gt;&lt;code&gt;';
+            } else {
+                return `&lt;p&gt;${line}&lt;/p&gt;`;
+            }
+        }).join('');
+    }
+
+    setupEventListeners() {
+        // Category selection
+        document.querySelectorAll('.category-btn').forEach(btn =&gt; {
+            btn.addEventListener('click', (e) =&gt; {
+                this.selectCategory(e.target.dataset.category);
+            });
+        });
+
+        // Next question button
+        document.getElementById('next-question').addEventListener('click', () =&gt; {
+            this.showNextQuestion();
+        });
+
+        // Reset session button
+        document.getElementById('reset-session').addEventListener('click', () =&gt; {
+            this.resetSession();
+        });
+    }
+
+    selectCategory(categoryId) {
+        this.currentCategory = this.categories.find(c =&gt; c.id === categoryId);
+        this.shownQuestions.clear();
+        this.loadQuestions().then(() =&gt; {
+            this.showNextQuestion();
+        });
+    }
+
+    showNextQuestion() {
+        const question = this.getRandomQuestion();
+        this.currentQuestion = question;
+        this.displayQuestion(question);
+    }
+
+    resetSession() {
+        this.shownQuestions.clear();
+        this.showNextQuestion();
+    }
+}
+
+// Initialize application
+const app = new StackQuest();
+</code></pre>
+<h2 id="responsive-design-1"><a class="header" href="#responsive-design-1">Responsive Design</a></h2>
+<h3 id="css-implementation"><a class="header" href="#css-implementation">CSS Implementation</a></h3>
+<pre><code class="language-css">.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.category-btn {
+    padding: 15px 20px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.category-btn:hover {
+    background: #007bff;
+    color: white;
+}
+
+.question-card {
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .categories {
+        grid-template-columns: 1fr;
+    }
+    
+    .question-card {
+        padding: 20px;
+    }
+}
+</code></pre>
+<h2 id="session-management-1"><a class="header" href="#session-management-1">Session Management</a></h2>
+<h3 id="localstorage-implementation"><a class="header" href="#localstorage-implementation">LocalStorage Implementation</a></h3>
+<pre><code class="language-javascript">class SessionManager {
+    constructor() {
+        this.storageKey = 'stackquest-session';
+    }
+
+    saveSession(sessionData) {
+        localStorage.setItem(this.storageKey, JSON.stringify(sessionData));
+    }
+
+    loadSession() {
+        const data = localStorage.getItem(this.storageKey);
+        return data ? JSON.parse(data) : null;
+    }
+
+    clearSession() {
+        localStorage.removeItem(this.storageKey);
+    }
+
+    getShownQuestions() {
+        const session = this.loadSession();
+        return session ? session.shownQuestions : [];
+    }
+
+    addShownQuestion(questionTitle) {
+        const session = this.loadSession() || { shownQuestions: [] };
+        if (!session.shownQuestions.includes(questionTitle)) {
+            session.shownQuestions.push(questionTitle);
+            this.saveSession(session);
+        }
+    }
+}
+</code></pre>
+<h2 id="content-management"><a class="header" href="#content-management">Content Management</a></h2>
+<h3 id="markdown-question-format"><a class="header" href="#markdown-question-format">Markdown Question Format</a></h3>
+<pre><code class="language-markdown">&lt;details&gt;
+&lt;summary&gt;What is the difference between TCP and UDP?&lt;/summary&gt;
+
+**Answer:**
+
+TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) are both transport layer protocols but serve different purposes:
+
+- **TCP**: Connection-oriented, reliable, ordered delivery
+  - Guarantees delivery
+  - Error checking and correction
+  - Flow control
+  - Used for: HTTP, HTTPS, FTP, SSH
+
+- **UDP**: Connectionless, unreliable, faster
+  - No delivery guarantee
+  - No error checking
+  - Lower overhead
+  - Used for: DNS, DHCP, streaming, gaming
+
+&lt;/details&gt;
+</code></pre>
+<h2 id="performance-optimization-1"><a class="header" href="#performance-optimization-1">Performance Optimization</a></h2>
+<h3 id="lazy-loading"><a class="header" href="#lazy-loading">Lazy Loading</a></h3>
+<pre><code class="language-javascript">class LazyLoader {
+    constructor() {
+        this.loadedCategories = new Set();
+    }
+
+    async loadCategoryOnDemand(categoryId) {
+        if (this.loadedCategories.has(categoryId)) {
+            return; // Already loaded
+        }
+
+        const category = this.categories.find(c =&gt; c.id === categoryId);
+        if (!category) return;
+
+        try {
+            const response = await fetch(category.file);
+            const content = await response.text();
+            this.parseAndCacheQuestions(content, categoryId);
+            this.loadedCategories.add(categoryId);
+        } catch (error) {
+            console.error(`Error loading category ${categoryId}:`, error);
+        }
+    }
+
+    parseAndCacheQuestions(content, categoryId) {
+        // Parse and cache questions for faster access
+        const questions = this.parseQuestions(content, categoryId);
+        this.questionCache[categoryId] = questions;
+    }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-architecture--design"><a class="header" href="#stack-quest-architecture--design">Stack-Quest Architecture &amp; Design</a></h1>
+<h2 id="system-architecture-1"><a class="header" href="#system-architecture-1">System Architecture</a></h2>
+<pre><code>┌─────────────────┐
+│   User Browser  │
+└────────┬────────┘
+         │
+         │ HTTP/HTTPS
+         │
+┌────────▼────────┐    ┌─────────────────┐
+│  GitHub Pages   │────│  Markdown Files │
+│  (Static Host)  │    │  (Content)      │
+└─────────────────┘    └─────────────────┘
+         │
+         │
+┌────────▼────────┐
+│  JavaScript     │
+│  (Client-side)  │
+│  - Session Mgmt│
+│  - Question Parser│
+│  - UI Rendering │
+└─────────────────┘
+</code></pre>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<h3 id="1-static-site-architecture"><a class="header" href="#1-static-site-architecture">1. <strong>Static Site Architecture</strong></a></h3>
+<ul>
+<li><strong>No Backend</strong>: Pure client-side application</li>
+<li><strong>GitHub Pages</strong>: Free hosting for static sites</li>
+<li><strong>CDN</strong>: Global content delivery via GitHub's CDN</li>
+<li><strong>Fast Loading</strong>: No server-side processing</li>
+</ul>
+<h3 id="2-content-management"><a class="header" href="#2-content-management">2. <strong>Content Management</strong></a></h3>
+<ul>
+<li><strong>Markdown Files</strong>: Easy to maintain and version control</li>
+<li><strong>Git-based</strong>: Content changes via pull requests</li>
+<li><strong>Structured Format</strong>: Consistent question format</li>
+<li><strong>Category Organization</strong>: Logical content grouping</li>
+</ul>
+<h3 id="3-user-experience"><a class="header" href="#3-user-experience">3. <strong>User Experience</strong></a></h3>
+<ul>
+<li><strong>Session Tracking</strong>: Prevents question repetition</li>
+<li><strong>Category Selection</strong>: Focused learning paths</li>
+<li><strong>Responsive Design</strong>: Works on all devices</li>
+<li><strong>Fast Navigation</strong>: Instant question loading</li>
+</ul>
+<h2 id="component-architecture"><a class="header" href="#component-architecture">Component Architecture</a></h2>
+<h3 id="frontend-components"><a class="header" href="#frontend-components">Frontend Components</a></h3>
+<ol>
+<li><strong>Category Selector</strong>: Choose learning topics</li>
+<li><strong>Question Display</strong>: Show questions and answers</li>
+<li><strong>Session Manager</strong>: Track shown questions</li>
+<li><strong>Content Parser</strong>: Parse markdown to HTML</li>
+<li><strong>UI Controller</strong>: Manage user interactions</li>
+</ol>
+<h3 id="data-flow-1"><a class="header" href="#data-flow-1">Data Flow</a></h3>
+<ol>
+<li>User selects category</li>
+<li>JavaScript loads markdown file</li>
+<li>Content parsed into question objects</li>
+<li>Random question selected (excluding shown)</li>
+<li>Question displayed with formatted content</li>
+<li>Session updated with shown question</li>
+</ol>
+<h2 id="scalability-considerations"><a class="header" href="#scalability-considerations">Scalability Considerations</a></h2>
+<h3 id="content-scaling"><a class="header" href="#content-scaling">Content Scaling</a></h3>
+<ul>
+<li><strong>Modular Structure</strong>: Easy to add new categories</li>
+<li><strong>File-based</strong>: No database limits</li>
+<li><strong>Version Control</strong>: Git tracks all changes</li>
+<li><strong>Contributions</strong>: Community can add content</li>
+</ul>
+<h3 id="performance-scaling"><a class="header" href="#performance-scaling">Performance Scaling</a></h3>
+<ul>
+<li><strong>Static Assets</strong>: Served from CDN</li>
+<li><strong>Client-side Processing</strong>: No server load</li>
+<li><strong>Lazy Loading</strong>: Load categories on demand</li>
+<li><strong>Caching</strong>: Browser caches static files</li>
+</ul>
+<h2 id="technology-stack"><a class="header" href="#technology-stack">Technology Stack</a></h2>
+<ul>
+<li><strong>HTML5</strong>: Semantic markup</li>
+<li><strong>CSS3</strong>: Modern styling and responsive design</li>
+<li><strong>JavaScript (ES6+)</strong>: Client-side logic</li>
+<li><strong>Markdown</strong>: Content format</li>
+<li><strong>GitHub Pages</strong>: Hosting platform</li>
+<li><strong>GitHub Actions</strong>: CI/CD automation</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-deployment--cicd"><a class="header" href="#stack-quest-deployment--cicd">Stack-Quest Deployment &amp; CI/CD</a></h1>
+<h2 id="github-pages-deployment"><a class="header" href="#github-pages-deployment">GitHub Pages Deployment</a></h2>
+<h3 id="automatic-deployment"><a class="header" href="#automatic-deployment">Automatic Deployment</a></h3>
+<pre><code class="language-yaml">name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+</code></pre>
+<h2 id="deployment-process-1"><a class="header" href="#deployment-process-1">Deployment Process</a></h2>
+<ol>
+<li><strong>Code Push</strong>: Developer pushes to main branch</li>
+<li><strong>Trigger</strong>: GitHub Actions workflow starts</li>
+<li><strong>Build</strong>: No build step needed (static site)</li>
+<li><strong>Deploy</strong>: Files uploaded to GitHub Pages</li>
+<li><strong>Live</strong>: Site available immediately</li>
+</ol>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<h3 id="github-pages-settings"><a class="header" href="#github-pages-settings">GitHub Pages Settings</a></h3>
+<ul>
+<li><strong>Source</strong>: Deploy from branch (main)</li>
+<li><strong>Branch</strong>: / (root)</li>
+<li><strong>Custom Domain</strong>: Optional</li>
+<li><strong>HTTPS</strong>: Automatically enabled</li>
+</ul>
+<h3 id="repository-structure"><a class="header" href="#repository-structure">Repository Structure</a></h3>
+<pre><code>stack-quest/
+├── index.html
+├── script.js
+├── styles.css
+├── Random-Questions/
+│   ├── linux.md
+│   ├── aws.md
+│   └── ...
+├── Challenge/
+│   ├── devops-challenges.md
+│   └── ...
+└── .github/
+    └── workflows/
+        └── deploy.yml
+</code></pre>
+<h2 id="custom-domain-setup"><a class="header" href="#custom-domain-setup">Custom Domain Setup</a></h2>
+<h3 id="dns-configuration"><a class="header" href="#dns-configuration">DNS Configuration</a></h3>
+<ol>
+<li>Add CNAME record pointing to GitHub Pages</li>
+<li>Configure custom domain in repository settings</li>
+<li>Enable HTTPS (automatic)</li>
+<li>Wait for DNS propagation</li>
+</ol>
+<h3 id="example-dns-records"><a class="header" href="#example-dns-records">Example DNS Records</a></h3>
+<pre><code>Type: CNAME
+Name: www
+Value: username.github.io
+</code></pre>
+<h2 id="rollback-strategy"><a class="header" href="#rollback-strategy">Rollback Strategy</a></h2>
+<h3 id="version-control"><a class="header" href="#version-control">Version Control</a></h3>
+<ul>
+<li><strong>Git History</strong>: All versions tracked</li>
+<li><strong>Branch Strategy</strong>: Feature branches for changes</li>
+<li><strong>Tagging</strong>: Tag releases for easy rollback</li>
+<li><strong>Revert Commits</strong>: Quick rollback via git revert</li>
+</ul>
+<h3 id="rollback-process"><a class="header" href="#rollback-process">Rollback Process</a></h3>
+<ol>
+<li>Identify problematic commit</li>
+<li>Revert commit or checkout previous version</li>
+<li>Push to main branch</li>
+<li>GitHub Actions redeploys automatically</li>
+</ol>
+<h2 id="monitoring-deployment"><a class="header" href="#monitoring-deployment">Monitoring Deployment</a></h2>
+<h3 id="github-actions-logs"><a class="header" href="#github-actions-logs">GitHub Actions Logs</a></h3>
+<ul>
+<li><strong>Workflow Runs</strong>: View deployment history</li>
+<li><strong>Build Logs</strong>: Check for errors</li>
+<li><strong>Deployment Status</strong>: Monitor deployment progress</li>
+</ul>
+<h3 id="health-checks"><a class="header" href="#health-checks">Health Checks</a></h3>
+<pre><code class="language-bash"># Check site availability
+curl -I https://username.github.io/stack-quest/
+
+# Verify content loading
+curl https://username.github.io/stack-quest/Random-Questions/linux.md
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Test Locally</strong>: Verify changes before pushing</li>
+<li><strong>Review Changes</strong>: Use pull requests for review</li>
+<li><strong>Monitor Deployments</strong>: Check GitHub Actions status</li>
+<li><strong>Version Control</strong>: Commit frequently with clear messages</li>
+<li><strong>Documentation</strong>: Keep README updated</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-performance-optimization"><a class="header" href="#stack-quest-performance-optimization">Stack-Quest Performance Optimization</a></h1>
+<h2 id="frontend-performance"><a class="header" href="#frontend-performance">Frontend Performance</a></h2>
+<h3 id="asset-optimization"><a class="header" href="#asset-optimization">Asset Optimization</a></h3>
+<ul>
+<li><strong>Minification</strong>: Minify CSS and JavaScript</li>
+<li><strong>Compression</strong>: Enable Gzip compression</li>
+<li><strong>Caching</strong>: Set appropriate cache headers</li>
+<li><strong>CDN</strong>: Leverage GitHub Pages CDN</li>
+</ul>
+<h3 id="code-optimization"><a class="header" href="#code-optimization">Code Optimization</a></h3>
+<pre><code class="language-javascript">// Debounce category selection
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () =&gt; {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Lazy load questions
+const questionLoader = {
+    cache: new Map(),
+    
+    async load(category) {
+        if (this.cache.has(category)) {
+            return this.cache.get(category);
+        }
+        
+        const questions = await fetch(`Random-Questions/${category}.md`)
+            .then(r =&gt; r.text())
+            .then(parseQuestions);
+        
+        this.cache.set(category, questions);
+        return questions;
+    }
+};
+</code></pre>
+<h2 id="loading-performance"><a class="header" href="#loading-performance">Loading Performance</a></h2>
+<h3 id="lazy-loading-strategy"><a class="header" href="#lazy-loading-strategy">Lazy Loading Strategy</a></h3>
+<ul>
+<li><strong>On-Demand Loading</strong>: Load categories when selected</li>
+<li><strong>Caching</strong>: Cache loaded questions in memory</li>
+<li><strong>Preloading</strong>: Preload popular categories</li>
+<li><strong>Progressive Enhancement</strong>: Basic functionality first</li>
+</ul>
+<h3 id="resource-hints"><a class="header" href="#resource-hints">Resource Hints</a></h3>
+<pre><code class="language-html">&lt;!-- Preconnect to GitHub CDN --&gt;
+&lt;link rel="preconnect" href="https://github.com"&gt;
+
+&lt;!-- Prefetch popular categories --&gt;
+&lt;link rel="prefetch" href="Random-Questions/linux.md"&gt;
+&lt;link rel="prefetch" href="Random-Questions/aws.md"&gt;
+</code></pre>
+<h2 id="caching-strategy"><a class="header" href="#caching-strategy">Caching Strategy</a></h2>
+<h3 id="browser-caching"><a class="header" href="#browser-caching">Browser Caching</a></h3>
+<pre><code class="language-javascript">// Service Worker for offline support
+self.addEventListener('install', (event) =&gt; {
+    event.waitUntil(
+        caches.open('stackquest-v1').then((cache) =&gt; {
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/script.js',
+                '/styles.css'
+            ]);
+        })
+    );
+});
+
+self.addEventListener('fetch', (event) =&gt; {
+    event.respondWith(
+        caches.match(event.request).then((response) =&gt; {
+            return response || fetch(event.request);
+        })
+    );
+});
+</code></pre>
+<h3 id="localstorage-caching"><a class="header" href="#localstorage-caching">LocalStorage Caching</a></h3>
+<pre><code class="language-javascript">class CacheManager {
+    constructor() {
+        this.cachePrefix = 'stackquest_';
+        this.cacheExpiry = 24 * 60 * 60 * 1000; // 24 hours
+    }
+
+    set(key, value) {
+        const item = {
+            value,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(
+            this.cachePrefix + key,
+            JSON.stringify(item)
+        );
+    }
+
+    get(key) {
+        const item = localStorage.getItem(this.cachePrefix + key);
+        if (!item) return null;
+
+        const parsed = JSON.parse(item);
+        if (Date.now() - parsed.timestamp &gt; this.cacheExpiry) {
+            localStorage.removeItem(this.cachePrefix + key);
+            return null;
+        }
+
+        return parsed.value;
+    }
+}
+</code></pre>
+<h2 id="performance-metrics"><a class="header" href="#performance-metrics">Performance Metrics</a></h2>
+<h3 id="key-metrics"><a class="header" href="#key-metrics">Key Metrics</a></h3>
+<ul>
+<li><strong>First Contentful Paint (FCP)</strong>: &lt; 1.5s</li>
+<li><strong>Largest Contentful Paint (LCP)</strong>: &lt; 2.5s</li>
+<li><strong>Time to Interactive (TTI)</strong>: &lt; 3.5s</li>
+<li><strong>Cumulative Layout Shift (CLS)</strong>: &lt; 0.1</li>
+</ul>
+<h3 id="monitoring"><a class="header" href="#monitoring">Monitoring</a></h3>
+<pre><code class="language-javascript">// Performance monitoring
+window.addEventListener('load', () =&gt; {
+    const perfData = performance.getEntriesByType('navigation')[0];
+    
+    console.log('Page Load Time:', perfData.loadEventEnd - perfData.fetchStart);
+    console.log('DOM Content Loaded:', perfData.domContentLoadedEventEnd - perfData.fetchStart);
+    console.log('First Paint:', performance.getEntriesByType('paint')[0].startTime);
+});
+</code></pre>
+<h2 id="optimization-techniques"><a class="header" href="#optimization-techniques">Optimization Techniques</a></h2>
+<ol>
+<li><strong>Code Splitting</strong>: Load only needed code</li>
+<li><strong>Tree Shaking</strong>: Remove unused code</li>
+<li><strong>Image Optimization</strong>: Use WebP format</li>
+<li><strong>Font Optimization</strong>: Subset fonts, use font-display</li>
+<li><strong>Critical CSS</strong>: Inline critical CSS</li>
+<li><strong>Async Loading</strong>: Load non-critical scripts async</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack-quest-technical-qa"><a class="header" href="#stack-quest-technical-qa">Stack-Quest Technical Q&amp;A</a></h1>
+<h2 id="architecture--design-questions-1"><a class="header" href="#architecture--design-questions-1">Architecture &amp; Design Questions</a></h2>
+<h3 id="q1-walk-me-through-the-architecture-of-stackquest"><a class="header" href="#q1-walk-me-through-the-architecture-of-stackquest">Q1: "Walk me through the architecture of StackQuest."</a></h3>
+<p><strong>Answer:</strong>
+"StackQuest is a static site application hosted on GitHub Pages. It uses pure client-side JavaScript to parse markdown files containing questions and answers. The architecture is simple yet effective:</p>
+<ul>
+<li><strong>Frontend</strong>: HTML, CSS, JavaScript (ES6+)</li>
+<li><strong>Content</strong>: Markdown files organized by category</li>
+<li><strong>Hosting</strong>: GitHub Pages (free, CDN-backed)</li>
+<li><strong>Deployment</strong>: Automated via GitHub Actions</li>
+<li><strong>Session Management</strong>: LocalStorage for client-side tracking</li>
+</ul>
+<p>The design prioritizes simplicity, performance, and maintainability."</p>
+<h3 id="q2-why-did-you-choose-a-static-site-over-a-dynamic-application"><a class="header" href="#q2-why-did-you-choose-a-static-site-over-a-dynamic-application">Q2: "Why did you choose a static site over a dynamic application?"</a></h3>
+<p><strong>Answer:</strong>
+"Static site was chosen for several reasons:</p>
+<ol>
+<li><strong>Cost</strong>: Free hosting on GitHub Pages</li>
+<li><strong>Performance</strong>: No server-side processing, fast loading</li>
+<li><strong>Simplicity</strong>: Easy to maintain and deploy</li>
+<li><strong>Scalability</strong>: CDN handles traffic automatically</li>
+<li><strong>Reliability</strong>: No server downtime concerns</li>
+<li><strong>Version Control</strong>: Content changes tracked in Git</li>
+</ol>
+<p>For a knowledge base with read-only content, static site is the optimal choice."</p>
+<h3 id="q3-how-do-you-handle-session-management-without-a-backend"><a class="header" href="#q3-how-do-you-handle-session-management-without-a-backend">Q3: "How do you handle session management without a backend?"</a></h3>
+<p><strong>Answer:</strong>
+"Client-side session management using LocalStorage:</p>
+<ol>
+<li><strong>Question Tracking</strong>: Store shown question IDs in LocalStorage</li>
+<li><strong>Session Persistence</strong>: Survives page refreshes</li>
+<li><strong>Reset Capability</strong>: Clear session on demand</li>
+<li><strong>Privacy</strong>: All data stays in browser</li>
+</ol>
+<p>This approach works well for the use case and maintains user privacy."</p>
+<h2 id="technical-implementation-questions"><a class="header" href="#technical-implementation-questions">Technical Implementation Questions</a></h2>
+<h3 id="q4-how-do-you-parse-markdown-files-in-the-browser"><a class="header" href="#q4-how-do-you-parse-markdown-files-in-the-browser">Q4: "How do you parse markdown files in the browser?"</a></h3>
+<p><strong>Answer:</strong>
+"Custom markdown parser for the question format:</p>
+<ol>
+<li><strong>Fetch</strong>: Load markdown file via fetch API</li>
+<li><strong>Parse</strong>: Extract questions from <code>&lt;details&gt;</code> blocks</li>
+<li><strong>Structure</strong>: Convert to JavaScript objects</li>
+<li><strong>Cache</strong>: Store parsed questions in memory</li>
+<li><strong>Render</strong>: Convert to HTML for display</li>
+</ol>
+<p>The parser handles the specific markdown format used for questions."</p>
+<h3 id="q5-how-would-you-scale-this-to-handle-more-content"><a class="header" href="#q5-how-would-you-scale-this-to-handle-more-content">Q5: "How would you scale this to handle more content?"</a></h3>
+<p><strong>Answer:</strong>
+"Scaling strategies:</p>
+<ol>
+<li><strong>Lazy Loading</strong>: Load categories on demand</li>
+<li><strong>Pagination</strong>: Split large categories into pages</li>
+<li><strong>Search</strong>: Add client-side search functionality</li>
+<li><strong>Indexing</strong>: Pre-build question index</li>
+<li><strong>Caching</strong>: Aggressive browser caching</li>
+<li><strong>CDN</strong>: Leverage GitHub Pages CDN</li>
+</ol>
+<p>The static architecture scales naturally with CDN distribution."</p>
+<h2 id="performance-questions"><a class="header" href="#performance-questions">Performance Questions</a></h2>
+<h3 id="q6-how-do-you-optimize-performance"><a class="header" href="#q6-how-do-you-optimize-performance">Q6: "How do you optimize performance?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple optimization strategies:</p>
+<ol>
+<li><strong>Asset Minification</strong>: Minify CSS and JavaScript</li>
+<li><strong>Lazy Loading</strong>: Load content on demand</li>
+<li><strong>Caching</strong>: Browser and LocalStorage caching</li>
+<li><strong>CDN</strong>: GitHub Pages CDN for global distribution</li>
+<li><strong>Code Splitting</strong>: Load only needed code</li>
+<li><strong>Service Worker</strong>: Offline support and caching</li>
+</ol>
+<p>Performance is critical for user experience."</p>
+<h3 id="q7-what-are-the-performance-metrics-you-track"><a class="header" href="#q7-what-are-the-performance-metrics-you-track">Q7: "What are the performance metrics you track?"</a></h3>
+<p><strong>Answer:</strong>
+"Key metrics:</p>
+<ol>
+<li><strong>First Contentful Paint (FCP)</strong>: &lt; 1.5s</li>
+<li><strong>Largest Contentful Paint (LCP)</strong>: &lt; 2.5s</li>
+<li><strong>Time to Interactive (TTI)</strong>: &lt; 3.5s</li>
+<li><strong>Cumulative Layout Shift (CLS)</strong>: &lt; 0.1</li>
+<li><strong>Page Load Time</strong>: Monitor via Performance API</li>
+</ol>
+<p>These metrics ensure good user experience."</p>
+<h2 id="deployment-questions"><a class="header" href="#deployment-questions">Deployment Questions</a></h2>
+<h3 id="q8-describe-your-cicd-pipeline"><a class="header" href="#q8-describe-your-cicd-pipeline">Q8: "Describe your CI/CD pipeline."</a></h3>
+<p><strong>Answer:</strong>
+"GitHub Actions workflow:</p>
+<ol>
+<li><strong>Trigger</strong>: Push to main branch</li>
+<li><strong>Build</strong>: No build step (static site)</li>
+<li><strong>Deploy</strong>: Upload to GitHub Pages</li>
+<li><strong>Automation</strong>: Fully automated deployment</li>
+<li><strong>Rollback</strong>: Git revert for quick rollback</li>
+</ol>
+<p>Simple and effective for static site deployment."</p>
+<h3 id="q9-how-do-you-handle-rollbacks"><a class="header" href="#q9-how-do-you-handle-rollbacks">Q9: "How do you handle rollbacks?"</a></h3>
+<p><strong>Answer:</strong>
+"Rollback strategies:</p>
+<ol>
+<li><strong>Git Revert</strong>: Revert problematic commits</li>
+<li><strong>Branch Strategy</strong>: Keep stable branch</li>
+<li><strong>Version Tags</strong>: Tag releases for reference</li>
+<li><strong>Git History</strong>: All versions in Git history</li>
+<li><strong>Quick Deploy</strong>: GitHub Actions redeploys automatically</li>
+</ol>
+<p>Fast and reliable rollback process."</p>
+<h2 id="content-management-questions"><a class="header" href="#content-management-questions">Content Management Questions</a></h2>
+<h3 id="q10-how-do-you-manage-content-updates"><a class="header" href="#q10-how-do-you-manage-content-updates">Q10: "How do you manage content updates?"</a></h3>
+<p><strong>Answer:</strong>
+"Git-based content management:</p>
+<ol>
+<li><strong>Markdown Files</strong>: Easy to edit and review</li>
+<li><strong>Pull Requests</strong>: Review before merging</li>
+<li><strong>Version Control</strong>: All changes tracked</li>
+<li><strong>Contributions</strong>: Community can contribute</li>
+<li><strong>Automation</strong>: Auto-deploy on merge</li>
+</ol>
+<p>This approach ensures quality and traceability."</p>
+<h3 id="q11-how-would-you-add-search-functionality"><a class="header" href="#q11-how-would-you-add-search-functionality">Q11: "How would you add search functionality?"</a></h3>
+<p><strong>Answer:</strong>
+"Client-side search implementation:</p>
+<ol>
+<li><strong>Index Building</strong>: Pre-build search index</li>
+<li><strong>Full-Text Search</strong>: Search question titles and content</li>
+<li><strong>Fuzzy Matching</strong>: Handle typos and variations</li>
+<li><strong>Category Filtering</strong>: Filter by category</li>
+<li><strong>Performance</strong>: Efficient search algorithm</li>
+</ol>
+<p>Would use libraries like Fuse.js or implement custom search."</p>
+<h2 id="advanced-questions-1"><a class="header" href="#advanced-questions-1">Advanced Questions</a></h2>
+<h3 id="q12-how-would-you-add-user-progress-tracking"><a class="header" href="#q12-how-would-you-add-user-progress-tracking">Q12: "How would you add user progress tracking?"</a></h3>
+<p><strong>Answer:</strong>
+"Enhanced session management:</p>
+<ol>
+<li><strong>Progress Storage</strong>: Track completed questions</li>
+<li><strong>Statistics</strong>: Show progress per category</li>
+<li><strong>Achievements</strong>: Badge system for milestones</li>
+<li><strong>Export</strong>: Export progress data</li>
+<li><strong>Sync</strong>: Optional cloud sync (future)</li>
+</ol>
+<p>Would extend LocalStorage with structured progress data."</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-1"><a class="header" href="#opensource-llm-rag-stack-1">Opensource-LLM-RAG-Stack</a></h1>
+<p>A production-ready, containerized RAG (Retrieval-Augmented Generation) stack with comprehensive monitoring, observability, and enterprise-grade DevOps practices.</p>
+<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
+<p>The Opensource-LLM-RAG-Stack is a complete, self-contained RAG system that demonstrates enterprise-grade AI infrastructure practices. It combines vector databases, LLM inference, web interfaces, and comprehensive monitoring in a single Docker Compose setup.</p>
+<p><img src="opensource-llm-rag-stack/../images/RAG-LLM-stack.png" alt="OpenSource RAG LLM Stack Architecture" /></p>
+<h2 id="key-features-2"><a class="header" href="#key-features-2">Key Features</a></h2>
+<ul>
+<li><strong>Containerized Microservices</strong>: Docker Compose orchestration with complete service isolation</li>
+<li><strong>Vector Database</strong>: Chroma for semantic search and embeddings storage</li>
+<li><strong>LLM Integration</strong>: Containerized Ollama for reproducible LLM inference with Open WebUI interface</li>
+<li><strong>Data Persistence</strong>: PostgreSQL with optimized schema for chat history and RAG documents</li>
+<li><strong>Observability</strong>: Prometheus metrics collection with Grafana dashboards</li>
+<li><strong>Monitoring</strong>: Real-time service health monitoring and performance metrics</li>
+<li><strong>Security</strong>: Network isolation, environment-based configuration, and data encryption</li>
+</ul>
+<h2 id="project-highlights-2"><a class="header" href="#project-highlights-2">Project Highlights</a></h2>
+<p>This project demonstrates:</p>
+<ul>
+<li>Modern AI/ML infrastructure patterns</li>
+<li>Containerized microservices architecture</li>
+<li>Vector database integration</li>
+<li>Comprehensive observability</li>
+<li>Production-ready RAG implementation</li>
+<li>Enterprise DevOps practices</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-architecture"><a class="header" href="#opensource-llm-rag-stack-architecture">Opensource-LLM-RAG-Stack Architecture</a></h1>
+<h2 id="system-architecture-2"><a class="header" href="#system-architecture-2">System Architecture</a></h2>
+<p><img src="opensource-llm-rag-stack/../images/RAG-LLM-stack.png" alt="OpenSource RAG LLM Stack Architecture" /></p>
+<p>This diagram illustrates the complete architecture of the OpenSource RAG LLM Stack, showing the interaction between all components for retrieval-augmented generation, chat history management, and comprehensive monitoring.</p>
+<h2 id="rag-flow"><a class="header" href="#rag-flow">RAG Flow</a></h2>
+<p><strong>RAG Flow:</strong> User → Open WebUI → Chroma (retrieve) → Open WebUI → Ollama (generate) → Open WebUI → User</p>
+<h2 id="core-components"><a class="header" href="#core-components">Core Components</a></h2>
+<h3 id="open-webui"><a class="header" href="#open-webui">Open WebUI</a></h3>
+<ul>
+<li><strong>Purpose</strong>: User interface for chat and document management</li>
+<li><strong>Port</strong>: 3000</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Chat interface</li>
+<li>Document upload and processing</li>
+<li>RAG integration</li>
+<li>Chat history management</li>
 </ul>
 </li>
-<li><strong>Engaging Demo</strong>: Visualizing chaos impacts (e.g., pod crashes in Grafana) and recovery processes makes for a compelling presentation.</li>
-<li><strong>Scalability</strong>: The platform handles high-load scenarios, showcasing AWS auto-scaling and resilience.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="open-source-foundation"><a class="header" href="#open-source-foundation">Open-Source Foundation</a></h1>
-<p>ChaosHub builds on open-source components but requires custom integration:</p>
+<h3 id="ollama"><a class="header" href="#ollama">Ollama</a></h3>
 <ul>
-<li><strong>LitmusChaos</strong>: Provides the chaos engine and ChaosCenter Dashboard for experiment management.</li>
-<li><strong>Target App</strong>: Fork a sample app like Google's Online Boutique for the mock e-commerce system.</li>
-<li><strong>Observability</strong>: Use OpenTelemetry Demo for tracing setup inspiration.</li>
-<li><strong>Custom Components</strong>: Build the analytics service, alerting service, and React frontend to tie everything together.</li>
-</ul>
-<p><strong>Build Effort</strong>: Starting with LitmusChaos and a sample app, expect 3-5 weeks for an MVP, focusing on integrating the DevOps/observability stack.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="demo-workflow"><a class="header" href="#demo-workflow">Demo Workflow</a></h1>
-<ol>
-<li><strong>Code Update</strong>: A developer adds a new chaos scenario (e.g., network partition) to the orchestrator and pushes to GitHub.</li>
-<li><strong>CI/CD</strong>: GitHub Actions tests, builds, and pushes the Docker image to ECR.</li>
-<li><strong>ArgoCD</strong>: Syncs the updated Helm chart to EKS, deploying the scenario with a canary rollout.</li>
-<li><strong>Chaos Experiment</strong>: LitmusChaos injects a network delay into the target app's order service.</li>
-<li><strong>Monitoring</strong>: Prometheus captures error spikes; Grafana visualizes latency; OpenTelemetry traces the failure's impact.</li>
-<li><strong>Analytics and Alerts</strong>: The analytics service reports MTTR; the alerting service notifies via Slack.</li>
-</ol>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="impact-and-value"><a class="header" href="#impact-and-value">Impact and Value</a></h1>
-<p>ChaosHub empowers SREs to proactively test and improve system resilience, reducing downtime in production environments. For the demo, it showcases a full DevOps/SRE toolchain in action:</p>
+<li><strong>Purpose</strong>: LLM inference engine</li>
+<li><strong>Port</strong>: 11434</li>
+<li><strong>Features</strong>:
 <ul>
-<li><strong>CI/CD</strong> automates rapid iteration.</li>
-<li><strong>ArgoCD</strong> ensures consistent, automated deployments.</li>
-<li><strong>Prometheus/Grafana</strong> provide deep observability.</li>
-<li><strong>OpenTelemetry</strong> reveals failure propagation.</li>
-<li><strong>Terraform/Helm</strong> enable scalable infrastructure.</li>
-<li><strong>LitmusChaos</strong> delivers a production-grade chaos engine with a sleek UI.</li>
+<li>Model management</li>
+<li>Text generation</li>
+<li>Embedding generation</li>
+<li>Containerized deployment</li>
 </ul>
-<p>This platform is a powerful tool for DevOps/SRE teams and a standout demo for technical audiences, highlighting the synergy of modern tools in a real-world chaos engineering use case.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h1>
+</li>
+</ul>
+<h3 id="chroma"><a class="header" href="#chroma">Chroma</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Vector database for embeddings</li>
+<li><strong>Port</strong>: 8000</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Semantic search</li>
+<li>Embedding storage</li>
+<li>Collection management</li>
+<li>Similarity search</li>
+</ul>
+</li>
+</ul>
+<h3 id="postgresql"><a class="header" href="#postgresql">PostgreSQL</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Relational database for chat history and metadata</li>
+<li><strong>Port</strong>: 5432</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Chat session storage</li>
+<li>Message history</li>
+<li>Document metadata</li>
+<li>Full-text search</li>
+</ul>
+</li>
+</ul>
+<h2 id="monitoring-stack"><a class="header" href="#monitoring-stack">Monitoring Stack</a></h2>
+<h3 id="prometheus"><a class="header" href="#prometheus">Prometheus</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Metrics collection and storage</li>
+<li><strong>Port</strong>: 9090</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Time-series database</li>
+<li>Service health monitoring</li>
+<li>Performance metrics</li>
+<li>Alert rule evaluation</li>
+</ul>
+</li>
+</ul>
+<h3 id="grafana"><a class="header" href="#grafana">Grafana</a></h3>
+<ul>
+<li><strong>Purpose</strong>: Visualization and dashboards</li>
+<li><strong>Port</strong>: 3001</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Real-time dashboards</li>
+<li>Service health visualization</li>
+<li>Performance analytics</li>
+<li>Custom dashboard creation</li>
+</ul>
+</li>
+</ul>
+<h2 id="data-flow-2"><a class="header" href="#data-flow-2">Data Flow</a></h2>
+<h3 id="document-processing-flow"><a class="header" href="#document-processing-flow">Document Processing Flow</a></h3>
 <ol>
-<li><strong>Setup</strong>: Deploy LitmusChaos on AWS EKS using Helm and Terraform (see Litmus Docs).</li>
-<li><strong>Target App</strong>: Fork Google's Online Boutique and instrument it with OpenTelemetry.</li>
-<li><strong>Custom Services</strong>: Build the analytics and alerting services (e.g., Python/Go) and the React frontend.</li>
-<li><strong>CI/CD</strong>: Configure GitHub Actions for automated builds and ArgoCD for deployments.</li>
-<li><strong>Observability</strong>: Integrate Prometheus, Grafana, and OpenTelemetry for metrics and tracing.</li>
-<li><strong>Demo Prep</strong>: Script a chaos experiment (e.g., pod crash) and visualize results in Grafana.</li>
+<li>User uploads document via Open WebUI</li>
+<li>Document is chunked into smaller pieces</li>
+<li>Chunks are converted to embeddings via Ollama</li>
+<li>Embeddings are stored in Chroma vector database</li>
+<li>Metadata is stored in PostgreSQL</li>
 </ol>
+<h3 id="query-flow-rag"><a class="header" href="#query-flow-rag">Query Flow (RAG)</a></h3>
+<ol>
+<li>User asks question in Open WebUI</li>
+<li>Question is converted to embedding</li>
+<li>Chroma performs similarity search</li>
+<li>Relevant document chunks are retrieved</li>
+<li>Chunks are added to prompt context</li>
+<li>Ollama generates response using context</li>
+<li>Response is displayed to user</li>
+<li>Conversation is saved to PostgreSQL</li>
+</ol>
+<h2 id="infrastructure-as-code-1"><a class="header" href="#infrastructure-as-code-1">Infrastructure as Code</a></h2>
+<p>The entire stack is defined in Docker Compose:</p>
+<pre><code class="language-yaml">services:
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    volumes:
+      - ollama-data:/root/.ollama
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports: ["3000:8080"]
+    environment:
+      - OLLAMA_API_BASE_URL=http://ollama:11434
+      - VECTOR_DB=chroma
+      - DATABASE_URL=postgresql://user:password@postgres:5432/chatdb
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    ports: ["8000:8000"]
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chatdb
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports: ["9090:9090"]
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    ports: ["3001:3000"]
+</code></pre>
+<h2 id="data-persistence"><a class="header" href="#data-persistence">Data Persistence</a></h2>
+<p>All data is persisted in Docker volumes:</p>
+<ul>
+<li><code>ollama-data</code>: LLM models and Ollama configurations</li>
+<li><code>openwebui-data</code>: WebUI configurations and user data</li>
+<li><code>chroma-data</code>: Vector embeddings and collections</li>
+<li><code>pgdata</code>: PostgreSQL database files</li>
+<li><code>grafana-data</code>: Dashboard configurations and user settings</li>
+<li><code>prometheus-data</code>: Metrics time-series data</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-setup"><a class="header" href="#opensource-llm-rag-stack-setup">Opensource-LLM-RAG-Stack Setup</a></h1>
+<h2 id="quick-start-1"><a class="header" href="#quick-start-1">Quick Start</a></h2>
+<h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
+<ul>
+<li>Docker &amp; Docker Compose</li>
+<li>8GB+ RAM (for LLM models)</li>
+</ul>
+<h3 id="complete-self-contained-setup"><a class="header" href="#complete-self-contained-setup">Complete Self-Contained Setup</a></h3>
+<pre><code class="language-bash"># Clone the repository
+git clone &lt;your-repo-url&gt;
+cd Opensource-LLM-RAG-Stack
+
+# Quick start (includes model setup)
+./start.sh
+
+# Or manual setup:
+# Start all services (includes Ollama)
+docker-compose up -d
+
+# Set up Ollama with a model
+./scripts/setup-ollama.sh
+
+# Check service status
+docker-compose ps
+</code></pre>
+<h3 id="alternative-use-local-ollama-installation"><a class="header" href="#alternative-use-local-ollama-installation">Alternative: Use Local Ollama Installation</a></h3>
+<pre><code class="language-bash"># Prerequisites: Install Ollama locally (https://ollama.ai)
+# Start Ollama on your host machine
+ollama serve
+
+# Start the RAG stack (connects to local Ollama)
+docker-compose -f local-ollama-docker-compose.yml up -d
+
+# Check service status
+docker-compose -f local-ollama-docker-compose.yml ps
+</code></pre>
+<h2 id="access-services"><a class="header" href="#access-services">Access Services</a></h2>
+<ul>
+<li><strong>Open WebUI</strong>: http://localhost:3000 (AI Chat Interface)</li>
+<li><strong>Grafana</strong>: http://localhost:3001 (admin/admin123)</li>
+<li><strong>Prometheus</strong>: http://localhost:9090 (Metrics)</li>
+<li><strong>Chroma API</strong>: http://localhost:8000 (Vector Database)</li>
+<li><strong>PostgreSQL</strong>: localhost:5432 (Database)</li>
+<li><strong>Ollama API</strong>: http://localhost:11434 (LLM Service)</li>
+</ul>
+<h2 id="ollama-model-management"><a class="header" href="#ollama-model-management">Ollama Model Management</a></h2>
+<h3 id="list-available-models"><a class="header" href="#list-available-models">List Available Models</a></h3>
+<pre><code class="language-bash">docker exec -it ollama ollama list
+</code></pre>
+<h3 id="pull-a-new-model"><a class="header" href="#pull-a-new-model">Pull a New Model</a></h3>
+<pre><code class="language-bash">docker exec -it ollama ollama pull llama3.2:3b
+</code></pre>
+<h3 id="remove-a-model"><a class="header" href="#remove-a-model">Remove a Model</a></h3>
+<pre><code class="language-bash">docker exec -it ollama ollama rm llama3.2:3b
+</code></pre>
+<h3 id="run-setup-script"><a class="header" href="#run-setup-script">Run Setup Script</a></h3>
+<pre><code class="language-bash"># Guided model installation
+./scripts/setup-ollama.sh
+</code></pre>
+<h2 id="recommended-models"><a class="header" href="#recommended-models">Recommended Models</a></h2>
+<ul>
+<li><strong>llama3.2:3b</strong> (3B params, ~2GB) - Best balance of speed and quality</li>
+<li><strong>llama3.2:1b</strong> (1B params, ~1GB) - Fastest, good for basic tasks</li>
+<li><strong>mistral:7b</strong> (7B params, ~4GB) - High quality, slower</li>
+<li><strong>codellama:7b</strong> (7B params, ~4GB) - Specialized for coding tasks</li>
+<li><strong>gemma:2b</strong> (2B params, ~1.5GB) - Google's efficient model</li>
+</ul>
+<h2 id="database-schema"><a class="header" href="#database-schema">Database Schema</a></h2>
+<p>The database is initialized with an optimized schema for RAG operations:</p>
+<pre><code class="language-sql">-- Chat Sessions Management
+CREATE TABLE chat_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id VARCHAR(255) NOT NULL,
+    session_name VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Message Storage with Full-Text Search
+CREATE TABLE chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    session_id UUID REFERENCES chat_sessions(id),
+    role VARCHAR(50) CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    token_count INTEGER DEFAULT 0
+);
+
+-- RAG Document Storage
+CREATE TABLE documents (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(500),
+    content TEXT NOT NULL,
+    source VARCHAR(500),
+    embedding_id VARCHAR(255), -- Chroma reference
+    metadata JSONB DEFAULT '{}'::jsonb
+);
+
+-- Performance Indexes
+CREATE INDEX idx_documents_content_gin ON documents 
+USING gin(to_tsvector('english', content));
+</code></pre>
+<h2 id="service-management"><a class="header" href="#service-management">Service Management</a></h2>
+<h3 id="view-logs"><a class="header" href="#view-logs">View Logs</a></h3>
+<pre><code class="language-bash">docker-compose logs [service-name]
+</code></pre>
+<h3 id="restart-services"><a class="header" href="#restart-services">Restart Services</a></h3>
+<pre><code class="language-bash">docker-compose restart [service-name]
+</code></pre>
+<h3 id="clean-restart"><a class="header" href="#clean-restart">Clean Restart</a></h3>
+<pre><code class="language-bash">docker-compose down
+docker-compose up -d
+</code></pre>
+<h3 id="for-local-ollama-setup"><a class="header" href="#for-local-ollama-setup">For Local Ollama Setup</a></h3>
+<pre><code class="language-bash">docker-compose -f local-ollama-docker-compose.yml [command]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-rag-implementation-guide"><a class="header" href="#opensource-llm-rag-stack-rag-implementation-guide">Opensource-LLM-RAG-Stack RAG Implementation Guide</a></h1>
+<h2 id="rag-implementation"><a class="header" href="#rag-implementation">RAG Implementation</a></h2>
+<h3 id="1-document-upload--processing"><a class="header" href="#1-document-upload--processing">1. Document Upload &amp; Processing</a></h3>
+<pre><code class="language-bash"># Access Open WebUI
+open http://localhost:3000
+
+# Navigate to Knowledge section
+# Upload documents (PDF, TXT, etc.)
+# System automatically:
+# - Chunks documents
+# - Generates embeddings
+# - Stores in Chroma vector database
+</code></pre>
+<h3 id="2-verify-vector-storage"><a class="header" href="#2-verify-vector-storage">2. Verify Vector Storage</a></h3>
+<pre><code class="language-bash"># Check Chroma collections
+curl -s http://localhost:8000/api/v2/tenants/default/databases/default/collections | jq '.'
+
+# Verify heartbeat
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8000/api/v2/heartbeat
+</code></pre>
+<h3 id="3-query-with-rag"><a class="header" href="#3-query-with-rag">3. Query with RAG</a></h3>
+<ul>
+<li>Ask questions in Open WebUI that reference uploaded content</li>
+<li>System retrieves relevant chunks from Chroma</li>
+<li>Augments prompts with retrieved context</li>
+<li>Generates responses using Ollama LLM</li>
+</ul>
+<h2 id="rag-workflow"><a class="header" href="#rag-workflow">RAG Workflow</a></h2>
+<h3 id="step-1-document-ingestion"><a class="header" href="#step-1-document-ingestion">Step 1: Document Ingestion</a></h3>
+<ol>
+<li>User uploads document via Open WebUI</li>
+<li>Document is parsed and chunked</li>
+<li>Each chunk is processed for embedding generation</li>
+</ol>
+<h3 id="step-2-embedding-generation"><a class="header" href="#step-2-embedding-generation">Step 2: Embedding Generation</a></h3>
+<ol>
+<li>Chunks are sent to Ollama for embedding</li>
+<li>Embeddings are generated using the selected model</li>
+<li>Embeddings are normalized for similarity search</li>
+</ol>
+<h3 id="step-3-vector-storage"><a class="header" href="#step-3-vector-storage">Step 3: Vector Storage</a></h3>
+<ol>
+<li>Embeddings are stored in Chroma with metadata</li>
+<li>Document metadata is stored in PostgreSQL</li>
+<li>Indexes are created for fast retrieval</li>
+</ol>
+<h3 id="step-4-query-processing"><a class="header" href="#step-4-query-processing">Step 4: Query Processing</a></h3>
+<ol>
+<li>User query is converted to embedding</li>
+<li>Chroma performs similarity search</li>
+<li>Top-K relevant chunks are retrieved</li>
+<li>Chunks are ranked by relevance score</li>
+</ol>
+<h3 id="step-5-context-augmentation"><a class="header" href="#step-5-context-augmentation">Step 5: Context Augmentation</a></h3>
+<ol>
+<li>Retrieved chunks are formatted as context</li>
+<li>Context is prepended to user query</li>
+<li>Augmented prompt is sent to Ollama</li>
+</ol>
+<h3 id="step-6-response-generation"><a class="header" href="#step-6-response-generation">Step 6: Response Generation</a></h3>
+<ol>
+<li>Ollama generates response using context</li>
+<li>Response is displayed to user</li>
+<li>Conversation is saved to PostgreSQL</li>
+</ol>
+<h2 id="troubleshooting-1"><a class="header" href="#troubleshooting-1">Troubleshooting</a></h2>
+<h3 id="rag-not-working---document-upload-issues"><a class="header" href="#rag-not-working---document-upload-issues">RAG Not Working - Document Upload Issues</a></h3>
+<pre><code class="language-bash"># Check Chroma connection
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8000/api/v2/heartbeat
+
+# Create tenant/database if needed
+curl -X POST http://localhost:8000/api/v2/tenants \
+  -H "Content-Type: application/json" \
+  -d '{"name": "default"}'
+
+curl -X POST http://localhost:8000/api/v2/tenants/default/databases \
+  -H "Content-Type: application/json" \
+  -d '{"name": "default"}'
+</code></pre>
+<h3 id="database-connection-issues"><a class="header" href="#database-connection-issues">Database Connection Issues</a></h3>
+<pre><code class="language-bash"># Check PostgreSQL status
+docker-compose logs postgres
+
+# Verify database initialization
+docker exec -it postgres psql -U user -d chatdb -c "\dt"
+</code></pre>
+<h3 id="embedding-generation-issues"><a class="header" href="#embedding-generation-issues">Embedding Generation Issues</a></h3>
+<pre><code class="language-bash"># Check Ollama status
+curl http://localhost:11434/api/tags
+
+# Verify model is loaded
+docker exec -it ollama ollama list
+
+# Test embedding generation
+curl http://localhost:11434/api/embeddings \
+  -d '{"model": "llama3.2:3b", "prompt": "test"}'
+</code></pre>
+<h2 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h2>
+<h3 id="document-chunking"><a class="header" href="#document-chunking">Document Chunking</a></h3>
+<ul>
+<li>Optimal chunk size: 500-1000 tokens</li>
+<li>Overlap between chunks: 100-200 tokens</li>
+<li>Preserve context boundaries (paragraphs, sections)</li>
+</ul>
+<h3 id="embedding-models"><a class="header" href="#embedding-models">Embedding Models</a></h3>
+<ul>
+<li>Use consistent embedding model for all documents</li>
+<li>Match embedding model with generation model when possible</li>
+<li>Consider model size vs. quality trade-offs</li>
+</ul>
+<h3 id="retrieval-strategy"><a class="header" href="#retrieval-strategy">Retrieval Strategy</a></h3>
+<ul>
+<li>Top-K retrieval: 3-5 most relevant chunks</li>
+<li>Re-ranking: Consider implementing re-ranking for better results</li>
+<li>Metadata filtering: Use metadata for precise retrieval</li>
+</ul>
+<h3 id="context-management"><a class="header" href="#context-management">Context Management</a></h3>
+<ul>
+<li>Limit context window to model's maximum</li>
+<li>Prioritize most relevant chunks</li>
+<li>Include source citations in responses</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-monitoring"><a class="header" href="#opensource-llm-rag-stack-monitoring">Opensource-LLM-RAG-Stack Monitoring</a></h1>
+<h2 id="monitoring--observability"><a class="header" href="#monitoring--observability">Monitoring &amp; Observability</a></h2>
+<h3 id="prometheus-metrics"><a class="header" href="#prometheus-metrics">Prometheus Metrics</a></h3>
+<p>Prometheus collects metrics from all services:</p>
+<ul>
+<li><strong>Service Health</strong>: <code>up{job=~"prometheus|postgres_exporter"}</code></li>
+<li><strong>Database Performance</strong>: PostgreSQL exporter metrics</li>
+<li><strong>Request Rates</strong>: HTTP request monitoring</li>
+<li><strong>Resource Usage</strong>: Container and system metrics</li>
+</ul>
+<h3 id="grafana-dashboards"><a class="header" href="#grafana-dashboards">Grafana Dashboards</a></h3>
+<p>Pre-configured dashboards include:</p>
+<ul>
+<li><strong>RAG Stack Overview</strong>: Service health and performance</li>
+<li><strong>Database Metrics</strong>: PostgreSQL performance monitoring</li>
+<li><strong>System Resources</strong>: CPU, memory, and disk usage</li>
+<li><strong>Request Analytics</strong>: API call patterns and response times</li>
+</ul>
+<h2 id="rag-stack-monitoring-dashboard"><a class="header" href="#rag-stack-monitoring-dashboard">RAG Stack Monitoring Dashboard</a></h2>
+<p><img src="opensource-llm-rag-stack/../images/rag-dashboard.png" alt="RAG Stack Monitoring Dashboard" /></p>
+<p>The dashboard provides real-time insights into:</p>
+<ul>
+<li><strong>Service Health Status</strong>: Live monitoring of all stack components</li>
+<li><strong>Active Services Count</strong>: Overview of running services</li>
+<li><strong>Request Rate Monitoring</strong>: API performance metrics</li>
+<li><strong>Database Performance</strong>: PostgreSQL metrics and health</li>
+</ul>
+<h2 id="auto-provisioning"><a class="header" href="#auto-provisioning">Auto-Provisioning</a></h2>
+<p>Grafana automatically configures:</p>
+<pre><code class="language-yaml"># Datasources
+datasources:
+  - name: Prometheus
+    type: prometheus
+    url: http://prometheus:9090
+    isDefault: true
+
+# Dashboards auto-loaded from:
+# monitoring/grafana/dashboards/
+</code></pre>
+<h2 id="production-deployment-1"><a class="header" href="#production-deployment-1">Production Deployment</a></h2>
+<h3 id="environment-configuration"><a class="header" href="#environment-configuration">Environment Configuration</a></h3>
+<pre><code class="language-bash"># Production environment variables
+export POSTGRES_PASSWORD=secure_password
+export GRAFANA_ADMIN_PASSWORD=secure_admin_password
+export OLLAMA_API_BASE_URL=https://your-ollama-instance.com
+</code></pre>
+<h3 id="scaling-considerations"><a class="header" href="#scaling-considerations">Scaling Considerations</a></h3>
+<ul>
+<li><strong>Horizontal Scaling</strong>: Multiple Ollama instances behind load balancer</li>
+<li><strong>Database Scaling</strong>: PostgreSQL read replicas for query performance</li>
+<li><strong>Vector DB Scaling</strong>: Chroma clustering for high availability</li>
+<li><strong>Monitoring</strong>: Prometheus federation for multi-instance monitoring</li>
+</ul>
+<h3 id="security-best-practices-1"><a class="header" href="#security-best-practices-1">Security Best Practices</a></h3>
+<ul>
+<li>Change default passwords in production</li>
+<li>Use Docker secrets for sensitive data</li>
+<li>Configure network security policies</li>
+<li>Enable SSL/TLS for all services</li>
+<li>Implement proper backup strategies</li>
+</ul>
+<h2 id="enterprise-features"><a class="header" href="#enterprise-features">Enterprise Features</a></h2>
+<h3 id="devops-best-practices"><a class="header" href="#devops-best-practices">DevOps Best Practices</a></h3>
+<ul>
+<li><strong>Infrastructure as Code</strong>: Docker Compose for reproducible deployments</li>
+<li><strong>Monitoring</strong>: Comprehensive observability with Prometheus and Grafana</li>
+<li><strong>Data Management</strong>: Optimized PostgreSQL schema with full-text search</li>
+<li><strong>Security</strong>: Network isolation and environment-based configuration</li>
+<li><strong>Scalability</strong>: Microservices architecture for horizontal scaling</li>
+</ul>
+<h3 id="aiml-capabilities"><a class="header" href="#aiml-capabilities">AI/ML Capabilities</a></h3>
+<ul>
+<li><strong>Vector Search</strong>: Chroma for semantic similarity search</li>
+<li><strong>Containerized LLM</strong>: Ollama in Docker for reproducible model inference</li>
+<li><strong>RAG Pipeline</strong>: Complete retrieval-augmented generation workflow</li>
+<li><strong>Document Processing</strong>: Automatic chunking and embedding generation</li>
+<li><strong>Chat History</strong>: Persistent conversation management</li>
+<li><strong>Model Management</strong>: Easy model switching and versioning with Docker volumes</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-technical-implementation"><a class="header" href="#opensource-llm-rag-stack-technical-implementation">Opensource-LLM-RAG-Stack Technical Implementation</a></h1>
+<h2 id="docker-compose-architecture"><a class="header" href="#docker-compose-architecture">Docker Compose Architecture</a></h2>
+<h3 id="service-configuration"><a class="header" href="#service-configuration">Service Configuration</a></h3>
+<pre><code class="language-yaml">version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_ORIGINS=*
+    networks:
+      - rag-network
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_API_BASE_URL=http://ollama:11434
+      - VECTOR_DB=chroma
+      - DATABASE_URL=postgresql://user:password@postgres:5432/chatdb
+      - CHROMA_SERVER_HOST=http://chroma:8000
+    depends_on:
+      - ollama
+      - chroma
+      - postgres
+    networks:
+      - rag-network
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    container_name: chroma
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+    environment:
+      - CHROMA_DB_IMPL=duckdb+parquet
+      - IS_PERSISTENT=TRUE
+    networks:
+      - rag-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chatdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - rag-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - rag-network
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - rag-network
+
+volumes:
+  ollama-data:
+  openwebui-data:
+  chroma-data:
+  pgdata:
+  grafana-data:
+  prometheus-data:
+
+networks:
+  rag-network:
+    driver: bridge
+</code></pre>
+<h2 id="database-schema-implementation"><a class="header" href="#database-schema-implementation">Database Schema Implementation</a></h2>
+<h3 id="postgresql-schema"><a class="header" href="#postgresql-schema">PostgreSQL Schema</a></h3>
+<pre><code class="language-sql">-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Chat Sessions Management
+CREATE TABLE chat_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id VARCHAR(255) NOT NULL,
+    session_name VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Message Storage with Full-Text Search
+CREATE TABLE chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    session_id UUID REFERENCES chat_sessions(id) ON DELETE CASCADE,
+    role VARCHAR(50) CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    token_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- RAG Document Storage
+CREATE TABLE documents (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(500),
+    content TEXT NOT NULL,
+    source VARCHAR(500),
+    embedding_id VARCHAR(255), -- Chroma reference
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Performance Indexes
+CREATE INDEX idx_chat_messages_session_id ON chat_messages(session_id);
+CREATE INDEX idx_chat_messages_created_at ON chat_messages(created_at);
+CREATE INDEX idx_documents_content_gin ON documents 
+    USING gin(to_tsvector('english', content));
+CREATE INDEX idx_documents_metadata_gin ON documents USING gin(metadata);
+
+-- Full-text search function
+CREATE OR REPLACE FUNCTION search_documents(search_query TEXT)
+RETURNS TABLE(id UUID, title VARCHAR, content TEXT, rank REAL) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        d.id,
+        d.title,
+        d.content,
+        ts_rank(to_tsvector('english', d.content), plainto_tsquery('english', search_query)) as rank
+    FROM documents d
+    WHERE to_tsvector('english', d.content) @@ plainto_tsquery('english', search_query)
+    ORDER BY rank DESC
+    LIMIT 10;
+END;
+$$ LANGUAGE plpgsql;
+</code></pre>
+<h2 id="rag-implementation-1"><a class="header" href="#rag-implementation-1">RAG Implementation</a></h2>
+<h3 id="document-processing-pipeline"><a class="header" href="#document-processing-pipeline">Document Processing Pipeline</a></h3>
+<pre><code class="language-python">import chromadb
+from chromadb.config import Settings
+from sentence_transformers import SentenceTransformer
+import ollama
+
+class RAGPipeline:
+    def __init__(self):
+        self.chroma_client = chromadb.Client(Settings(
+            chroma_db_impl="duckdb+parquet",
+            persist_directory="./chroma_db"
+        ))
+        self.collection = self.chroma_client.get_or_create_collection("documents")
+        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.ollama_client = ollama.Client(host='http://ollama:11434')
+    
+    def process_document(self, document_text, metadata=None):
+        """Process and store document in vector database"""
+        # Chunk document
+        chunks = self.chunk_document(document_text, chunk_size=500, overlap=100)
+        
+        # Generate embeddings
+        embeddings = self.embedding_model.encode(chunks)
+        
+        # Store in Chroma
+        ids = [f"doc_{i}" for i in range(len(chunks))]
+        self.collection.add(
+            embeddings=embeddings.tolist(),
+            documents=chunks,
+            ids=ids,
+            metadatas=[metadata] * len(chunks) if metadata else None
+        )
+        
+        return len(chunks)
+    
+    def chunk_document(self, text, chunk_size=500, overlap=100):
+        """Split document into overlapping chunks"""
+        chunks = []
+        words = text.split()
+        
+        for i in range(0, len(words), chunk_size - overlap):
+            chunk = ' '.join(words[i:i + chunk_size])
+            chunks.append(chunk)
+        
+        return chunks
+    
+    def retrieve_relevant_chunks(self, query, top_k=5):
+        """Retrieve relevant document chunks for query"""
+        # Generate query embedding
+        query_embedding = self.embedding_model.encode([query])[0]
+        
+        # Search in Chroma
+        results = self.collection.query(
+            query_embeddings=[query_embedding.tolist()],
+            n_results=top_k
+        )
+        
+        return results['documents'][0]
+    
+    def generate_response(self, query, context_chunks):
+        """Generate response using RAG"""
+        # Build context from retrieved chunks
+        context = "\n\n".join(context_chunks)
+        
+        # Create augmented prompt
+        prompt = f"""Context:
+{context}
+
+Question: {query}
+
+Answer based on the context provided:"""
+        
+        # Generate response using Ollama
+        response = self.ollama_client.generate(
+            model='llama3.2:3b',
+            prompt=prompt
+        )
+        
+        return response['response']
+</code></pre>
+<h2 id="monitoring-implementation"><a class="header" href="#monitoring-implementation">Monitoring Implementation</a></h2>
+<h3 id="prometheus-configuration"><a class="header" href="#prometheus-configuration">Prometheus Configuration</a></h3>
+<pre><code class="language-yaml">global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+  - job_name: 'rag-stack'
+    static_configs:
+      - targets: ['open-webui:8080', 'chroma:8000', 'ollama:11434']
+</code></pre>
+<h3 id="custom-metrics-collection"><a class="header" href="#custom-metrics-collection">Custom Metrics Collection</a></h3>
+<pre><code class="language-python">from prometheus_client import Counter, Histogram, Gauge
+import time
+
+# Define metrics
+request_count = Counter('rag_requests_total', 'Total RAG requests')
+request_duration = Histogram('rag_request_duration_seconds', 'RAG request duration')
+active_sessions = Gauge('rag_active_sessions', 'Active chat sessions')
+document_count = Gauge('rag_documents_total', 'Total documents in vector DB')
+
+def track_rag_request(func):
+    """Decorator to track RAG requests"""
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        request_count.inc()
+        
+        try:
+            result = func(*args, **kwargs)
+            request_duration.observe(time.time() - start_time)
+            return result
+        except Exception as e:
+            request_count.labels(status='error').inc()
+            raise
+    
+    return wrapper
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-security--best-practices"><a class="header" href="#opensource-llm-rag-stack-security--best-practices">Opensource-LLM-RAG-Stack Security &amp; Best Practices</a></h1>
+<h2 id="container-security"><a class="header" href="#container-security">Container Security</a></h2>
+<h3 id="image-security"><a class="header" href="#image-security">Image Security</a></h3>
+<ul>
+<li><strong>Official Images</strong>: Use official, maintained images</li>
+<li><strong>Version Pinning</strong>: Pin specific image versions</li>
+<li><strong>Regular Updates</strong>: Keep images updated</li>
+<li><strong>Vulnerability Scanning</strong>: Scan images for vulnerabilities</li>
+</ul>
+<h3 id="network-security-1"><a class="header" href="#network-security-1">Network Security</a></h3>
+<pre><code class="language-yaml">networks:
+  rag-network:
+    driver: bridge
+    internal: false  # Set to true for isolated network
+
+# Service-specific network configuration
+services:
+  postgres:
+    networks:
+      - rag-network
+    # No external ports exposed
+</code></pre>
+<h2 id="data-security"><a class="header" href="#data-security">Data Security</a></h2>
+<h3 id="database-security"><a class="header" href="#database-security">Database Security</a></h3>
+<pre><code class="language-sql">-- Create read-only user
+CREATE USER readonly_user WITH PASSWORD 'secure_password';
+GRANT CONNECT ON DATABASE chatdb TO readonly_user;
+GRANT USAGE ON SCHEMA public TO readonly_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly_user;
+
+-- Encrypt sensitive data
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Encrypt password column
+ALTER TABLE users ADD COLUMN password_encrypted BYTEA;
+</code></pre>
+<h3 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h3>
+<pre><code class="language-yaml"># Use Docker secrets for sensitive data
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+</code></pre>
+<h2 id="access-control"><a class="header" href="#access-control">Access Control</a></h2>
+<h3 id="api-security"><a class="header" href="#api-security">API Security</a></h3>
+<pre><code class="language-python">from functools import wraps
+from flask import request, jsonify
+import jwt
+
+def require_auth(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+        
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        except:
+            return jsonify({'error': 'Invalid token'}), 401
+        
+        return f(*args, **kwargs)
+    return decorated_function
+</code></pre>
+<h3 id="rate-limiting"><a class="header" href="#rate-limiting">Rate Limiting</a></h3>
+<pre><code class="language-python">from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
+
+@app.route('/api/chat')
+@limiter.limit("10 per minute")
+@require_auth
+def chat():
+    # Chat endpoint with rate limiting
+    pass
+</code></pre>
+<h2 id="security-best-practices-2"><a class="header" href="#security-best-practices-2">Security Best Practices</a></h2>
+<h3 id="1-secrets-management"><a class="header" href="#1-secrets-management">1. <strong>Secrets Management</strong></a></h3>
+<ul>
+<li>Use Docker secrets or environment files</li>
+<li>Never commit secrets to Git</li>
+<li>Rotate secrets regularly</li>
+<li>Use different secrets per environment</li>
+</ul>
+<h3 id="2-network-isolation"><a class="header" href="#2-network-isolation">2. <strong>Network Isolation</strong></a></h3>
+<ul>
+<li>Isolate services in Docker networks</li>
+<li>Limit exposed ports</li>
+<li>Use reverse proxy for external access</li>
+<li>Implement firewall rules</li>
+</ul>
+<h3 id="3-data-encryption"><a class="header" href="#3-data-encryption">3. <strong>Data Encryption</strong></a></h3>
+<ul>
+<li>Encrypt data at rest (PostgreSQL)</li>
+<li>Encrypt data in transit (TLS/SSL)</li>
+<li>Encrypt sensitive fields in database</li>
+<li>Use secure key management</li>
+</ul>
+<h3 id="4-access-control"><a class="header" href="#4-access-control">4. <strong>Access Control</strong></a></h3>
+<ul>
+<li>Implement authentication</li>
+<li>Use role-based access control (RBAC)</li>
+<li>Enforce least privilege principle</li>
+<li>Audit access logs</li>
+</ul>
+<h3 id="5-vulnerability-management"><a class="header" href="#5-vulnerability-management">5. <strong>Vulnerability Management</strong></a></h3>
+<ul>
+<li>Regular security updates</li>
+<li>Scan for vulnerabilities</li>
+<li>Patch promptly</li>
+<li>Monitor security advisories</li>
+</ul>
+<h2 id="production-security-checklist"><a class="header" href="#production-security-checklist">Production Security Checklist</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Change all default passwords</li>
+<li><input disabled="" type="checkbox"/>
+Enable TLS/SSL for all services</li>
+<li><input disabled="" type="checkbox"/>
+Configure firewall rules</li>
+<li><input disabled="" type="checkbox"/>
+Set up authentication</li>
+<li><input disabled="" type="checkbox"/>
+Enable audit logging</li>
+<li><input disabled="" type="checkbox"/>
+Configure backup encryption</li>
+<li><input disabled="" type="checkbox"/>
+Implement rate limiting</li>
+<li><input disabled="" type="checkbox"/>
+Set up intrusion detection</li>
+<li><input disabled="" type="checkbox"/>
+Regular security audits</li>
+<li><input disabled="" type="checkbox"/>
+Incident response plan</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-scaling--performance"><a class="header" href="#opensource-llm-rag-stack-scaling--performance">Opensource-LLM-RAG-Stack Scaling &amp; Performance</a></h1>
+<h2 id="horizontal-scaling"><a class="header" href="#horizontal-scaling">Horizontal Scaling</a></h2>
+<h3 id="load-balancing"><a class="header" href="#load-balancing">Load Balancing</a></h3>
+<pre><code class="language-yaml"># Multiple Ollama instances behind load balancer
+services:
+  ollama-1:
+    image: ollama/ollama:latest
+    deploy:
+      replicas: 3
+  
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "11434:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+</code></pre>
+<h3 id="database-scaling"><a class="header" href="#database-scaling">Database Scaling</a></h3>
+<pre><code class="language-yaml"># PostgreSQL with read replicas
+services:
+  postgres-primary:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_REPLICATION_MODE: master
+  
+  postgres-replica:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_REPLICATION_MODE: slave
+    depends_on:
+      - postgres-primary
+</code></pre>
+<h2 id="vector-database-scaling"><a class="header" href="#vector-database-scaling">Vector Database Scaling</a></h2>
+<h3 id="chroma-clustering"><a class="header" href="#chroma-clustering">Chroma Clustering</a></h3>
+<pre><code class="language-python"># Distributed Chroma setup
+from chromadb.config import Settings
+
+# Primary Chroma instance
+primary_client = chromadb.Client(Settings(
+    chroma_db_impl="duckdb+parquet",
+    persist_directory="/chroma/primary"
+))
+
+# Replica instances for read scaling
+replica_clients = [
+    chromadb.Client(Settings(
+        chroma_db_impl="duckdb+parquet",
+        persist_directory=f"/chroma/replica-{i}"
+    )) for i in range(3)
+]
+</code></pre>
+<h2 id="performance-optimization-2"><a class="header" href="#performance-optimization-2">Performance Optimization</a></h2>
+<h3 id="caching-strategy-1"><a class="header" href="#caching-strategy-1">Caching Strategy</a></h3>
+<pre><code class="language-python">from functools import lru_cache
+import redis
+
+redis_client = redis.Redis(host='redis', port=6379, db=0)
+
+@lru_cache(maxsize=1000)
+def get_cached_embedding(text):
+    """Cache embeddings to avoid recomputation"""
+    cache_key = f"embedding:{hash(text)}"
+    cached = redis_client.get(cache_key)
+    
+    if cached:
+        return pickle.loads(cached)
+    
+    embedding = embedding_model.encode(text)
+    redis_client.setex(cache_key, 3600, pickle.dumps(embedding))
+    return embedding
+</code></pre>
+<h3 id="query-optimization"><a class="header" href="#query-optimization">Query Optimization</a></h3>
+<pre><code class="language-python"># Optimize RAG retrieval
+def optimized_retrieve(query, top_k=5, rerank=True):
+    # Initial retrieval
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=top_k * 2  # Retrieve more for reranking
+    )
+    
+    if rerank:
+        # Rerank using cross-encoder
+        reranked = rerank_results(query, results)
+        return reranked[:top_k]
+    
+    return results[:top_k]
+</code></pre>
+<h2 id="resource-management"><a class="header" href="#resource-management">Resource Management</a></h2>
+<h3 id="resource-limits"><a class="header" href="#resource-limits">Resource Limits</a></h3>
+<pre><code class="language-yaml">services:
+  ollama:
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+  
+  postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+</code></pre>
+<h3 id="auto-scaling"><a class="header" href="#auto-scaling">Auto-Scaling</a></h3>
+<pre><code class="language-yaml"># Docker Swarm auto-scaling
+services:
+  open-webui:
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+</code></pre>
+<h2 id="monitoring-scaling-metrics"><a class="header" href="#monitoring-scaling-metrics">Monitoring Scaling Metrics</a></h2>
+<h3 id="key-metrics-1"><a class="header" href="#key-metrics-1">Key Metrics</a></h3>
+<ul>
+<li><strong>Request Rate</strong>: Requests per second</li>
+<li><strong>Response Time</strong>: P50, P95, P99 latencies</li>
+<li><strong>Error Rate</strong>: Percentage of failed requests</li>
+<li><strong>Resource Usage</strong>: CPU, memory, disk</li>
+<li><strong>Database Connections</strong>: Active connections</li>
+<li><strong>Vector DB Size</strong>: Number of documents</li>
+</ul>
+<h3 id="scaling-triggers"><a class="header" href="#scaling-triggers">Scaling Triggers</a></h3>
+<pre><code class="language-yaml"># Auto-scaling based on metrics
+scaling:
+  triggers:
+    - metric: cpu_usage
+      threshold: 70
+      action: scale_up
+    - metric: memory_usage
+      threshold: 80
+      action: scale_up
+    - metric: request_latency
+      threshold: 1000ms
+      action: scale_up
+</code></pre>
+<h2 id="cost-optimization"><a class="header" href="#cost-optimization">Cost Optimization</a></h2>
+<h3 id="resource-right-sizing"><a class="header" href="#resource-right-sizing">Resource Right-Sizing</a></h3>
+<ul>
+<li><strong>Ollama</strong>: Adjust based on model size</li>
+<li><strong>PostgreSQL</strong>: Optimize connection pool</li>
+<li><strong>Chroma</strong>: Tune index parameters</li>
+<li><strong>Monitoring</strong>: Use efficient exporters</li>
+</ul>
+<h3 id="caching-strategy-2"><a class="header" href="#caching-strategy-2">Caching Strategy</a></h3>
+<ul>
+<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
+<li><strong>Query Cache</strong>: Cache frequent queries</li>
+<li><strong>Response Cache</strong>: Cache LLM responses</li>
+<li><strong>CDN</strong>: Use CDN for static assets</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-troubleshooting"><a class="header" href="#opensource-llm-rag-stack-troubleshooting">Opensource-LLM-RAG-Stack Troubleshooting</a></h1>
+<h2 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h2>
+<h3 id="ollama-not-starting"><a class="header" href="#ollama-not-starting">Ollama Not Starting</a></h3>
+<pre><code class="language-bash"># Check Ollama logs
+docker logs ollama
+
+# Verify Ollama is running
+curl http://localhost:11434/api/tags
+
+# Restart Ollama
+docker restart ollama
+
+# Check available models
+docker exec -it ollama ollama list
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Ensure sufficient memory (8GB+ recommended)</li>
+<li>Check disk space for model storage</li>
+<li>Verify network connectivity</li>
+<li>Review Ollama logs for errors</li>
+</ul>
+<h3 id="chroma-connection-issues"><a class="header" href="#chroma-connection-issues">Chroma Connection Issues</a></h3>
+<pre><code class="language-bash"># Check Chroma health
+curl http://localhost:8000/api/v2/heartbeat
+
+# Verify Chroma collections
+curl http://localhost:8000/api/v2/tenants/default/databases/default/collections
+
+# Check Chroma logs
+docker logs chroma
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Verify Chroma container is running</li>
+<li>Check network connectivity</li>
+<li>Ensure proper volume mounts</li>
+<li>Review Chroma configuration</li>
+</ul>
+<h3 id="postgresql-connection-errors"><a class="header" href="#postgresql-connection-errors">PostgreSQL Connection Errors</a></h3>
+<pre><code class="language-bash"># Check PostgreSQL status
+docker exec -it postgres pg_isready
+
+# Test connection
+docker exec -it postgres psql -U user -d chatdb -c "SELECT version();"
+
+# Check PostgreSQL logs
+docker logs postgres
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Verify database credentials</li>
+<li>Check connection string format</li>
+<li>Ensure database is initialized</li>
+<li>Review PostgreSQL logs</li>
+</ul>
+<h3 id="rag-not-working"><a class="header" href="#rag-not-working">RAG Not Working</a></h3>
+<pre><code class="language-bash"># Test document upload
+curl -X POST http://localhost:3000/api/documents \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Test", "content": "Test content"}'
+
+# Verify embeddings
+curl http://localhost:8000/api/v2/collections
+
+# Test query
+curl -X POST http://localhost:3000/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "test query"}'
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Verify document processing pipeline</li>
+<li>Check embedding generation</li>
+<li>Ensure Chroma has documents</li>
+<li>Review RAG implementation logs</li>
+</ul>
+<h2 id="performance-issues"><a class="header" href="#performance-issues">Performance Issues</a></h2>
+<h3 id="slow-query-response"><a class="header" href="#slow-query-response">Slow Query Response</a></h3>
+<pre><code class="language-bash"># Check service response times
+time curl http://localhost:3000/api/health
+
+# Monitor resource usage
+docker stats
+
+# Check database performance
+docker exec -it postgres psql -U user -d chatdb -c "EXPLAIN ANALYZE SELECT * FROM documents;"
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Optimize database queries</li>
+<li>Add appropriate indexes</li>
+<li>Increase resource allocation</li>
+<li>Implement caching</li>
+</ul>
+<h3 id="high-memory-usage"><a class="header" href="#high-memory-usage">High Memory Usage</a></h3>
+<pre><code class="language-bash"># Check memory usage
+docker stats --no-stream
+
+# Check Ollama memory
+docker exec -it ollama ollama ps
+
+# Monitor memory per service
+docker stats ollama postgres chroma
+</code></pre>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Reduce model size</li>
+<li>Limit concurrent requests</li>
+<li>Optimize batch sizes</li>
+<li>Add memory limits</li>
+</ul>
+<h2 id="debugging-commands"><a class="header" href="#debugging-commands">Debugging Commands</a></h2>
+<h3 id="service-health-checks"><a class="header" href="#service-health-checks">Service Health Checks</a></h3>
+<pre><code class="language-bash"># Check all services
+docker-compose ps
+
+# Check service logs
+docker-compose logs [service-name]
+
+# Follow logs
+docker-compose logs -f [service-name]
+
+# Restart service
+docker-compose restart [service-name]
+</code></pre>
+<h3 id="database-debugging"><a class="header" href="#database-debugging">Database Debugging</a></h3>
+<pre><code class="language-bash"># Connect to PostgreSQL
+docker exec -it postgres psql -U user -d chatdb
+
+# Check table sizes
+SELECT pg_size_pretty(pg_total_relation_size('documents'));
+
+# Check active connections
+SELECT count(*) FROM pg_stat_activity;
+
+# Analyze query performance
+EXPLAIN ANALYZE SELECT * FROM documents WHERE content LIKE '%test%';
+</code></pre>
+<h3 id="vector-db-debugging"><a class="header" href="#vector-db-debugging">Vector DB Debugging</a></h3>
+<pre><code class="language-bash"># Check Chroma collections
+curl http://localhost:8000/api/v2/collections | jq
+
+# Get collection stats
+curl http://localhost:8000/api/v2/collections/{collection_id} | jq
+
+# Query test
+curl -X POST http://localhost:8000/api/v2/collections/{collection_id}/query \
+  -H "Content-Type: application/json" \
+  -d '{"query_texts": ["test"], "n_results": 5}'
+</code></pre>
+<h2 id="recovery-procedures"><a class="header" href="#recovery-procedures">Recovery Procedures</a></h2>
+<h3 id="data-backup"><a class="header" href="#data-backup">Data Backup</a></h3>
+<pre><code class="language-bash"># Backup PostgreSQL
+docker exec postgres pg_dump -U user chatdb &gt; backup.sql
+
+# Backup Chroma data
+docker exec chroma tar -czf /tmp/chroma-backup.tar.gz /chroma/chroma
+
+# Backup volumes
+docker run --rm -v rag-stack_pgdata:/data -v $(pwd):/backup \
+  alpine tar -czf /backup/pgdata-backup.tar.gz /data
+</code></pre>
+<h3 id="data-restore"><a class="header" href="#data-restore">Data Restore</a></h3>
+<pre><code class="language-bash"># Restore PostgreSQL
+docker exec -i postgres psql -U user chatdb &lt; backup.sql
+
+# Restore Chroma
+docker exec chroma tar -xzf /tmp/chroma-backup.tar.gz -C /
+
+# Restore volumes
+docker run --rm -v rag-stack_pgdata:/data -v $(pwd):/backup \
+  alpine tar -xzf /backup/pgdata-backup.tar.gz -C /
+</code></pre>
+<h2 id="monitoring--logging"><a class="header" href="#monitoring--logging">Monitoring &amp; Logging</a></h2>
+<h3 id="view-all-logs"><a class="header" href="#view-all-logs">View All Logs</a></h3>
+<pre><code class="language-bash"># All services
+docker-compose logs
+
+# Specific service
+docker-compose logs ollama
+
+# Last 100 lines
+docker-compose logs --tail=100
+
+# Follow logs
+docker-compose logs -f
+</code></pre>
+<h3 id="check-metrics"><a class="header" href="#check-metrics">Check Metrics</a></h3>
+<pre><code class="language-bash"># Prometheus metrics
+curl http://localhost:9090/api/v1/query?query=up
+
+# Grafana dashboards
+open http://localhost:3001
+
+# Service health
+curl http://localhost:3000/health
+curl http://localhost:8000/api/v2/heartbeat
+curl http://localhost:11434/api/tags
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-technical-qa"><a class="header" href="#opensource-llm-rag-stack-technical-qa">Opensource-LLM-RAG-Stack Technical Q&amp;A</a></h1>
+<h2 id="architecture--design-questions-2"><a class="header" href="#architecture--design-questions-2">Architecture &amp; Design Questions</a></h2>
+<h3 id="q1-walk-me-through-the-rag-stack-architecture"><a class="header" href="#q1-walk-me-through-the-rag-stack-architecture">Q1: "Walk me through the RAG stack architecture."</a></h3>
+<p><strong>Answer:</strong>
+"The RAG stack is a containerized microservices architecture:</p>
+<ul>
+<li><strong>Open WebUI</strong>: User interface for chat and document management</li>
+<li><strong>Ollama</strong>: LLM inference engine for text generation</li>
+<li><strong>Chroma</strong>: Vector database for semantic search</li>
+<li><strong>PostgreSQL</strong>: Relational database for chat history</li>
+<li><strong>Prometheus</strong>: Metrics collection</li>
+<li><strong>Grafana</strong>: Visualization and dashboards</li>
+</ul>
+<p>The architecture enables retrieval-augmented generation by combining vector search with LLM inference."</p>
+<h3 id="q2-why-did-you-choose-chroma-over-other-vector-databases"><a class="header" href="#q2-why-did-you-choose-chroma-over-other-vector-databases">Q2: "Why did you choose Chroma over other vector databases?"</a></h3>
+<p><strong>Answer:</strong>
+"Chroma was chosen for several reasons:</p>
+<ol>
+<li><strong>Simplicity</strong>: Easy to set up and use</li>
+<li><strong>Open Source</strong>: Free and community-driven</li>
+<li><strong>Docker Support</strong>: Containerized deployment</li>
+<li><strong>Performance</strong>: Efficient for small to medium datasets</li>
+<li><strong>Integration</strong>: Works well with Python ecosystem</li>
+</ol>
+<p>For this use case, Chroma provides the right balance of features and simplicity."</p>
+<h3 id="q3-how-does-the-rag-pipeline-work"><a class="header" href="#q3-how-does-the-rag-pipeline-work">Q3: "How does the RAG pipeline work?"</a></h3>
+<p><strong>Answer:</strong>
+"RAG pipeline steps:</p>
+<ol>
+<li><strong>Document Ingestion</strong>: Upload and chunk documents</li>
+<li><strong>Embedding Generation</strong>: Create vector embeddings</li>
+<li><strong>Vector Storage</strong>: Store in Chroma database</li>
+<li><strong>Query Processing</strong>: Convert user query to embedding</li>
+<li><strong>Retrieval</strong>: Find relevant document chunks</li>
+<li><strong>Context Augmentation</strong>: Add chunks to prompt</li>
+<li><strong>Generation</strong>: LLM generates response with context</li>
+</ol>
+<p>This enables the LLM to answer questions based on uploaded documents."</p>
+<h2 id="technical-implementation-questions-1"><a class="header" href="#technical-implementation-questions-1">Technical Implementation Questions</a></h2>
+<h3 id="q4-how-do-you-handle-document-chunking"><a class="header" href="#q4-how-do-you-handle-document-chunking">Q4: "How do you handle document chunking?"</a></h3>
+<p><strong>Answer:</strong>
+"Document chunking strategy:</p>
+<ol>
+<li><strong>Size</strong>: 500-1000 tokens per chunk</li>
+<li><strong>Overlap</strong>: 100-200 tokens between chunks</li>
+<li><strong>Boundaries</strong>: Preserve sentence/paragraph boundaries</li>
+<li><strong>Metadata</strong>: Store source and position metadata</li>
+<li><strong>Indexing</strong>: Create full-text search indexes</li>
+</ol>
+<p>This ensures relevant context is retrieved while maintaining coherence."</p>
+<h3 id="q5-how-would-you-scale-this-to-handle-more-documents"><a class="header" href="#q5-how-would-you-scale-this-to-handle-more-documents">Q5: "How would you scale this to handle more documents?"</a></h3>
+<p><strong>Answer:</strong>
+"Scaling strategies:</p>
+<ol>
+<li><strong>Horizontal Scaling</strong>: Multiple Chroma instances</li>
+<li><strong>Sharding</strong>: Partition documents by category</li>
+<li><strong>Caching</strong>: Cache frequent queries</li>
+<li><strong>Indexing</strong>: Optimize vector indexes</li>
+<li><strong>Load Balancing</strong>: Distribute queries across instances</li>
+<li><strong>Database Optimization</strong>: PostgreSQL read replicas</li>
+</ol>
+<p>The architecture supports horizontal scaling for increased capacity."</p>
+<h2 id="performance-questions-1"><a class="header" href="#performance-questions-1">Performance Questions</a></h2>
+<h3 id="q6-how-do-you-optimize-rag-performance"><a class="header" href="#q6-how-do-you-optimize-rag-performance">Q6: "How do you optimize RAG performance?"</a></h3>
+<p><strong>Answer:</strong>
+"Performance optimizations:</p>
+<ol>
+<li><strong>Embedding Cache</strong>: Cache computed embeddings</li>
+<li><strong>Query Optimization</strong>: Efficient vector search</li>
+<li><strong>Reranking</strong>: Use cross-encoder for better results</li>
+<li><strong>Batch Processing</strong>: Process documents in batches</li>
+<li><strong>Connection Pooling</strong>: Optimize database connections</li>
+<li><strong>Caching</strong>: Cache frequent queries and responses</li>
+</ol>
+<p>These optimizations reduce latency and improve user experience."</p>
+<h3 id="q7-what-are-the-bottlenecks-in-your-rag-system"><a class="header" href="#q7-what-are-the-bottlenecks-in-your-rag-system">Q7: "What are the bottlenecks in your RAG system?"</a></h3>
+<p><strong>Answer:</strong>
+"Potential bottlenecks:</p>
+<ol>
+<li><strong>Embedding Generation</strong>: Can be slow for large documents</li>
+<li><strong>Vector Search</strong>: Query time increases with database size</li>
+<li><strong>LLM Inference</strong>: Model generation time</li>
+<li><strong>Database Queries</strong>: PostgreSQL query performance</li>
+<li><strong>Network Latency</strong>: Inter-service communication</li>
+</ol>
+<p>Mitigation strategies include caching, optimization, and scaling."</p>
+<h2 id="monitoring-questions-1"><a class="header" href="#monitoring-questions-1">Monitoring Questions</a></h2>
+<h3 id="q8-how-do-you-monitor-the-rag-stack"><a class="header" href="#q8-how-do-you-monitor-the-rag-stack">Q8: "How do you monitor the RAG stack?"</a></h3>
+<p><strong>Answer:</strong>
+"Comprehensive monitoring:</p>
+<ol>
+<li><strong>Prometheus</strong>: Collect metrics from all services</li>
+<li><strong>Grafana</strong>: Visualize metrics and create dashboards</li>
+<li><strong>Logs</strong>: Centralized logging for all services</li>
+<li><strong>Health Checks</strong>: Service availability monitoring</li>
+<li><strong>Custom Metrics</strong>: Track RAG-specific metrics</li>
+</ol>
+<p>Key metrics include request rate, latency, error rate, and resource usage."</p>
+<h3 id="q9-what-metrics-do-you-track"><a class="header" href="#q9-what-metrics-do-you-track">Q9: "What metrics do you track?"</a></h3>
+<p><strong>Answer:</strong>
+"Key metrics:</p>
+<ol>
+<li><strong>Request Metrics</strong>: Total requests, success rate</li>
+<li><strong>Latency</strong>: P50, P95, P99 response times</li>
+<li><strong>Error Rate</strong>: Percentage of failed requests</li>
+<li><strong>Resource Usage</strong>: CPU, memory, disk per service</li>
+<li><strong>Database Metrics</strong>: Query performance, connections</li>
+<li><strong>Vector DB</strong>: Document count, query performance</li>
+<li><strong>LLM Metrics</strong>: Token usage, generation time</li>
+</ol>
+<p>These metrics provide visibility into system health and performance."</p>
+<h2 id="security-questions"><a class="header" href="#security-questions">Security Questions</a></h2>
+<h3 id="q10-how-do-you-secure-the-rag-stack"><a class="header" href="#q10-how-do-you-secure-the-rag-stack">Q10: "How do you secure the RAG stack?"</a></h3>
+<p><strong>Answer:</strong>
+"Security measures:</p>
+<ol>
+<li><strong>Network Isolation</strong>: Docker networks for service isolation</li>
+<li><strong>Authentication</strong>: User authentication for API access</li>
+<li><strong>Encryption</strong>: Data encryption at rest and in transit</li>
+<li><strong>Secrets Management</strong>: Secure handling of credentials</li>
+<li><strong>Access Control</strong>: Role-based access control</li>
+<li><strong>Audit Logging</strong>: Track all access and changes</li>
+</ol>
+<p>Security is implemented at multiple layers for defense in depth."</p>
+<h3 id="q11-how-do-you-handle-sensitive-documents"><a class="header" href="#q11-how-do-you-handle-sensitive-documents">Q11: "How do you handle sensitive documents?"</a></h3>
+<p><strong>Answer:</strong>
+"Sensitive document handling:</p>
+<ol>
+<li><strong>Access Control</strong>: Restrict document access by user/role</li>
+<li><strong>Encryption</strong>: Encrypt sensitive documents</li>
+<li><strong>Audit Trail</strong>: Log all document access</li>
+<li><strong>Data Retention</strong>: Implement retention policies</li>
+<li><strong>Compliance</strong>: Follow data protection regulations</li>
+<li><strong>Secure Deletion</strong>: Properly delete sensitive data</li>
+</ol>
+<p>Multiple safeguards protect sensitive information."</p>
+<h2 id="advanced-questions-2"><a class="header" href="#advanced-questions-2">Advanced Questions</a></h2>
+<h3 id="q12-how-would-you-improve-the-rag-system"><a class="header" href="#q12-how-would-you-improve-the-rag-system">Q12: "How would you improve the RAG system?"</a></h3>
+<p><strong>Answer:</strong>
+"Improvement strategies:</p>
+<ol>
+<li><strong>Better Embeddings</strong>: Use larger embedding models</li>
+<li><strong>Reranking</strong>: Implement cross-encoder reranking</li>
+<li><strong>Hybrid Search</strong>: Combine vector and keyword search</li>
+<li><strong>Query Expansion</strong>: Expand queries for better retrieval</li>
+<li><strong>Fine-tuning</strong>: Fine-tune LLM for domain-specific tasks</li>
+<li><strong>Evaluation</strong>: Implement RAG evaluation metrics</li>
+<li><strong>A/B Testing</strong>: Test different configurations</li>
+</ol>
+<p>Continuous improvement based on user feedback and metrics."</p>
 
                     </main>
 

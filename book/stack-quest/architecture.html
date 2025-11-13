@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Architecture &amp; Design - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,104 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="stack-quest-architecture--design"><a class="header" href="#stack-quest-architecture--design">Stack-Quest Architecture &amp; Design</a></h1>
+<h2 id="system-architecture"><a class="header" href="#system-architecture">System Architecture</a></h2>
+<pre><code>┌─────────────────┐
+│   User Browser  │
+└────────┬────────┘
+         │
+         │ HTTP/HTTPS
+         │
+┌────────▼────────┐    ┌─────────────────┐
+│  GitHub Pages   │────│  Markdown Files │
+│  (Static Host)  │    │  (Content)      │
+└─────────────────┘    └─────────────────┘
+         │
+         │
+┌────────▼────────┐
+│  JavaScript     │
+│  (Client-side)  │
+│  - Session Mgmt│
+│  - Question Parser│
+│  - UI Rendering │
+└─────────────────┘
+</code></pre>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<h3 id="1-static-site-architecture"><a class="header" href="#1-static-site-architecture">1. <strong>Static Site Architecture</strong></a></h3>
+<ul>
+<li><strong>No Backend</strong>: Pure client-side application</li>
+<li><strong>GitHub Pages</strong>: Free hosting for static sites</li>
+<li><strong>CDN</strong>: Global content delivery via GitHub's CDN</li>
+<li><strong>Fast Loading</strong>: No server-side processing</li>
+</ul>
+<h3 id="2-content-management"><a class="header" href="#2-content-management">2. <strong>Content Management</strong></a></h3>
+<ul>
+<li><strong>Markdown Files</strong>: Easy to maintain and version control</li>
+<li><strong>Git-based</strong>: Content changes via pull requests</li>
+<li><strong>Structured Format</strong>: Consistent question format</li>
+<li><strong>Category Organization</strong>: Logical content grouping</li>
+</ul>
+<h3 id="3-user-experience"><a class="header" href="#3-user-experience">3. <strong>User Experience</strong></a></h3>
+<ul>
+<li><strong>Session Tracking</strong>: Prevents question repetition</li>
+<li><strong>Category Selection</strong>: Focused learning paths</li>
+<li><strong>Responsive Design</strong>: Works on all devices</li>
+<li><strong>Fast Navigation</strong>: Instant question loading</li>
+</ul>
+<h2 id="component-architecture"><a class="header" href="#component-architecture">Component Architecture</a></h2>
+<h3 id="frontend-components"><a class="header" href="#frontend-components">Frontend Components</a></h3>
+<ol>
+<li><strong>Category Selector</strong>: Choose learning topics</li>
+<li><strong>Question Display</strong>: Show questions and answers</li>
+<li><strong>Session Manager</strong>: Track shown questions</li>
+<li><strong>Content Parser</strong>: Parse markdown to HTML</li>
+<li><strong>UI Controller</strong>: Manage user interactions</li>
+</ol>
+<h3 id="data-flow"><a class="header" href="#data-flow">Data Flow</a></h3>
+<ol>
+<li>User selects category</li>
+<li>JavaScript loads markdown file</li>
+<li>Content parsed into question objects</li>
+<li>Random question selected (excluding shown)</li>
+<li>Question displayed with formatted content</li>
+<li>Session updated with shown question</li>
+</ol>
+<h2 id="scalability-considerations"><a class="header" href="#scalability-considerations">Scalability Considerations</a></h2>
+<h3 id="content-scaling"><a class="header" href="#content-scaling">Content Scaling</a></h3>
+<ul>
+<li><strong>Modular Structure</strong>: Easy to add new categories</li>
+<li><strong>File-based</strong>: No database limits</li>
+<li><strong>Version Control</strong>: Git tracks all changes</li>
+<li><strong>Contributions</strong>: Community can add content</li>
+</ul>
+<h3 id="performance-scaling"><a class="header" href="#performance-scaling">Performance Scaling</a></h3>
+<ul>
+<li><strong>Static Assets</strong>: Served from CDN</li>
+<li><strong>Client-side Processing</strong>: No server load</li>
+<li><strong>Lazy Loading</strong>: Load categories on demand</li>
+<li><strong>Caching</strong>: Browser caches static files</li>
+</ul>
+<h2 id="technology-stack"><a class="header" href="#technology-stack">Technology Stack</a></h2>
+<ul>
+<li><strong>HTML5</strong>: Semantic markup</li>
+<li><strong>CSS3</strong>: Modern styling and responsive design</li>
+<li><strong>JavaScript (ES6+)</strong>: Client-side logic</li>
+<li><strong>Markdown</strong>: Content format</li>
+<li><strong>GitHub Pages</strong>: Hosting platform</li>
+<li><strong>GitHub Actions</strong>: CI/CD automation</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../stack-quest/technical-implementation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../stack-quest/deployment.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +283,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../stack-quest/technical-implementation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../stack-quest/deployment.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +318,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

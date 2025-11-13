@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Projects Portfolio</title>
+        <title>Troubleshooting - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -12,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -106,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -141,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -178,37 +178,190 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="projects-portfolio"><a class="header" href="#projects-portfolio">Projects Portfolio</a></h1>
-<p>Welcome to my projects portfolio! This documentation showcases three major projects I've developed, each demonstrating different aspects of modern DevOps, SRE, and cloud engineering practices.</p>
-<h2 id="-projects-overview"><a class="header" href="#-projects-overview">🚀 Projects Overview</a></h2>
-<h3 id="cloud-cv"><a class="header" href="#cloud-cv"><a href="cloud-cv/introduction.html">Cloud-CV</a></a></h3>
-<p>A modern, cloud-hosted resume showcasing SRE/DevOps expertise with AWS best practices. Features infrastructure as code with Terraform, CI/CD pipelines, serverless architecture, and comprehensive monitoring.</p>
-<p><strong>Key Technologies:</strong> AWS, Terraform, GitHub Actions, Lambda, CloudFront, S3, LocalStack</p>
-<h3 id="stack-quest"><a class="header" href="#stack-quest"><a href="stack-quest/introduction.html">Stack-Quest</a></a></h3>
-<p>A comprehensive knowledge base and challenge platform for DevOps, SRE, and Cloud engineering. Features curated questions across 12+ categories and hands-on challenges for practical learning.</p>
-<p><strong>Key Technologies:</strong> GitHub Pages, JavaScript, Markdown, Responsive Design</p>
-<h3 id="opensource-llm-rag-stack"><a class="header" href="#opensource-llm-rag-stack"><a href="opensource-llm-rag-stack/introduction.html">Opensource-LLM-RAG-Stack</a></a></h3>
-<p>A production-ready, containerized RAG (Retrieval-Augmented Generation) stack with comprehensive monitoring, observability, and enterprise-grade DevOps practices.</p>
-<p><strong>Key Technologies:</strong> Docker, Ollama, Chroma, PostgreSQL, Prometheus, Grafana, Open WebUI</p>
-<hr />
-<h2 id="-navigation"><a class="header" href="#-navigation">📚 Navigation</a></h2>
-<p>Use the sidebar to navigate through each project's detailed documentation, including:</p>
+                        <h1 id="cloud-cv-troubleshooting-scenarios"><a class="header" href="#cloud-cv-troubleshooting-scenarios">Cloud-CV Troubleshooting Scenarios</a></h1>
+<h2 id="lambda-function-issues"><a class="header" href="#lambda-function-issues">Lambda Function Issues</a></h2>
+<h3 id="problem-lambda-timeout"><a class="header" href="#problem-lambda-timeout">Problem: Lambda Timeout</a></h3>
+<pre><code class="language-bash"># Check CloudWatch logs
+aws logs describe-log-groups --log-group-name-prefix /aws/lambda/cloud-cv
+
+# Check function configuration
+aws lambda get-function --function-name cloud-cv-visitor-counter
+
+# View recent logs
+aws logs tail /aws/lambda/cloud-cv-visitor-counter --follow
+</code></pre>
+<p><strong>Solution:</strong></p>
 <ul>
-<li>Architecture diagrams</li>
-<li>Setup and deployment guides</li>
-<li>Feature documentation</li>
-<li>Technical implementation details</li>
-<li>Best practices and troubleshooting</li>
+<li>Increase timeout in Terraform configuration</li>
+<li>Optimize code performance</li>
+<li>Check DynamoDB connection</li>
+<li>Review function memory allocation</li>
 </ul>
-<hr />
-<p><em>This portfolio demonstrates modern DevOps practices, cloud-native architecture, and production-ready system design.</em></p>
+<h3 id="problem-lambda-memory-issues"><a class="header" href="#problem-lambda-memory-issues">Problem: Lambda Memory Issues</a></h3>
+<pre><code class="language-bash"># Check memory usage
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/Lambda \
+  --metric-name MemoryUtilization \
+  --dimensions Name=FunctionName,Value=cloud-cv-visitor-counter \
+  --start-time 2024-01-01T00:00:00Z \
+  --end-time 2024-01-02T00:00:00Z \
+  --period 3600 \
+  --statistics Maximum
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Increase Lambda memory allocation</li>
+<li>Optimize code to reduce memory usage</li>
+<li>Check for memory leaks</li>
+</ul>
+<h2 id="api-gateway-issues"><a class="header" href="#api-gateway-issues">API Gateway Issues</a></h2>
+<h3 id="problem-cors-errors"><a class="header" href="#problem-cors-errors">Problem: CORS Errors</a></h3>
+<pre><code class="language-javascript">// Check browser console for CORS errors
+// Verify API Gateway CORS configuration
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Update API Gateway CORS settings</li>
+<li>Check Lambda response headers</li>
+<li>Verify preflight OPTIONS method</li>
+<li>Ensure proper Access-Control-Allow-Origin header</li>
+</ul>
+<h3 id="problem-502-bad-gateway"><a class="header" href="#problem-502-bad-gateway">Problem: 502 Bad Gateway</a></h3>
+<pre><code class="language-bash"># Check API Gateway logs
+aws apigateway get-rest-apis
+
+# Test endpoint directly
+curl -X GET https://api-gateway-url/visitor-count
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify Lambda function is deployed</li>
+<li>Check Lambda function permissions</li>
+<li>Review API Gateway integration settings</li>
+<li>Check Lambda function logs</li>
+</ul>
+<h2 id="cloudfront-issues"><a class="header" href="#cloudfront-issues">CloudFront Issues</a></h2>
+<h3 id="problem-cache-not-updating"><a class="header" href="#problem-cache-not-updating">Problem: Cache Not Updating</a></h3>
+<pre><code class="language-bash"># Create cache invalidation
+aws cloudfront create-invalidation \
+  --distribution-id DISTRIBUTION_ID \
+  --paths "/*"
+
+# Check invalidation status
+aws cloudfront list-invalidations --distribution-id DISTRIBUTION_ID
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Invalidate CloudFront cache</li>
+<li>Check cache policies</li>
+<li>Verify origin settings</li>
+<li>Review TTL configurations</li>
+</ul>
+<h3 id="problem-403-forbidden-errors"><a class="header" href="#problem-403-forbidden-errors">Problem: 403 Forbidden Errors</a></h3>
+<pre><code class="language-bash"># Check S3 bucket policy
+aws s3api get-bucket-policy --bucket cloud-cv-bucket
+
+# Verify CloudFront OAC
+aws cloudfront get-distribution --id DISTRIBUTION_ID
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify S3 bucket permissions</li>
+<li>Check CloudFront Origin Access Control</li>
+<li>Review bucket policy</li>
+<li>Ensure proper IAM roles</li>
+</ul>
+<h2 id="dynamodb-issues"><a class="header" href="#dynamodb-issues">DynamoDB Issues</a></h2>
+<h3 id="problem-throttling-errors"><a class="header" href="#problem-throttling-errors">Problem: Throttling Errors</a></h3>
+<pre><code class="language-bash"># Check DynamoDB metrics
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/DynamoDB \
+  --metric-name ThrottledRequests \
+  --dimensions Name=TableName,Value=cloud-cv-visitor-counter \
+  --start-time 2024-01-01T00:00:00Z \
+  --end-time 2024-01-02T00:00:00Z \
+  --period 3600 \
+  --statistics Sum
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Enable auto-scaling</li>
+<li>Optimize read/write patterns</li>
+<li>Consider provisioned capacity</li>
+<li>Implement exponential backoff</li>
+</ul>
+<h3 id="problem-item-not-found"><a class="header" href="#problem-item-not-found">Problem: Item Not Found</a></h3>
+<pre><code class="language-bash"># Check table items
+aws dynamodb scan --table-name cloud-cv-visitor-counter
+
+# Verify table structure
+aws dynamodb describe-table --table-name cloud-cv-visitor-counter
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify table name in Lambda environment</li>
+<li>Check item key structure</li>
+<li>Review DynamoDB permissions</li>
+<li>Ensure table exists</li>
+</ul>
+<h2 id="s3-issues"><a class="header" href="#s3-issues">S3 Issues</a></h2>
+<h3 id="problem-404-not-found"><a class="header" href="#problem-404-not-found">Problem: 404 Not Found</a></h3>
+<pre><code class="language-bash"># List bucket contents
+aws s3 ls s3://cloud-cv-bucket/
+
+# Check bucket configuration
+aws s3api get-bucket-website --bucket cloud-cv-bucket
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Verify files are uploaded</li>
+<li>Check file paths</li>
+<li>Review bucket website configuration</li>
+<li>Ensure index.html exists</li>
+</ul>
+<h3 id="problem-access-denied"><a class="header" href="#problem-access-denied">Problem: Access Denied</a></h3>
+<pre><code class="language-bash"># Check bucket policy
+aws s3api get-bucket-policy --bucket cloud-cv-bucket
+
+# Verify IAM permissions
+aws iam get-user-policy --user-name USER_NAME --policy-name POLICY_NAME
+</code></pre>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Review bucket policy</li>
+<li>Check IAM permissions</li>
+<li>Verify CloudFront OAC</li>
+<li>Ensure proper access controls</li>
+</ul>
+<h2 id="common-debugging-commands"><a class="header" href="#common-debugging-commands">Common Debugging Commands</a></h2>
+<pre><code class="language-bash"># Check all resources
+aws cloudformation describe-stacks
+
+# View Lambda logs
+aws logs tail /aws/lambda/cloud-cv-visitor-counter --follow
+
+# Test API endpoint
+curl -X GET https://api-gateway-url/visitor-count
+
+# Check CloudFront distribution
+aws cloudfront get-distribution --id DISTRIBUTION_ID
+
+# Verify DynamoDB table
+aws dynamodb describe-table --table-name cloud-cv-visitor-counter
+
+# Check S3 bucket
+aws s3 ls s3://cloud-cv-bucket/ --recursive
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../cloud-cv/cost-optimization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next prefetch" href="cloud-cv/introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../cloud-cv/technical-qa.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -218,8 +371,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../cloud-cv/cost-optimization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next prefetch" href="cloud-cv/introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../cloud-cv/technical-qa.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -250,13 +406,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

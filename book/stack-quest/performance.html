@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Performance Optimization - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,158 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="stack-quest-performance-optimization"><a class="header" href="#stack-quest-performance-optimization">Stack-Quest Performance Optimization</a></h1>
+<h2 id="frontend-performance"><a class="header" href="#frontend-performance">Frontend Performance</a></h2>
+<h3 id="asset-optimization"><a class="header" href="#asset-optimization">Asset Optimization</a></h3>
+<ul>
+<li><strong>Minification</strong>: Minify CSS and JavaScript</li>
+<li><strong>Compression</strong>: Enable Gzip compression</li>
+<li><strong>Caching</strong>: Set appropriate cache headers</li>
+<li><strong>CDN</strong>: Leverage GitHub Pages CDN</li>
+</ul>
+<h3 id="code-optimization"><a class="header" href="#code-optimization">Code Optimization</a></h3>
+<pre><code class="language-javascript">// Debounce category selection
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () =&gt; {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Lazy load questions
+const questionLoader = {
+    cache: new Map(),
+    
+    async load(category) {
+        if (this.cache.has(category)) {
+            return this.cache.get(category);
+        }
+        
+        const questions = await fetch(`Random-Questions/${category}.md`)
+            .then(r =&gt; r.text())
+            .then(parseQuestions);
+        
+        this.cache.set(category, questions);
+        return questions;
+    }
+};
+</code></pre>
+<h2 id="loading-performance"><a class="header" href="#loading-performance">Loading Performance</a></h2>
+<h3 id="lazy-loading-strategy"><a class="header" href="#lazy-loading-strategy">Lazy Loading Strategy</a></h3>
+<ul>
+<li><strong>On-Demand Loading</strong>: Load categories when selected</li>
+<li><strong>Caching</strong>: Cache loaded questions in memory</li>
+<li><strong>Preloading</strong>: Preload popular categories</li>
+<li><strong>Progressive Enhancement</strong>: Basic functionality first</li>
+</ul>
+<h3 id="resource-hints"><a class="header" href="#resource-hints">Resource Hints</a></h3>
+<pre><code class="language-html">&lt;!-- Preconnect to GitHub CDN --&gt;
+&lt;link rel="preconnect" href="https://github.com"&gt;
+
+&lt;!-- Prefetch popular categories --&gt;
+&lt;link rel="prefetch" href="Random-Questions/linux.md"&gt;
+&lt;link rel="prefetch" href="Random-Questions/aws.md"&gt;
+</code></pre>
+<h2 id="caching-strategy"><a class="header" href="#caching-strategy">Caching Strategy</a></h2>
+<h3 id="browser-caching"><a class="header" href="#browser-caching">Browser Caching</a></h3>
+<pre><code class="language-javascript">// Service Worker for offline support
+self.addEventListener('install', (event) =&gt; {
+    event.waitUntil(
+        caches.open('stackquest-v1').then((cache) =&gt; {
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/script.js',
+                '/styles.css'
+            ]);
+        })
+    );
+});
+
+self.addEventListener('fetch', (event) =&gt; {
+    event.respondWith(
+        caches.match(event.request).then((response) =&gt; {
+            return response || fetch(event.request);
+        })
+    );
+});
+</code></pre>
+<h3 id="localstorage-caching"><a class="header" href="#localstorage-caching">LocalStorage Caching</a></h3>
+<pre><code class="language-javascript">class CacheManager {
+    constructor() {
+        this.cachePrefix = 'stackquest_';
+        this.cacheExpiry = 24 * 60 * 60 * 1000; // 24 hours
+    }
+
+    set(key, value) {
+        const item = {
+            value,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(
+            this.cachePrefix + key,
+            JSON.stringify(item)
+        );
+    }
+
+    get(key) {
+        const item = localStorage.getItem(this.cachePrefix + key);
+        if (!item) return null;
+
+        const parsed = JSON.parse(item);
+        if (Date.now() - parsed.timestamp &gt; this.cacheExpiry) {
+            localStorage.removeItem(this.cachePrefix + key);
+            return null;
+        }
+
+        return parsed.value;
+    }
+}
+</code></pre>
+<h2 id="performance-metrics"><a class="header" href="#performance-metrics">Performance Metrics</a></h2>
+<h3 id="key-metrics"><a class="header" href="#key-metrics">Key Metrics</a></h3>
+<ul>
+<li><strong>First Contentful Paint (FCP)</strong>: &lt; 1.5s</li>
+<li><strong>Largest Contentful Paint (LCP)</strong>: &lt; 2.5s</li>
+<li><strong>Time to Interactive (TTI)</strong>: &lt; 3.5s</li>
+<li><strong>Cumulative Layout Shift (CLS)</strong>: &lt; 0.1</li>
+</ul>
+<h3 id="monitoring"><a class="header" href="#monitoring">Monitoring</a></h3>
+<pre><code class="language-javascript">// Performance monitoring
+window.addEventListener('load', () =&gt; {
+    const perfData = performance.getEntriesByType('navigation')[0];
+    
+    console.log('Page Load Time:', perfData.loadEventEnd - perfData.fetchStart);
+    console.log('DOM Content Loaded:', perfData.domContentLoadedEventEnd - perfData.fetchStart);
+    console.log('First Paint:', performance.getEntriesByType('paint')[0].startTime);
+});
+</code></pre>
+<h2 id="optimization-techniques"><a class="header" href="#optimization-techniques">Optimization Techniques</a></h2>
+<ol>
+<li><strong>Code Splitting</strong>: Load only needed code</li>
+<li><strong>Tree Shaking</strong>: Remove unused code</li>
+<li><strong>Image Optimization</strong>: Use WebP format</li>
+<li><strong>Font Optimization</strong>: Subset fonts, use font-display</li>
+<li><strong>Critical CSS</strong>: Inline critical CSS</li>
+<li><strong>Async Loading</strong>: Load non-critical scripts async</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../stack-quest/deployment.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../stack-quest/technical-qa.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +337,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../stack-quest/deployment.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../stack-quest/technical-qa.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +372,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Monitoring &amp; Observability - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,136 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="cloud-cv-monitoring--observability"><a class="header" href="#cloud-cv-monitoring--observability">Cloud-CV Monitoring &amp; Observability</a></h1>
+<h2 id="cloudwatch-metrics"><a class="header" href="#cloudwatch-metrics">CloudWatch Metrics</a></h2>
+<h3 id="lambda-metrics"><a class="header" href="#lambda-metrics">Lambda Metrics</a></h3>
+<ul>
+<li><strong>Invocations</strong>: Number of function invocations</li>
+<li><strong>Errors</strong>: Error count and error rate</li>
+<li><strong>Duration</strong>: Execution time</li>
+<li><strong>Throttles</strong>: Concurrent execution limits</li>
+</ul>
+<h3 id="dynamodb-metrics"><a class="header" href="#dynamodb-metrics">DynamoDB Metrics</a></h3>
+<ul>
+<li><strong>Read/Write Capacity</strong>: Throughput metrics</li>
+<li><strong>Throttling</strong>: Throttled requests</li>
+<li><strong>Consistent Reads</strong>: Strongly consistent reads</li>
+<li><strong>Item Count</strong>: Table size metrics</li>
+</ul>
+<h3 id="cloudfront-metrics"><a class="header" href="#cloudfront-metrics">CloudFront Metrics</a></h3>
+<ul>
+<li><strong>Requests</strong>: Total request count</li>
+<li><strong>Cache Hit Ratio</strong>: CDN efficiency</li>
+<li><strong>Data Transfer</strong>: Bandwidth usage</li>
+<li><strong>Error Rates</strong>: 4xx and 5xx errors</li>
+</ul>
+<h3 id="s3-metrics"><a class="header" href="#s3-metrics">S3 Metrics</a></h3>
+<ul>
+<li><strong>Request Metrics</strong>: GET, PUT, DELETE requests</li>
+<li><strong>Storage Metrics</strong>: Bucket size</li>
+<li><strong>Data Transfer</strong>: Bandwidth usage</li>
+</ul>
+<h2 id="custom-metrics"><a class="header" href="#custom-metrics">Custom Metrics</a></h2>
+<pre><code class="language-python"># Lambda function with custom metrics
+import boto3
+from datetime import datetime
+
+cloudwatch = boto3.client('cloudwatch')
+
+def put_custom_metric(metric_name, value, unit='Count'):
+    cloudwatch.put_metric_data(
+        Namespace='CloudCV/VisitorCounter',
+        MetricData=[
+            {
+                'MetricName': metric_name,
+                'Value': value,
+                'Unit': unit,
+                'Timestamp': datetime.utcnow()
+            }
+        ]
+    )
+
+# Usage in Lambda
+def lambda_handler(event, context):
+    # ... visitor counter logic ...
+    
+    # Send custom metric
+    put_custom_metric('VisitorCount', new_count)
+    put_custom_metric('APIResponseTime', response_time, 'Milliseconds')
+    
+    return response
+</code></pre>
+<h2 id="logging-strategy"><a class="header" href="#logging-strategy">Logging Strategy</a></h2>
+<h3 id="lambda-logs"><a class="header" href="#lambda-logs">Lambda Logs</a></h3>
+<ul>
+<li><strong>CloudWatch Logs</strong>: Automatic log collection</li>
+<li><strong>Log Levels</strong>: INFO, WARNING, ERROR</li>
+<li><strong>Structured Logging</strong>: JSON format</li>
+<li><strong>Log Retention</strong>: 30 days default</li>
+</ul>
+<h3 id="api-gateway-logs"><a class="header" href="#api-gateway-logs">API Gateway Logs</a></h3>
+<ul>
+<li><strong>Access Logs</strong>: Request/response logging</li>
+<li><strong>Execution Logs</strong>: API execution details</li>
+<li><strong>Error Logs</strong>: Error tracking</li>
+</ul>
+<h3 id="cloudfront-logs"><a class="header" href="#cloudfront-logs">CloudFront Logs</a></h3>
+<ul>
+<li><strong>Access Logs</strong>: Request logging</li>
+<li><strong>Real-time Logs</strong>: Stream to CloudWatch</li>
+<li><strong>Log Analysis</strong>: Query with CloudWatch Insights</li>
+</ul>
+<h2 id="alerting"><a class="header" href="#alerting">Alerting</a></h2>
+<h3 id="cloudwatch-alarms"><a class="header" href="#cloudwatch-alarms">CloudWatch Alarms</a></h3>
+<pre><code class="language-hcl"># Lambda error rate alarm
+resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
+  alarm_name          = "cloud-cv-lambda-errors"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 5
+  alarm_description   = "Alert when Lambda errors exceed 5"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+}
+</code></pre>
+<h3 id="alert-conditions"><a class="header" href="#alert-conditions">Alert Conditions</a></h3>
+<ul>
+<li><strong>Error Rate</strong>: &gt; 5% error rate</li>
+<li><strong>Latency</strong>: &gt; 1 second response time</li>
+<li><strong>Availability</strong>: &lt; 99% uptime</li>
+<li><strong>Cost</strong>: Unusual cost spikes</li>
+</ul>
+<h2 id="dashboards"><a class="header" href="#dashboards">Dashboards</a></h2>
+<h3 id="cloudwatch-dashboard"><a class="header" href="#cloudwatch-dashboard">CloudWatch Dashboard</a></h3>
+<ul>
+<li><strong>Service Health</strong>: Overall system status</li>
+<li><strong>Performance Metrics</strong>: Response times and throughput</li>
+<li><strong>Error Tracking</strong>: Error rates and types</li>
+<li><strong>Cost Monitoring</strong>: Resource usage and costs</li>
+</ul>
+<h3 id="key-metrics-to-monitor"><a class="header" href="#key-metrics-to-monitor">Key Metrics to Monitor</a></h3>
+<ol>
+<li>Lambda invocation count and errors</li>
+<li>DynamoDB read/write capacity</li>
+<li>CloudFront cache hit ratio</li>
+<li>API Gateway latency</li>
+<li>S3 request metrics</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../cloud-cv/security.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../cloud-cv/cost-optimization.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +315,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../cloud-cv/security.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../cloud-cv/cost-optimization.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +350,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

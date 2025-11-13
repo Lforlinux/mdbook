@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Projects Portfolio</title>
-        <base href="/">
+        <title>Setup Guide - Projects Portfolio</title>
 
 
         <!-- Custom HTML head -->
@@ -13,34 +12,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "../searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +106,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +141,7 @@
                     <h1 class="menu-title">Projects Portfolio</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
@@ -179,14 +178,132 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="opensource-llm-rag-stack-setup"><a class="header" href="#opensource-llm-rag-stack-setup">Opensource-LLM-RAG-Stack Setup</a></h1>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
+<h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
+<ul>
+<li>Docker &amp; Docker Compose</li>
+<li>8GB+ RAM (for LLM models)</li>
+</ul>
+<h3 id="complete-self-contained-setup"><a class="header" href="#complete-self-contained-setup">Complete Self-Contained Setup</a></h3>
+<pre><code class="language-bash"># Clone the repository
+git clone &lt;your-repo-url&gt;
+cd Opensource-LLM-RAG-Stack
+
+# Quick start (includes model setup)
+./start.sh
+
+# Or manual setup:
+# Start all services (includes Ollama)
+docker-compose up -d
+
+# Set up Ollama with a model
+./scripts/setup-ollama.sh
+
+# Check service status
+docker-compose ps
+</code></pre>
+<h3 id="alternative-use-local-ollama-installation"><a class="header" href="#alternative-use-local-ollama-installation">Alternative: Use Local Ollama Installation</a></h3>
+<pre><code class="language-bash"># Prerequisites: Install Ollama locally (https://ollama.ai)
+# Start Ollama on your host machine
+ollama serve
+
+# Start the RAG stack (connects to local Ollama)
+docker-compose -f local-ollama-docker-compose.yml up -d
+
+# Check service status
+docker-compose -f local-ollama-docker-compose.yml ps
+</code></pre>
+<h2 id="access-services"><a class="header" href="#access-services">Access Services</a></h2>
+<ul>
+<li><strong>Open WebUI</strong>: http://localhost:3000 (AI Chat Interface)</li>
+<li><strong>Grafana</strong>: http://localhost:3001 (admin/admin123)</li>
+<li><strong>Prometheus</strong>: http://localhost:9090 (Metrics)</li>
+<li><strong>Chroma API</strong>: http://localhost:8000 (Vector Database)</li>
+<li><strong>PostgreSQL</strong>: localhost:5432 (Database)</li>
+<li><strong>Ollama API</strong>: http://localhost:11434 (LLM Service)</li>
+</ul>
+<h2 id="ollama-model-management"><a class="header" href="#ollama-model-management">Ollama Model Management</a></h2>
+<h3 id="list-available-models"><a class="header" href="#list-available-models">List Available Models</a></h3>
+<pre><code class="language-bash">docker exec -it ollama ollama list
+</code></pre>
+<h3 id="pull-a-new-model"><a class="header" href="#pull-a-new-model">Pull a New Model</a></h3>
+<pre><code class="language-bash">docker exec -it ollama ollama pull llama3.2:3b
+</code></pre>
+<h3 id="remove-a-model"><a class="header" href="#remove-a-model">Remove a Model</a></h3>
+<pre><code class="language-bash">docker exec -it ollama ollama rm llama3.2:3b
+</code></pre>
+<h3 id="run-setup-script"><a class="header" href="#run-setup-script">Run Setup Script</a></h3>
+<pre><code class="language-bash"># Guided model installation
+./scripts/setup-ollama.sh
+</code></pre>
+<h2 id="recommended-models"><a class="header" href="#recommended-models">Recommended Models</a></h2>
+<ul>
+<li><strong>llama3.2:3b</strong> (3B params, ~2GB) - Best balance of speed and quality</li>
+<li><strong>llama3.2:1b</strong> (1B params, ~1GB) - Fastest, good for basic tasks</li>
+<li><strong>mistral:7b</strong> (7B params, ~4GB) - High quality, slower</li>
+<li><strong>codellama:7b</strong> (7B params, ~4GB) - Specialized for coding tasks</li>
+<li><strong>gemma:2b</strong> (2B params, ~1.5GB) - Google's efficient model</li>
+</ul>
+<h2 id="database-schema"><a class="header" href="#database-schema">Database Schema</a></h2>
+<p>The database is initialized with an optimized schema for RAG operations:</p>
+<pre><code class="language-sql">-- Chat Sessions Management
+CREATE TABLE chat_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id VARCHAR(255) NOT NULL,
+    session_name VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Message Storage with Full-Text Search
+CREATE TABLE chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    session_id UUID REFERENCES chat_sessions(id),
+    role VARCHAR(50) CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    token_count INTEGER DEFAULT 0
+);
+
+-- RAG Document Storage
+CREATE TABLE documents (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(500),
+    content TEXT NOT NULL,
+    source VARCHAR(500),
+    embedding_id VARCHAR(255), -- Chroma reference
+    metadata JSONB DEFAULT '{}'::jsonb
+);
+
+-- Performance Indexes
+CREATE INDEX idx_documents_content_gin ON documents 
+USING gin(to_tsvector('english', content));
+</code></pre>
+<h2 id="service-management"><a class="header" href="#service-management">Service Management</a></h2>
+<h3 id="view-logs"><a class="header" href="#view-logs">View Logs</a></h3>
+<pre><code class="language-bash">docker-compose logs [service-name]
+</code></pre>
+<h3 id="restart-services"><a class="header" href="#restart-services">Restart Services</a></h3>
+<pre><code class="language-bash">docker-compose restart [service-name]
+</code></pre>
+<h3 id="clean-restart"><a class="header" href="#clean-restart">Clean Restart</a></h3>
+<pre><code class="language-bash">docker-compose down
+docker-compose up -d
+</code></pre>
+<h3 id="for-local-ollama-setup"><a class="header" href="#for-local-ollama-setup">For Local Ollama Setup</a></h3>
+<pre><code class="language-bash">docker-compose -f local-ollama-docker-compose.yml [command]
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../opensource-llm-rag-stack/architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../opensource-llm-rag-stack/rag-guide.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,7 +311,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../opensource-llm-rag-stack/architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../opensource-llm-rag-stack/rag-guide.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -223,13 +346,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 
