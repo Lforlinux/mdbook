@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>ChaosHub</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Empowering SREs to Build Resilient Systems with Controlled Chaos">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ChaosHub</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>ChaosHub is a sophisticated Chaos Engineering Platform designed to help Site Reliability Engineers (SREs) and DevOps teams test and enhance the resilience of distributed systems. By orchestrating controlled failure scenarios (e.g., pod crashes, network latency, resource exhaustion) on a mock microservices-based application, ChaosHub provides real-time insights into system behavior under stress. The platform features a web-based dashboard for experiment management, observability integrations for monitoring, and a scalable cloud-native infrastructure. It serves as a powerful demonstration of modern DevOps and SRE practices, leveraging CI/CD, ArgoCD, Prometheus, Grafana, OpenTelemetry, AWS, Terraform, and Helm, with LitmusChaos as the chaos engineering engine.</p>
+<h2 id="problem-statement"><a class="header" href="#problem-statement">Problem Statement</a></h2>
+<p>In modern cloud-native environments, distributed systems face unpredictable failures—network outages, pod crashes, or resource bottlenecks—that can disrupt services. SREs need tools to proactively test system resilience, identify weak points, and ensure high availability. Existing chaos engineering tools like LitmusChaos provide robust failure injection but lack a comprehensive, production-like platform that integrates a target application, real-time analytics, and a full DevOps toolchain. ChaosHub addresses this by offering an end-to-end platform to simulate failures, monitor impacts, and analyze resilience, all while showcasing best-in-class DevOps practices.</p>
+<h2 id="objectives"><a class="header" href="#objectives">Objectives</a></h2>
+<ul>
+<li><strong>Demonstrate Resilience Testing</strong>: Enable SREs to run controlled chaos experiments (e.g., pod termination, CPU spikes) on a mock distributed application, simulating real-world failure scenarios.</li>
+<li><strong>Showcase DevOps Toolchain</strong>: Highlight a production-grade setup with CI/CD automation, GitOps deployments (ArgoCD), observability (Prometheus, Grafana, OpenTelemetry), and infrastructure as code (Terraform, Helm).</li>
+<li><strong>Provide Actionable Insights</strong>: Deliver real-time metrics, traces, and analytics to identify system weaknesses and improve resilience.</li>
+<li><strong>Engage DevOps/SRE Audiences</strong>: Create a compelling demo for technical teams, showing how chaos engineering integrates with modern cloud-native workflows.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="system-architecture"><a class="header" href="#system-architecture">System Architecture</a></h1>
+<p>ChaosHub is a microservices-based platform deployed on AWS EKS, with a mock target application and a chaos orchestrator built around LitmusChaos. The architecture includes:</p>
+<h2 id="chaos-orchestrator"><a class="header" href="#chaos-orchestrator">Chaos Orchestrator</a></h2>
+<ul>
+<li>Built on LitmusChaos (ChaosCenter for UI and engine).</li>
+<li>Schedules and executes chaos experiments (e.g., pod deletion, network delay) via REST APIs or cron jobs.</li>
+<li>Integrates with the ChaosCenter Dashboard for user-friendly experiment configuration.</li>
+</ul>
+<h2 id="target-application"><a class="header" href="#target-application">Target Application</a></h2>
+<ul>
+<li>A mock e-commerce app with microservices (e.g., user, order, inventory) deployed on Kubernetes.</li>
+<li>Simulates a production-like system to test resilience under chaos (e.g., HTTP errors, database failures).</li>
+</ul>
+<h2 id="analytics-service"><a class="header" href="#analytics-service">Analytics Service</a></h2>
+<ul>
+<li>Processes experiment results, calculating metrics like mean time to recovery (MTTR) and failure blast radius.</li>
+<li>Stores data in AWS RDS and generates resilience reports.</li>
+</ul>
+<h2 id="alerting-service"><a class="header" href="#alerting-service">Alerting Service</a></h2>
+<ul>
+<li>Sends notifications (e.g., via Slack or PagerDuty) for experiment outcomes or critical failures.</li>
+<li>Integrates with Prometheus for alert rules.</li>
+</ul>
+<h2 id="frontend-dashboard"><a class="header" href="#frontend-dashboard">Frontend Dashboard</a></h2>
+<ul>
+<li>A React-based web interface for SREs to configure chaos experiments, monitor system health, and view analytics.</li>
+<li>Embeds Grafana panels for real-time visualizations (e.g., latency spikes, pod health).</li>
+</ul>
+<h2 id="infrastructure"><a class="header" href="#infrastructure">Infrastructure</a></h2>
+<ul>
+<li>Deployed on AWS EKS with RDS for data storage, S3 for logs/artifacts, and Elastic Load Balancer for traffic routing.</li>
+<li>Managed by Terraform for infrastructure as code and Helm for Kubernetes deployments.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="features"><a class="header" href="#features">Features</a></h1>
+<h2 id="chaos-experiment-management"><a class="header" href="#chaos-experiment-management">Chaos Experiment Management</a></h2>
+<ul>
+<li>Schedule and run chaos workflows (e.g., pod crashes, network latency) using LitmusChaos's ChaosCenter UI or APIs.</li>
+<li>Support for custom chaos scenarios via scripts or predefined Litmus experiments.</li>
+</ul>
+<h2 id="real-time-observability"><a class="header" href="#real-time-observability">Real-Time Observability</a></h2>
+<ul>
+<li>Monitor experiment impacts (e.g., error rates, latency) with Prometheus and visualize in Grafana.</li>
+<li>Trace request flows across microservices with OpenTelemetry to pinpoint failure propagation.</li>
+</ul>
+<h2 id="resilience-analytics"><a class="header" href="#resilience-analytics">Resilience Analytics</a></h2>
+<ul>
+<li>Analyze system behavior under chaos (e.g., recovery time, service degradation).</li>
+<li>Generate reports suggesting improvements (e.g., auto-scaling policies, retry mechanisms).</li>
+</ul>
+<h2 id="user-friendly-dashboard"><a class="header" href="#user-friendly-dashboard">User-Friendly Dashboard</a></h2>
+<ul>
+<li>Configure experiments, view live metrics, and explore historical data via a React-based UI.</li>
+<li>Embed Grafana dashboards for time-series visualizations (e.g., CPU usage, API response times).</li>
+</ul>
+<h2 id="automated-notifications"><a class="header" href="#automated-notifications">Automated Notifications</a></h2>
+<ul>
+<li>Alert SREs on experiment outcomes or system failures via webhooks to Slack/PagerDuty.</li>
+<li>Configurable alert rules based on Prometheus metrics.</li>
+</ul>
+<h2 id="scalable-deployment"><a class="header" href="#scalable-deployment">Scalable Deployment</a></h2>
+<ul>
+<li>Auto-scale EKS nodes and microservices during high-load experiments.</li>
+<li>Use ArgoCD for GitOps-driven deployments and rollbacks.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="technical-implementation"><a class="header" href="#technical-implementation">Technical Implementation</a></h1>
+<h2 id="components-and-tools"><a class="header" href="#components-and-tools">Components and Tools</a></h2>
+<h3 id="cicd-pipeline-github-actions"><a class="header" href="#cicd-pipeline-github-actions">CI/CD Pipeline (GitHub Actions)</a></h3>
+<ul>
+<li>Automates building, testing, and deploying microservices and the frontend.</li>
+<li>Example: A commit to the chaos orchestrator triggers tests, builds a Docker image, pushes to Amazon ECR, and updates the Helm chart.</li>
+</ul>
+<h3 id="argocd"><a class="header" href="#argocd">ArgoCD</a></h3>
+<ul>
+<li>Manages Kubernetes deployments via GitOps.</li>
+<li>Each microservice (orchestrator, target app, analytics, frontend) is packaged as a Helm chart in a Git repository.</li>
+<li>Supports canary rollouts and rollbacks (e.g., for new chaos scenarios).</li>
+</ul>
+<h3 id="prometheus"><a class="header" href="#prometheus">Prometheus</a></h3>
+<ul>
+<li>Collects metrics from:
+<ul>
+<li>Target app (e.g., API latency, error rates).</li>
+<li>Chaos orchestrator (e.g., experiment success rate).</li>
+<li>EKS infrastructure (e.g., node CPU/memory).</li>
+</ul>
+</li>
+<li>Defines alerts for anomalies (e.g., high error rates during chaos).</li>
+</ul>
+<h3 id="grafana"><a class="header" href="#grafana">Grafana</a></h3>
+<ul>
+<li>Visualizes:
+<ul>
+<li>Experiment results (e.g., latency spikes, recovery times).</li>
+<li>System health (e.g., pod status, resource usage).</li>
+<li>OpenTelemetry traces for failure analysis.</li>
+</ul>
+</li>
+<li>Embeds dashboards in the ChaosHub UI for seamless monitoring.</li>
+</ul>
+<h3 id="opentelemetry"><a class="header" href="#opentelemetry">OpenTelemetry</a></h3>
+<ul>
+<li>Instruments microservices to trace requests (e.g., from dashboard to orchestrator to target app).</li>
+<li>Exports traces to Jaeger or AWS X-Ray, visualized in Grafana.</li>
+<li>Tracks failure propagation (e.g., how a pod crash impacts downstream services).</li>
+</ul>
+<h3 id="aws-and-terraform"><a class="header" href="#aws-and-terraform">AWS and Terraform</a></h3>
+<ul>
+<li>Terraform provisions:
+<ul>
+<li>EKS cluster for microservices and LitmusChaos.</li>
+<li>RDS for experiment data and metadata.</li>
+<li>S3 for logs and artifacts (e.g., experiment reports).</li>
+<li>Elastic Load Balancer for routing traffic.</li>
+<li>IAM roles for secure access.</li>
+</ul>
+</li>
+<li>Supports infrastructure versioning and scaling (e.g., adding nodes during load tests).</li>
+</ul>
+<h3 id="helm-charts"><a class="header" href="#helm-charts">Helm Charts</a></h3>
+<ul>
+<li>Packages microservices and LitmusChaos components.</li>
+<li>Manages dependencies (e.g., Redis for caching, Kafka for event streaming).</li>
+<li>Customizes deployments for dev/staging/prod environments.</li>
+</ul>
+<h3 id="litmuschaos"><a class="header" href="#litmuschaos">LitmusChaos</a></h3>
+<ul>
+<li>Provides the chaos engineering engine via ChaosCenter.</li>
+<li>Executes experiments like pod termination, network latency, or CPU hog.</li>
+<li>Offers a web-based UI (ChaosCenter Dashboard) for experiment configuration and monitoring.</li>
+</ul>
+<h2 id="data-flow"><a class="header" href="#data-flow">Data Flow</a></h2>
+<ol>
+<li><strong>Experiment Initiation</strong>: Users configure chaos workflows via the ChaosHub dashboard or ChaosCenter UI.</li>
+<li><strong>Chaos Execution</strong>: The orchestrator (LitmusChaos) injects failures into the target app (e.g., kills an inventory service pod).</li>
+<li><strong>Data Collection</strong>: Metrics (Prometheus) and traces (OpenTelemetry) are collected from all services.</li>
+<li><strong>Analysis</strong>: The analytics service processes data, stores results in RDS, and generates resilience reports.</li>
+<li><strong>Visualization and Alerts</strong>: The frontend displays live metrics via Grafana embeds; the alerting service notifies SREs of outcomes.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-chaoshub-is-ideal-for-demonstration"><a class="header" href="#why-chaoshub-is-ideal-for-demonstration">Why ChaosHub is Ideal for Demonstration</a></h1>
+<ul>
+<li><strong>Complexity</strong>: Combines a chaos orchestrator, target app, analytics, and frontend, creating a realistic distributed system to test resilience.</li>
+<li><strong>SRE Relevance</strong>: Chaos engineering is a core SRE practice, making the platform highly relevant for DevOps/SRE audiences.</li>
+<li><strong>Tool Showcase</strong>:
+<ul>
+<li><strong>CI/CD</strong>: Automates testing and deployment of microservices.</li>
+<li><strong>ArgoCD</strong>: Demonstrates GitOps with Helm chart deployments.</li>
+<li><strong>Prometheus/Grafana</strong>: Monitors experiment impacts and system health.</li>
+<li><strong>OpenTelemetry</strong>: Traces failure propagation across services.</li>
+<li><strong>Terraform/Helm</strong>: Manages cloud-native infrastructure and Kubernetes resources.</li>
+<li><strong>LitmusChaos</strong>: Provides a production-ready chaos engine with a user-friendly UI.</li>
+</ul>
+</li>
+<li><strong>Engaging Demo</strong>: Visualizing chaos impacts (e.g., pod crashes in Grafana) and recovery processes makes for a compelling presentation.</li>
+<li><strong>Scalability</strong>: The platform handles high-load scenarios, showcasing AWS auto-scaling and resilience.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="open-source-foundation"><a class="header" href="#open-source-foundation">Open-Source Foundation</a></h1>
+<p>ChaosHub builds on open-source components but requires custom integration:</p>
+<ul>
+<li><strong>LitmusChaos</strong>: Provides the chaos engine and ChaosCenter Dashboard for experiment management.</li>
+<li><strong>Target App</strong>: Fork a sample app like Google's Online Boutique for the mock e-commerce system.</li>
+<li><strong>Observability</strong>: Use OpenTelemetry Demo for tracing setup inspiration.</li>
+<li><strong>Custom Components</strong>: Build the analytics service, alerting service, and React frontend to tie everything together.</li>
+</ul>
+<p><strong>Build Effort</strong>: Starting with LitmusChaos and a sample app, expect 3-5 weeks for an MVP, focusing on integrating the DevOps/observability stack.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="demo-workflow"><a class="header" href="#demo-workflow">Demo Workflow</a></h1>
+<ol>
+<li><strong>Code Update</strong>: A developer adds a new chaos scenario (e.g., network partition) to the orchestrator and pushes to GitHub.</li>
+<li><strong>CI/CD</strong>: GitHub Actions tests, builds, and pushes the Docker image to ECR.</li>
+<li><strong>ArgoCD</strong>: Syncs the updated Helm chart to EKS, deploying the scenario with a canary rollout.</li>
+<li><strong>Chaos Experiment</strong>: LitmusChaos injects a network delay into the target app's order service.</li>
+<li><strong>Monitoring</strong>: Prometheus captures error spikes; Grafana visualizes latency; OpenTelemetry traces the failure's impact.</li>
+<li><strong>Analytics and Alerts</strong>: The analytics service reports MTTR; the alerting service notifies via Slack.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="impact-and-value"><a class="header" href="#impact-and-value">Impact and Value</a></h1>
+<p>ChaosHub empowers SREs to proactively test and improve system resilience, reducing downtime in production environments. For the demo, it showcases a full DevOps/SRE toolchain in action:</p>
+<ul>
+<li><strong>CI/CD</strong> automates rapid iteration.</li>
+<li><strong>ArgoCD</strong> ensures consistent, automated deployments.</li>
+<li><strong>Prometheus/Grafana</strong> provide deep observability.</li>
+<li><strong>OpenTelemetry</strong> reveals failure propagation.</li>
+<li><strong>Terraform/Helm</strong> enable scalable infrastructure.</li>
+<li><strong>LitmusChaos</strong> delivers a production-grade chaos engine with a sleek UI.</li>
+</ul>
+<p>This platform is a powerful tool for DevOps/SRE teams and a standout demo for technical audiences, highlighting the synergy of modern tools in a real-world chaos engineering use case.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h1>
+<ol>
+<li><strong>Setup</strong>: Deploy LitmusChaos on AWS EKS using Helm and Terraform (see Litmus Docs).</li>
+<li><strong>Target App</strong>: Fork Google's Online Boutique and instrument it with OpenTelemetry.</li>
+<li><strong>Custom Services</strong>: Build the analytics and alerting services (e.g., Python/Go) and the React frontend.</li>
+<li><strong>CI/CD</strong>: Configure GitHub Actions for automated builds and ArgoCD for deployments.</li>
+<li><strong>Observability</strong>: Integrate Prometheus, Grafana, and OpenTelemetry for metrics and tracing.</li>
+<li><strong>Demo Prep</strong>: Script a chaos experiment (e.g., pod crash) and visualize results in Grafana.</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
