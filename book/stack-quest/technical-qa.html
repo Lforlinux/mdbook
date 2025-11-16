@@ -319,6 +319,39 @@
 <li><strong>Sync</strong>: Optional cloud sync (future)</li>
 </ol>
 <p>Would extend LocalStorage with structured progress data."</p>
+<h3 id="q13-how-do-you-handle-browser-compatibility"><a class="header" href="#q13-how-do-you-handle-browser-compatibility">Q13: "How do you handle browser compatibility?"</a></h3>
+<p><strong>Answer:</strong>
+"Browser compatibility strategy:</p>
+<ol>
+<li><strong>ES6+ Support</strong>: Modern JavaScript features</li>
+<li><strong>Polyfills</strong>: Add polyfills for older browsers</li>
+<li><strong>Feature Detection</strong>: Check for API support</li>
+<li><strong>Graceful Degradation</strong>: Fallback for unsupported features</li>
+<li><strong>Testing</strong>: Test on multiple browsers</li>
+</ol>
+<p>The application targets modern browsers with ES6+ support."</p>
+<h3 id="q14-what-would-you-do-if-github-pages-went-down"><a class="header" href="#q14-what-would-you-do-if-github-pages-went-down">Q14: "What would you do if GitHub Pages went down?"</a></h3>
+<p><strong>Answer:</strong>
+"Contingency planning:</p>
+<ol>
+<li><strong>Backup Hosting</strong>: Alternative static hosting (Netlify, Vercel)</li>
+<li><strong>CDN</strong>: Use multiple CDN providers</li>
+<li><strong>Monitoring</strong>: Set up uptime monitoring</li>
+<li><strong>Quick Migration</strong>: Terraform/automation for quick switch</li>
+<li><strong>DNS</strong>: Quick DNS changes for failover</li>
+</ol>
+<p>GitHub Pages has high availability, but having a backup plan is prudent."</p>
+<h3 id="q15-how-would-you-add-analytics-to-track-usage"><a class="header" href="#q15-how-would-you-add-analytics-to-track-usage">Q15: "How would you add analytics to track usage?"</a></h3>
+<p><strong>Answer:</strong>
+"Analytics implementation:</p>
+<ol>
+<li><strong>Privacy-First</strong>: Use privacy-respecting analytics (Plausible, Fathom)</li>
+<li><strong>Client-Side</strong>: JavaScript-based tracking</li>
+<li><strong>No Cookies</strong>: Cookie-free analytics</li>
+<li><strong>GDPR Compliant</strong>: Respect user privacy</li>
+<li><strong>Custom Events</strong>: Track question views, category selections</li>
+</ol>
+<p>Would implement lightweight, privacy-focused analytics."</p>
 
                     </main>
 

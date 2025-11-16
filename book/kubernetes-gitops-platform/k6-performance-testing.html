@@ -1,0 +1,735 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>k6 Performance Testing - Projects Portfolio</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="A comprehensive portfolio showcasing DevOps, SRE, and Cloud engineering projects">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Projects Portfolio</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Lforlinux/mdbook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="kubernetes-gitops-platform---k6-performance-testing"><a class="header" href="#kubernetes-gitops-platform---k6-performance-testing">Kubernetes GitOps Platform - k6 Performance Testing</a></h1>
+<h2 id="what-is-k6"><a class="header" href="#what-is-k6">What is k6?</a></h2>
+<p>k6 is a modern, developer-centric performance testing tool built by Grafana Labs. It's designed for testing the performance of APIs, microservices, and websites using JavaScript.</p>
+<h3 id="key-features-of-k6"><a class="header" href="#key-features-of-k6">Key Features of k6</a></h3>
+<ul>
+<li><strong>JavaScript-based</strong>: Write tests in JavaScript (ES6+)</li>
+<li><strong>Developer-friendly</strong>: Easy to learn and integrate into CI/CD</li>
+<li><strong>Cloud-native</strong>: Designed for containerized environments</li>
+<li><strong>Metrics Integration</strong>: Native Prometheus and StatsD support</li>
+<li><strong>High Performance</strong>: Can generate massive load from a single machine</li>
+<li><strong>Open Source</strong>: Free and open-source tool</li>
+</ul>
+<h3 id="why-k6-for-kubernetes"><a class="header" href="#why-k6-for-kubernetes">Why k6 for Kubernetes?</a></h3>
+<ul>
+<li><strong>Kubernetes-native</strong>: Runs as Kubernetes Jobs</li>
+<li><strong>Resource Efficient</strong>: Single container can generate high load</li>
+<li><strong>GitOps Compatible</strong>: Test scripts stored in Git</li>
+<li><strong>Observability</strong>: Metrics exported to Prometheus</li>
+<li><strong>Automation</strong>: Can be scheduled via CronJobs</li>
+</ul>
+<h2 id="k6-implementation-in-kubernetes-gitops-platform"><a class="header" href="#k6-implementation-in-kubernetes-gitops-platform">k6 Implementation in Kubernetes GitOps Platform</a></h2>
+<h3 id="architecture"><a class="header" href="#architecture">Architecture</a></h3>
+<pre><code>┌─────────────────┐
+│  k6 Test Jobs   │
+│  (Kubernetes)   │
+└────────┬────────┘
+         │
+         │ Metrics Export
+         │
+┌────────▼────────┐    ┌─────────────────┐
+│ StatsD Exporter│────│   Prometheus    │
+│                │    │                 │
+└────────────────┘    └────────┬────────┘
+                               │
+                               │ Query
+                               │
+                       ┌───────▼────────┐
+                       │    Grafana     │
+                       │   Dashboards   │
+                       └────────────────┘
+</code></pre>
+<h3 id="test-types-implemented"><a class="header" href="#test-types-implemented">Test Types Implemented</a></h3>
+<h4 id="1-smoke-test"><a class="header" href="#1-smoke-test">1. Smoke Test</a></h4>
+<p><strong>Purpose</strong>: Basic functionality verification with minimal load</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '1m', target: 1 },   // Ramp up to 1 user
+    { duration: '2m', target: 1 },   // Stay at 1 user
+    { duration: '1m', target: 0 },    // Ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)&lt;2000'],  // 95% &lt; 2s
+    http_req_failed: ['rate&lt;0.01'],     // &lt; 1% errors
+  },
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Quick validation after deployment</li>
+<li>Pre-deployment sanity checks</li>
+<li>CI/CD pipeline integration</li>
+<li>Daily health verification</li>
+</ul>
+<h4 id="2-load-test"><a class="header" href="#2-load-test">2. Load Test</a></h4>
+<p><strong>Purpose</strong>: Normal production load testing</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '2m', target: 50 },   // Ramp to 50 users
+    { duration: '5m', target: 50 },   // Normal load
+    { duration: '2m', target: 100 },  // Ramp to 100 users
+    { duration: '5m', target: 100 },  // Higher load
+    { duration: '2m', target: 0 },    // Ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)&lt;3000', 'p(99)&lt;5000'],
+    http_req_failed: ['rate&lt;0.05'],
+  },
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Validate performance under expected load</li>
+<li>Capacity planning</li>
+<li>Performance baseline establishment</li>
+<li>SLO validation</li>
+</ul>
+<h4 id="3-stress-test"><a class="header" href="#3-stress-test">3. Stress Test</a></h4>
+<p><strong>Purpose</strong>: Find breaking point and maximum capacity</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '2m', target: 100 },
+    { duration: '5m', target: 100 },
+    { duration: '2m', target: 200 },
+    { duration: '5m', target: 200 },
+    { duration: '2m', target: 300 },
+    { duration: '5m', target: 300 },
+    { duration: '2m', target: 400 },
+    { duration: '5m', target: 400 },
+    { duration: '2m', target: 500 },
+    { duration: '5m', target: 500 },
+    { duration: '10m', target: 0 },
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)&lt;10000'],
+    http_req_failed: ['rate&lt;0.20'],
+  },
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Find maximum capacity</li>
+<li>Identify bottlenecks</li>
+<li>Test autoscaling limits</li>
+<li>Disaster recovery planning</li>
+</ul>
+<h4 id="4-spike-test"><a class="header" href="#4-spike-test">4. Spike Test</a></h4>
+<p><strong>Purpose</strong>: Test handling of sudden traffic spikes</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '1m', target: 10 },
+    { duration: '30s', target: 500 },   // Sudden spike
+    { duration: '1m', target: 500 },
+    { duration: '30s', target: 10 },
+    { duration: '1m', target: 10 },
+    { duration: '30s', target: 1000 },  // Larger spike
+    { duration: '1m', target: 1000 },
+    { duration: '30s', target: 10 },
+    { duration: '1m', target: 0 },
+  ],
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Validate autoscaling response</li>
+<li>Test rate limiting</li>
+<li>Verify circuit breakers</li>
+<li>Black Friday scenarios</li>
+</ul>
+<h2 id="test-implementation-details"><a class="header" href="#test-implementation-details">Test Implementation Details</a></h2>
+<h3 id="test-structure"><a class="header" href="#test-structure">Test Structure</a></h3>
+<p>Each test script follows this structure:</p>
+<pre><code class="language-javascript">// 1. Import k6 modules
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+import { Rate } from 'k6/metrics';
+
+// 2. Define custom metrics
+const errorRate = new Rate('errors');
+const frontendErrorRate = new Rate('frontend_errors');
+const backendErrorRate = new Rate('backend_errors');
+
+// 3. Configure test options
+export const options = {
+  stages: [...],
+  thresholds: {...},
+};
+
+// 4. Main test function
+export default function () {
+  // Frontend tests (HTTP)
+  // Backend tests (health checks)
+}
+
+// 5. Summary handler
+export function handleSummary(data) {
+  return { 'stdout': textSummary(data) };
+}
+</code></pre>
+<h3 id="test-scenarios"><a class="header" href="#test-scenarios">Test Scenarios</a></h3>
+<h4 id="frontend-testing"><a class="header" href="#frontend-testing">Frontend Testing</a></h4>
+<ul>
+<li><strong>Homepage Load</strong>: Tests main page accessibility</li>
+<li><strong>Product Pages</strong>: Tests product detail pages</li>
+<li><strong>Error Tracking</strong>: Monitors frontend-specific errors</li>
+</ul>
+<h4 id="backend-testing"><a class="header" href="#backend-testing">Backend Testing</a></h4>
+<ul>
+<li><strong>Health Checks</strong>: Validates backend service health</li>
+<li><strong>Service Integration</strong>: Tests microservice communication</li>
+<li><strong>Error Tracking</strong>: Monitors backend-specific errors</li>
+</ul>
+<h3 id="custom-metrics"><a class="header" href="#custom-metrics">Custom Metrics</a></h3>
+<pre><code class="language-javascript">// Custom error rate metrics
+const errorRate = new Rate('errors');
+const frontendErrorRate = new Rate('frontend_errors');
+const backendErrorRate = new Rate('backend_errors');
+
+// Track errors in tests
+errorRate.add(!success);
+frontendErrorRate.add(!success);
+backendErrorRate.add(!success);
+</code></pre>
+<h2 id="kubernetes-deployment"><a class="header" href="#kubernetes-deployment">Kubernetes Deployment</a></h2>
+<h3 id="job-configuration"><a class="header" href="#job-configuration">Job Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k6-load-test
+  namespace: performance-testing
+spec:
+  template:
+    spec:
+      containers:
+      - name: k6
+        image: grafana/k6:0.50.0
+        command: ["k6", "run"]
+        args:
+          - "--out"
+          - "statsd"
+          - "/scripts/k6-load-test.js"
+        env:
+        - name: TARGET_URL
+          value: "http://frontend-external.online-boutique.svc.cluster.local"
+        - name: K6_STATSD_ADDR
+          value: "statsd-exporter.performance-testing.svc.cluster.local:9125"
+        volumeMounts:
+        - name: test-scripts
+          mountPath: /scripts
+      volumes:
+      - name: test-scripts
+        configMap:
+          name: k6-test-scripts
+</code></pre>
+<h3 id="configmap-for-test-scripts"><a class="header" href="#configmap-for-test-scripts">ConfigMap for Test Scripts</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6-test-scripts
+  namespace: performance-testing
+data:
+  k6-smoke-test.js: |
+    // Test script content
+  k6-load-test.js: |
+    // Test script content
+  k6-stress-test.js: |
+    // Test script content
+  k6-spike-test.js: |
+    // Test script content
+</code></pre>
+<h3 id="scheduled-testing-cronjob"><a class="header" href="#scheduled-testing-cronjob">Scheduled Testing (CronJob)</a></h3>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: k6-scheduled-test
+  namespace: performance-testing
+spec:
+  schedule: "0 */6 * * *"  # Every 6 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: k6
+            image: grafana/k6:0.50.0
+            command: ["k6", "run", "/scripts/k6-smoke-test.js"]
+</code></pre>
+<h2 id="prometheus-integration"><a class="header" href="#prometheus-integration">Prometheus Integration</a></h2>
+<h3 id="statsd-exporter"><a class="header" href="#statsd-exporter">StatsD Exporter</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: statsd-exporter
+  namespace: performance-testing
+spec:
+  template:
+    spec:
+      containers:
+      - name: statsd-exporter
+        image: prom/statsd-exporter:latest
+        ports:
+        - containerPort: 9125  # StatsD
+        - containerPort: 9102  # Prometheus metrics
+</code></pre>
+<h3 id="metrics-export"><a class="header" href="#metrics-export">Metrics Export</a></h3>
+<p>k6 exports metrics via StatsD to Prometheus:</p>
+<pre><code class="language-javascript">// k6 configuration
+export const options = {
+  // Metrics automatically exported to StatsD
+  // Then scraped by Prometheus
+};
+</code></pre>
+<h3 id="available-metrics"><a class="header" href="#available-metrics">Available Metrics</a></h3>
+<ul>
+<li><code>k6_http_reqs_total</code> - Total HTTP requests</li>
+<li><code>k6_http_req_duration_seconds</code> - Request duration histogram</li>
+<li><code>k6_http_req_failed_total</code> - Failed requests</li>
+<li><code>k6_vus</code> - Current virtual users</li>
+<li><code>k6_data_received_total</code> - Data received</li>
+<li><code>k6_data_sent_total</code> - Data sent</li>
+<li><code>k6_iterations_total</code> - Total test iterations</li>
+</ul>
+<h2 id="grafana-dashboards"><a class="header" href="#grafana-dashboards">Grafana Dashboards</a></h2>
+<h3 id="official-k6-dashboard"><a class="header" href="#official-k6-dashboard">Official k6 Dashboard</a></h3>
+<ul>
+<li><strong>Dashboard ID</strong>: <code>19665</code></li>
+<li><strong>Source</strong>: Grafana Labs official dashboard</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Request rate visualization</li>
+<li>Response time percentiles (p50, p95, p99)</li>
+<li>Error rate tracking</li>
+<li>Virtual user count</li>
+<li>Data transfer metrics</li>
+</ul>
+</li>
+</ul>
+<h3 id="custom-dashboard"><a class="header" href="#custom-dashboard">Custom Dashboard</a></h3>
+<p>Custom dashboard includes:</p>
+<ul>
+<li>Test type filtering</li>
+<li>Service-specific metrics</li>
+<li>Threshold visualization</li>
+<li>Historical comparison</li>
+<li>Alert integration</li>
+</ul>
+<h2 id="running-tests"><a class="header" href="#running-tests">Running Tests</a></h2>
+<h3 id="quick-test-execution"><a class="header" href="#quick-test-execution">Quick Test Execution</a></h3>
+<pre><code class="language-bash"># Run smoke test
+./deployment/run-test.sh smoke
+
+# Run load test
+./deployment/run-test.sh load
+
+# Run stress test
+./deployment/run-test.sh stress
+
+# Run spike test
+./deployment/run-test.sh spike
+</code></pre>
+<h3 id="manual-execution"><a class="header" href="#manual-execution">Manual Execution</a></h3>
+<pre><code class="language-bash"># Create test job
+kubectl apply -f k8s-manifest/job-load-test.yaml
+
+# Watch logs
+kubectl logs -f job/k6-load-test -n performance-testing
+
+# Check results
+kubectl get job k6-load-test -n performance-testing
+</code></pre>
+<h3 id="scheduled-tests"><a class="header" href="#scheduled-tests">Scheduled Tests</a></h3>
+<pre><code class="language-bash"># Deploy CronJob
+kubectl apply -f k8s-manifest/cronjob-scheduled-test.yaml
+
+# View scheduled jobs
+kubectl get cronjobs -n performance-testing
+
+# View job history
+kubectl get jobs -n performance-testing
+</code></pre>
+<h2 id="test-results-analysis"><a class="header" href="#test-results-analysis">Test Results Analysis</a></h2>
+<h3 id="key-metrics-to-monitor"><a class="header" href="#key-metrics-to-monitor">Key Metrics to Monitor</a></h3>
+<ol>
+<li>
+<p><strong>Response Times</strong></p>
+<ul>
+<li>p50 (median)</li>
+<li>p95 (95th percentile)</li>
+<li>p99 (99th percentile)</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Rates</strong></p>
+<ul>
+<li>HTTP error rate</li>
+<li>Frontend errors</li>
+<li>Backend errors</li>
+</ul>
+</li>
+<li>
+<p><strong>Throughput</strong></p>
+<ul>
+<li>Requests per second</li>
+<li>Successful requests</li>
+<li>Failed requests</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Usage</strong></p>
+<ul>
+<li>CPU utilization</li>
+<li>Memory usage</li>
+<li>Network bandwidth</li>
+</ul>
+</li>
+</ol>
+<h3 id="interpreting-results"><a class="header" href="#interpreting-results">Interpreting Results</a></h3>
+<p><strong>Good Performance</strong>:</p>
+<pre><code>✓ checks: 100.00%
+✓ thresholds: 100.00%
+http_req_duration: p95=500ms, p99=800ms
+http_req_failed: 0.00%
+</code></pre>
+<p><strong>Performance Issues</strong>:</p>
+<pre><code>✗ checks: 85.00%
+✗ thresholds: 60.00%
+http_req_duration: p95=5000ms, p99=10000ms
+http_req_failed: 15.00%
+</code></pre>
+<h2 id="integration-with-hpa"><a class="header" href="#integration-with-hpa">Integration with HPA</a></h2>
+<h3 id="triggering-autoscaling"><a class="header" href="#triggering-autoscaling">Triggering Autoscaling</a></h3>
+<p>k6 tests can trigger HPA scaling:</p>
+<pre><code class="language-bash"># Run load test
+./deployment/run-test.sh load
+
+# Watch HPA scaling
+kubectl get hpa -w
+
+# Watch pod scaling
+kubectl get pods -w
+</code></pre>
+<h3 id="validating-autoscaling"><a class="header" href="#validating-autoscaling">Validating Autoscaling</a></h3>
+<ol>
+<li><strong>Start Test</strong>: Run k6 load test</li>
+<li><strong>Monitor Metrics</strong>: Watch CPU/memory usage</li>
+<li><strong>Observe Scaling</strong>: HPA creates new pods</li>
+<li><strong>Verify Performance</strong>: Response times remain stable</li>
+<li><strong>Scale Down</strong>: After test, pods scale down</li>
+</ol>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-test-design"><a class="header" href="#1-test-design">1. <strong>Test Design</strong></a></h3>
+<ul>
+<li>Start with smoke tests</li>
+<li>Progress to load tests</li>
+<li>Use stress tests for capacity planning</li>
+<li>Run spike tests for autoscaling validation</li>
+</ul>
+<h3 id="2-thresholds"><a class="header" href="#2-thresholds">2. <strong>Thresholds</strong></a></h3>
+<ul>
+<li>Set realistic thresholds</li>
+<li>Use percentiles (p95, p99)</li>
+<li>Consider business requirements</li>
+<li>Update based on baseline</li>
+</ul>
+<h3 id="3-test-frequency"><a class="header" href="#3-test-frequency">3. <strong>Test Frequency</strong></a></h3>
+<ul>
+<li>Smoke tests: After each deployment</li>
+<li>Load tests: Weekly or monthly</li>
+<li>Stress tests: Quarterly</li>
+<li>Spike tests: Before major events</li>
+</ul>
+<h3 id="4-monitoring"><a class="header" href="#4-monitoring">4. <strong>Monitoring</strong></a></h3>
+<ul>
+<li>Export metrics to Prometheus</li>
+<li>Create Grafana dashboards</li>
+<li>Set up alerts</li>
+<li>Track trends over time</li>
+</ul>
+<h3 id="5-cicd-integration"><a class="header" href="#5-cicd-integration">5. <strong>CI/CD Integration</strong></a></h3>
+<ul>
+<li>Run smoke tests in CI pipeline</li>
+<li>Block deployments on test failures</li>
+<li>Store test results</li>
+<li>Generate reports</li>
+</ul>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="test-failures"><a class="header" href="#test-failures">Test Failures</a></h3>
+<pre><code class="language-bash"># Check job status
+kubectl get job k6-load-test -n performance-testing
+
+# View logs
+kubectl logs job/k6-load-test -n performance-testing
+
+# Check pod events
+kubectl describe job k6-load-test -n performance-testing
+</code></pre>
+<h3 id="metrics-not-appearing"><a class="header" href="#metrics-not-appearing">Metrics Not Appearing</a></h3>
+<pre><code class="language-bash"># Check StatsD exporter
+kubectl get pods -n performance-testing -l app=statsd-exporter
+
+# Check Prometheus scraping
+kubectl port-forward -n monitoring svc/prometheus 9090:9090
+# Access http://localhost:9090/targets
+
+# Verify metrics
+# Query: {__name__=~"k6_.*"}
+</code></pre>
+<h3 id="performance-issues-during-tests"><a class="header" href="#performance-issues-during-tests">Performance Issues During Tests</a></h3>
+<pre><code class="language-bash"># Check application pods
+kubectl get pods -n online-boutique
+
+# Check resource usage
+kubectl top pods -n online-boutique
+
+# Check HPA status
+kubectl get hpa -n online-boutique
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../kubernetes-gitops-platform/scaling.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../kubernetes-gitops-platform/troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../kubernetes-gitops-platform/scaling.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../kubernetes-gitops-platform/troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

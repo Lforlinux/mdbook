@@ -21,7 +21,8 @@ This project demonstrates enterprise-grade Kubernetes platform operations, GitOp
 - **High Availability**: Multi-AZ deployment with auto-scaling worker nodes and Horizontal Pod Autoscaler (HPA)
 - **Zero-Downtime Deployments**: Kubernetes rolling updates ensure continuous service availability
 - **Complete Observability**: Prometheus, Grafana, Loki, and Promtail for metrics, logs, and dashboards
-- **SRE-Ready**: Availability testing and sanity checks built-in
+- **Performance Testing**: k6 integration for smoke, load, stress, and spike testing with Prometheus metrics
+- **SRE-Ready**: Availability testing, sanity checks, and performance validation built-in
 
 ## Project Highlights
 

@@ -43,5 +43,6 @@
   - [Monitoring & Observability](kubernetes-gitops-platform/monitoring.md)
   - [Security & Best Practices](kubernetes-gitops-platform/security.md)
   - [Scaling & Performance](kubernetes-gitops-platform/scaling.md)
+  - [k6 Performance Testing](kubernetes-gitops-platform/k6-performance-testing.md)
   - [Troubleshooting](kubernetes-gitops-platform/troubleshooting.md)
   - [Technical Q&A](kubernetes-gitops-platform/technical-qa.md)

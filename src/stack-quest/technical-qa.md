@@ -158,3 +158,39 @@ Would use libraries like Fuse.js or implement custom search."
 5. **Sync**: Optional cloud sync (future)
 
 Would extend LocalStorage with structured progress data."
+
+### Q13: "How do you handle browser compatibility?"
+
+**Answer:**
+"Browser compatibility strategy:
+1. **ES6+ Support**: Modern JavaScript features
+2. **Polyfills**: Add polyfills for older browsers
+3. **Feature Detection**: Check for API support
+4. **Graceful Degradation**: Fallback for unsupported features
+5. **Testing**: Test on multiple browsers
+
+The application targets modern browsers with ES6+ support."
+
+### Q14: "What would you do if GitHub Pages went down?"
+
+**Answer:**
+"Contingency planning:
+1. **Backup Hosting**: Alternative static hosting (Netlify, Vercel)
+2. **CDN**: Use multiple CDN providers
+3. **Monitoring**: Set up uptime monitoring
+4. **Quick Migration**: Terraform/automation for quick switch
+5. **DNS**: Quick DNS changes for failover
+
+GitHub Pages has high availability, but having a backup plan is prudent."
+
+### Q15: "How would you add analytics to track usage?"
+
+**Answer:**
+"Analytics implementation:
+1. **Privacy-First**: Use privacy-respecting analytics (Plausible, Fathom)
+2. **Client-Side**: JavaScript-based tracking
+3. **No Cookies**: Cookie-free analytics
+4. **GDPR Compliant**: Respect user privacy
+5. **Custom Events**: Track question views, category selections
+
+Would implement lightweight, privacy-focused analytics."

@@ -357,6 +357,39 @@
 </ol>
 <p>Recovery time objective: &lt; 1 hour
 Recovery point objective: &lt; 15 minutes"</p>
+<h3 id="q13-how-do-you-handle-lambda-cold-starts"><a class="header" href="#q13-how-do-you-handle-lambda-cold-starts">Q13: "How do you handle Lambda cold starts?"</a></h3>
+<p><strong>Answer:</strong>
+"Cold start mitigation:</p>
+<ol>
+<li><strong>Provisioned Concurrency</strong>: Keep functions warm</li>
+<li><strong>Memory Optimization</strong>: Right-size Lambda memory</li>
+<li><strong>Package Size</strong>: Minimize deployment package</li>
+<li><strong>VPC Configuration</strong>: Avoid VPC if not needed</li>
+<li><strong>Reserved Capacity</strong>: Use reserved concurrency</li>
+</ol>
+<p>For visitor counter, cold starts are acceptable (&lt; 1s), but can be optimized if needed."</p>
+<h3 id="q14-what-would-you-do-if-dynamodb-throttling-occurred"><a class="header" href="#q14-what-would-you-do-if-dynamodb-throttling-occurred">Q14: "What would you do if DynamoDB throttling occurred?"</a></h3>
+<p><strong>Answer:</strong>
+"Throttling resolution:</p>
+<ol>
+<li><strong>On-Demand Mode</strong>: Switch to on-demand billing</li>
+<li><strong>Auto-Scaling</strong>: Enable auto-scaling for provisioned capacity</li>
+<li><strong>Retry Logic</strong>: Implement exponential backoff</li>
+<li><strong>Batch Operations</strong>: Use batch writes when possible</li>
+<li><strong>Monitoring</strong>: Set up CloudWatch alarms</li>
+</ol>
+<p>The current setup uses on-demand mode which auto-scales automatically."</p>
+<h3 id="q15-how-do-you-ensure-cloudfront-cache-invalidation-works-correctly"><a class="header" href="#q15-how-do-you-ensure-cloudfront-cache-invalidation-works-correctly">Q15: "How do you ensure CloudFront cache invalidation works correctly?"</a></h3>
+<p><strong>Answer:</strong>
+"Cache invalidation strategy:</p>
+<ol>
+<li><strong>Selective Invalidation</strong>: Invalidate only changed files</li>
+<li><strong>Versioning</strong>: Use file versioning in URLs</li>
+<li><strong>TTL Configuration</strong>: Set appropriate cache TTLs</li>
+<li><strong>Automation</strong>: Automate invalidation in CI/CD</li>
+<li><strong>Monitoring</strong>: Track cache hit ratios</li>
+</ol>
+<p>GitHub Actions automatically invalidates cache on deployment."</p>
 
                     </main>
 

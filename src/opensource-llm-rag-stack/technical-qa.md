@@ -166,3 +166,42 @@ Multiple safeguards protect sensitive information."
 7. **A/B Testing**: Test different configurations
 
 Continuous improvement based on user feedback and metrics."
+
+### Q13: "How do you handle large document uploads?"
+
+**Answer:**
+"Large document handling:
+1. **Chunking**: Split large documents into smaller chunks
+2. **Streaming**: Stream document processing
+3. **Async Processing**: Process documents asynchronously
+4. **Progress Tracking**: Show upload progress
+5. **Error Handling**: Handle upload failures gracefully
+6. **Size Limits**: Set reasonable size limits
+
+Would implement chunked uploads for files > 10MB."
+
+### Q14: "What happens if Chroma database becomes unavailable?"
+
+**Answer:**
+"Chroma availability strategy:
+1. **Health Checks**: Monitor Chroma health
+2. **Backup**: Regular backups of vector database
+3. **Replication**: Consider Chroma replication
+4. **Fallback**: Graceful degradation if unavailable
+5. **Recovery**: Automated recovery procedures
+6. **Monitoring**: Alert on service unavailability
+
+Would implement health checks and automated recovery."
+
+### Q15: "How do you optimize LLM token usage and costs?"
+
+**Answer:**
+"Token optimization:
+1. **Context Window**: Limit context window size
+2. **Chunk Selection**: Retrieve only relevant chunks
+3. **Prompt Optimization**: Minimize prompt size
+4. **Caching**: Cache common queries and responses
+5. **Model Selection**: Use appropriate model size
+6. **Batch Processing**: Batch similar queries
+
+These strategies reduce token usage and associated costs."

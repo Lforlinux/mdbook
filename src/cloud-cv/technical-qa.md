@@ -183,3 +183,39 @@ Additional considerations:
 Recovery time objective: < 1 hour
 Recovery point objective: < 15 minutes"
 
+### Q13: "How do you handle Lambda cold starts?"
+
+**Answer:**
+"Cold start mitigation:
+1. **Provisioned Concurrency**: Keep functions warm
+2. **Memory Optimization**: Right-size Lambda memory
+3. **Package Size**: Minimize deployment package
+4. **VPC Configuration**: Avoid VPC if not needed
+5. **Reserved Capacity**: Use reserved concurrency
+
+For visitor counter, cold starts are acceptable (< 1s), but can be optimized if needed."
+
+### Q14: "What would you do if DynamoDB throttling occurred?"
+
+**Answer:**
+"Throttling resolution:
+1. **On-Demand Mode**: Switch to on-demand billing
+2. **Auto-Scaling**: Enable auto-scaling for provisioned capacity
+3. **Retry Logic**: Implement exponential backoff
+4. **Batch Operations**: Use batch writes when possible
+5. **Monitoring**: Set up CloudWatch alarms
+
+The current setup uses on-demand mode which auto-scales automatically."
+
+### Q15: "How do you ensure CloudFront cache invalidation works correctly?"
+
+**Answer:**
+"Cache invalidation strategy:
+1. **Selective Invalidation**: Invalidate only changed files
+2. **Versioning**: Use file versioning in URLs
+3. **TTL Configuration**: Set appropriate cache TTLs
+4. **Automation**: Automate invalidation in CI/CD
+5. **Monitoring**: Track cache hit ratios
+
+GitHub Actions automatically invalidates cache on deployment."
+

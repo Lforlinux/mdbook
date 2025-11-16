@@ -328,6 +328,42 @@
 <li><strong>A/B Testing</strong>: Test different configurations</li>
 </ol>
 <p>Continuous improvement based on user feedback and metrics."</p>
+<h3 id="q13-how-do-you-handle-large-document-uploads"><a class="header" href="#q13-how-do-you-handle-large-document-uploads">Q13: "How do you handle large document uploads?"</a></h3>
+<p><strong>Answer:</strong>
+"Large document handling:</p>
+<ol>
+<li><strong>Chunking</strong>: Split large documents into smaller chunks</li>
+<li><strong>Streaming</strong>: Stream document processing</li>
+<li><strong>Async Processing</strong>: Process documents asynchronously</li>
+<li><strong>Progress Tracking</strong>: Show upload progress</li>
+<li><strong>Error Handling</strong>: Handle upload failures gracefully</li>
+<li><strong>Size Limits</strong>: Set reasonable size limits</li>
+</ol>
+<p>Would implement chunked uploads for files &gt; 10MB."</p>
+<h3 id="q14-what-happens-if-chroma-database-becomes-unavailable"><a class="header" href="#q14-what-happens-if-chroma-database-becomes-unavailable">Q14: "What happens if Chroma database becomes unavailable?"</a></h3>
+<p><strong>Answer:</strong>
+"Chroma availability strategy:</p>
+<ol>
+<li><strong>Health Checks</strong>: Monitor Chroma health</li>
+<li><strong>Backup</strong>: Regular backups of vector database</li>
+<li><strong>Replication</strong>: Consider Chroma replication</li>
+<li><strong>Fallback</strong>: Graceful degradation if unavailable</li>
+<li><strong>Recovery</strong>: Automated recovery procedures</li>
+<li><strong>Monitoring</strong>: Alert on service unavailability</li>
+</ol>
+<p>Would implement health checks and automated recovery."</p>
+<h3 id="q15-how-do-you-optimize-llm-token-usage-and-costs"><a class="header" href="#q15-how-do-you-optimize-llm-token-usage-and-costs">Q15: "How do you optimize LLM token usage and costs?"</a></h3>
+<p><strong>Answer:</strong>
+"Token optimization:</p>
+<ol>
+<li><strong>Context Window</strong>: Limit context window size</li>
+<li><strong>Chunk Selection</strong>: Retrieve only relevant chunks</li>
+<li><strong>Prompt Optimization</strong>: Minimize prompt size</li>
+<li><strong>Caching</strong>: Cache common queries and responses</li>
+<li><strong>Model Selection</strong>: Use appropriate model size</li>
+<li><strong>Batch Processing</strong>: Batch similar queries</li>
+</ol>
+<p>These strategies reduce token usage and associated costs."</p>
 
                     </main>
 

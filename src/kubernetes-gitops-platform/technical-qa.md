@@ -199,9 +199,88 @@ Security best practices:
 - Image vulnerability scanning
 - Compliance with CIS benchmarks"
 
+## Performance Testing Questions
+
+### Q12: "Tell me about k6 performance testing in your platform."
+
+**Answer:**
+"k6 is a modern, developer-centric performance testing tool integrated into the platform:
+- **Test Types**: Smoke, Load, Stress, and Spike tests
+- **Kubernetes Native**: Runs as Kubernetes Jobs
+- **GitOps Integrated**: Test scripts stored in Git, deployed via ArgoCD
+- **Prometheus Integration**: Metrics exported via StatsD exporter
+- **Grafana Dashboards**: Real-time visualization of test results
+
+Test scenarios:
+- **Smoke Test**: Basic functionality (1 user, ~4 minutes)
+- **Load Test**: Normal production load (50-100 users, ~16 minutes)
+- **Stress Test**: Find breaking point (100-500 users, ~40 minutes)
+- **Spike Test**: Sudden traffic spikes (10→500→1000 users, ~6 minutes)
+
+Each test validates:
+- Frontend HTTP endpoints (homepage, product pages)
+- Backend health checks
+- Error rates and response times
+- Custom metrics (frontend_errors, backend_errors)
+
+Tests can be run manually or scheduled via CronJobs for continuous validation."
+
+### Q13: "How does k6 integrate with your monitoring stack?"
+
+**Answer:**
+"k6 metrics flow through this pipeline:
+1. **k6 Test Jobs**: Generate load and collect metrics
+2. **StatsD Exporter**: Receives metrics from k6 via StatsD protocol
+3. **Prometheus**: Scrapes StatsD exporter metrics
+4. **Grafana**: Visualizes metrics in dashboards
+
+Available metrics:
+- `k6_http_reqs_total` - Total requests
+- `k6_http_req_duration_seconds` - Response time histogram
+- `k6_http_req_failed_total` - Failed requests
+- `k6_vus` - Current virtual users
+- Custom metrics: `frontend_errors`, `backend_errors`
+
+We use the official Grafana k6 dashboard (ID: 19665) for visualization, showing:
+- Request rate over time
+- Response time percentiles (p50, p95, p99)
+- Error rates
+- Virtual user count
+- Data transfer metrics
+
+This integration allows us to correlate performance test results with application metrics in real-time."
+
+### Q14: "How do you use k6 to validate autoscaling?"
+
+**Answer:**
+"k6 tests validate HPA and Cluster Autoscaler:
+1. **Load Test**: Gradually increases load to trigger HPA
+   - Watch HPA create new pods
+   - Verify response times remain stable
+   - Confirm pods scale down after test
+
+2. **Spike Test**: Sudden load spikes test autoscaling response
+   - Validates rapid scaling capability
+   - Tests rate limiting and circuit breakers
+   - Verifies system recovers after spike
+
+3. **Stress Test**: Finds autoscaling limits
+   - Identifies maximum capacity
+   - Tests cluster autoscaler node addition
+   - Validates resource constraints
+
+Process:
+- Run k6 test with increasing load
+- Monitor HPA status: `kubectl get hpa -w`
+- Watch pod scaling: `kubectl get pods -w`
+- Verify metrics in Grafana
+- Confirm performance remains within thresholds
+
+This ensures autoscaling works correctly and maintains SLOs under load."
+
 ## Advanced Questions
 
-### Q12: "How would you scale this to production?"
+### Q15: "How would you scale this to production?"
 
 **Answer:**
 "Production scaling strategies:
@@ -214,4 +293,30 @@ Security best practices:
 7. **Compliance**: Enhanced security and audit logging
 
 The architecture supports horizontal scaling and can be extended for enterprise production use."
+
+### Q16: "How do you handle performance testing in CI/CD?"
+
+**Answer:**
+"Performance testing integration:
+1. **Smoke Tests**: Run after each deployment
+   - Quick validation (< 5 minutes)
+   - Blocks deployment on failure
+   - Integrated in GitHub Actions
+
+2. **Scheduled Tests**: CronJobs run regularly
+   - Load tests weekly
+   - Stress tests monthly
+   - Spike tests before major releases
+
+3. **Metrics Collection**: All tests export to Prometheus
+   - Historical trend analysis
+   - Performance regression detection
+   - SLO validation
+
+4. **Alerting**: Prometheus alerts on threshold violations
+   - High error rates
+   - Slow response times
+   - Test failures
+
+This ensures continuous performance validation and early detection of regressions."
 

@@ -393,8 +393,98 @@
 <li>Image vulnerability scanning</li>
 <li>Compliance with CIS benchmarks"</li>
 </ul>
+<h2 id="performance-testing-questions"><a class="header" href="#performance-testing-questions">Performance Testing Questions</a></h2>
+<h3 id="q12-tell-me-about-k6-performance-testing-in-your-platform"><a class="header" href="#q12-tell-me-about-k6-performance-testing-in-your-platform">Q12: "Tell me about k6 performance testing in your platform."</a></h3>
+<p><strong>Answer:</strong>
+"k6 is a modern, developer-centric performance testing tool integrated into the platform:</p>
+<ul>
+<li><strong>Test Types</strong>: Smoke, Load, Stress, and Spike tests</li>
+<li><strong>Kubernetes Native</strong>: Runs as Kubernetes Jobs</li>
+<li><strong>GitOps Integrated</strong>: Test scripts stored in Git, deployed via ArgoCD</li>
+<li><strong>Prometheus Integration</strong>: Metrics exported via StatsD exporter</li>
+<li><strong>Grafana Dashboards</strong>: Real-time visualization of test results</li>
+</ul>
+<p>Test scenarios:</p>
+<ul>
+<li><strong>Smoke Test</strong>: Basic functionality (1 user, ~4 minutes)</li>
+<li><strong>Load Test</strong>: Normal production load (50-100 users, ~16 minutes)</li>
+<li><strong>Stress Test</strong>: Find breaking point (100-500 users, ~40 minutes)</li>
+<li><strong>Spike Test</strong>: Sudden traffic spikes (10→500→1000 users, ~6 minutes)</li>
+</ul>
+<p>Each test validates:</p>
+<ul>
+<li>Frontend HTTP endpoints (homepage, product pages)</li>
+<li>Backend health checks</li>
+<li>Error rates and response times</li>
+<li>Custom metrics (frontend_errors, backend_errors)</li>
+</ul>
+<p>Tests can be run manually or scheduled via CronJobs for continuous validation."</p>
+<h3 id="q13-how-does-k6-integrate-with-your-monitoring-stack"><a class="header" href="#q13-how-does-k6-integrate-with-your-monitoring-stack">Q13: "How does k6 integrate with your monitoring stack?"</a></h3>
+<p><strong>Answer:</strong>
+"k6 metrics flow through this pipeline:</p>
+<ol>
+<li><strong>k6 Test Jobs</strong>: Generate load and collect metrics</li>
+<li><strong>StatsD Exporter</strong>: Receives metrics from k6 via StatsD protocol</li>
+<li><strong>Prometheus</strong>: Scrapes StatsD exporter metrics</li>
+<li><strong>Grafana</strong>: Visualizes metrics in dashboards</li>
+</ol>
+<p>Available metrics:</p>
+<ul>
+<li><code>k6_http_reqs_total</code> - Total requests</li>
+<li><code>k6_http_req_duration_seconds</code> - Response time histogram</li>
+<li><code>k6_http_req_failed_total</code> - Failed requests</li>
+<li><code>k6_vus</code> - Current virtual users</li>
+<li>Custom metrics: <code>frontend_errors</code>, <code>backend_errors</code></li>
+</ul>
+<p>We use the official Grafana k6 dashboard (ID: 19665) for visualization, showing:</p>
+<ul>
+<li>Request rate over time</li>
+<li>Response time percentiles (p50, p95, p99)</li>
+<li>Error rates</li>
+<li>Virtual user count</li>
+<li>Data transfer metrics</li>
+</ul>
+<p>This integration allows us to correlate performance test results with application metrics in real-time."</p>
+<h3 id="q14-how-do-you-use-k6-to-validate-autoscaling"><a class="header" href="#q14-how-do-you-use-k6-to-validate-autoscaling">Q14: "How do you use k6 to validate autoscaling?"</a></h3>
+<p><strong>Answer:</strong>
+"k6 tests validate HPA and Cluster Autoscaler:</p>
+<ol>
+<li>
+<p><strong>Load Test</strong>: Gradually increases load to trigger HPA</p>
+<ul>
+<li>Watch HPA create new pods</li>
+<li>Verify response times remain stable</li>
+<li>Confirm pods scale down after test</li>
+</ul>
+</li>
+<li>
+<p><strong>Spike Test</strong>: Sudden load spikes test autoscaling response</p>
+<ul>
+<li>Validates rapid scaling capability</li>
+<li>Tests rate limiting and circuit breakers</li>
+<li>Verifies system recovers after spike</li>
+</ul>
+</li>
+<li>
+<p><strong>Stress Test</strong>: Finds autoscaling limits</p>
+<ul>
+<li>Identifies maximum capacity</li>
+<li>Tests cluster autoscaler node addition</li>
+<li>Validates resource constraints</li>
+</ul>
+</li>
+</ol>
+<p>Process:</p>
+<ul>
+<li>Run k6 test with increasing load</li>
+<li>Monitor HPA status: <code>kubectl get hpa -w</code></li>
+<li>Watch pod scaling: <code>kubectl get pods -w</code></li>
+<li>Verify metrics in Grafana</li>
+<li>Confirm performance remains within thresholds</li>
+</ul>
+<p>This ensures autoscaling works correctly and maintains SLOs under load."</p>
 <h2 id="advanced-questions"><a class="header" href="#advanced-questions">Advanced Questions</a></h2>
-<h3 id="q12-how-would-you-scale-this-to-production"><a class="header" href="#q12-how-would-you-scale-this-to-production">Q12: "How would you scale this to production?"</a></h3>
+<h3 id="q15-how-would-you-scale-this-to-production"><a class="header" href="#q15-how-would-you-scale-this-to-production">Q15: "How would you scale this to production?"</a></h3>
 <p><strong>Answer:</strong>
 "Production scaling strategies:</p>
 <ol>
@@ -407,6 +497,44 @@
 <li><strong>Compliance</strong>: Enhanced security and audit logging</li>
 </ol>
 <p>The architecture supports horizontal scaling and can be extended for enterprise production use."</p>
+<h3 id="q16-how-do-you-handle-performance-testing-in-cicd"><a class="header" href="#q16-how-do-you-handle-performance-testing-in-cicd">Q16: "How do you handle performance testing in CI/CD?"</a></h3>
+<p><strong>Answer:</strong>
+"Performance testing integration:</p>
+<ol>
+<li>
+<p><strong>Smoke Tests</strong>: Run after each deployment</p>
+<ul>
+<li>Quick validation (&lt; 5 minutes)</li>
+<li>Blocks deployment on failure</li>
+<li>Integrated in GitHub Actions</li>
+</ul>
+</li>
+<li>
+<p><strong>Scheduled Tests</strong>: CronJobs run regularly</p>
+<ul>
+<li>Load tests weekly</li>
+<li>Stress tests monthly</li>
+<li>Spike tests before major releases</li>
+</ul>
+</li>
+<li>
+<p><strong>Metrics Collection</strong>: All tests export to Prometheus</p>
+<ul>
+<li>Historical trend analysis</li>
+<li>Performance regression detection</li>
+<li>SLO validation</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerting</strong>: Prometheus alerts on threshold violations</p>
+<ul>
+<li>High error rates</li>
+<li>Slow response times</li>
+<li>Test failures</li>
+</ul>
+</li>
+</ol>
+<p>This ensures continuous performance validation and early detection of regressions."</p>
 
                     </main>
 

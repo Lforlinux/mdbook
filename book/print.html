@@ -1396,6 +1396,39 @@ aws s3 ls s3://cloud-cv-bucket/ --recursive
 </ol>
 <p>Recovery time objective: &lt; 1 hour
 Recovery point objective: &lt; 15 minutes"</p>
+<h3 id="q13-how-do-you-handle-lambda-cold-starts"><a class="header" href="#q13-how-do-you-handle-lambda-cold-starts">Q13: "How do you handle Lambda cold starts?"</a></h3>
+<p><strong>Answer:</strong>
+"Cold start mitigation:</p>
+<ol>
+<li><strong>Provisioned Concurrency</strong>: Keep functions warm</li>
+<li><strong>Memory Optimization</strong>: Right-size Lambda memory</li>
+<li><strong>Package Size</strong>: Minimize deployment package</li>
+<li><strong>VPC Configuration</strong>: Avoid VPC if not needed</li>
+<li><strong>Reserved Capacity</strong>: Use reserved concurrency</li>
+</ol>
+<p>For visitor counter, cold starts are acceptable (&lt; 1s), but can be optimized if needed."</p>
+<h3 id="q14-what-would-you-do-if-dynamodb-throttling-occurred"><a class="header" href="#q14-what-would-you-do-if-dynamodb-throttling-occurred">Q14: "What would you do if DynamoDB throttling occurred?"</a></h3>
+<p><strong>Answer:</strong>
+"Throttling resolution:</p>
+<ol>
+<li><strong>On-Demand Mode</strong>: Switch to on-demand billing</li>
+<li><strong>Auto-Scaling</strong>: Enable auto-scaling for provisioned capacity</li>
+<li><strong>Retry Logic</strong>: Implement exponential backoff</li>
+<li><strong>Batch Operations</strong>: Use batch writes when possible</li>
+<li><strong>Monitoring</strong>: Set up CloudWatch alarms</li>
+</ol>
+<p>The current setup uses on-demand mode which auto-scales automatically."</p>
+<h3 id="q15-how-do-you-ensure-cloudfront-cache-invalidation-works-correctly"><a class="header" href="#q15-how-do-you-ensure-cloudfront-cache-invalidation-works-correctly">Q15: "How do you ensure CloudFront cache invalidation works correctly?"</a></h3>
+<p><strong>Answer:</strong>
+"Cache invalidation strategy:</p>
+<ol>
+<li><strong>Selective Invalidation</strong>: Invalidate only changed files</li>
+<li><strong>Versioning</strong>: Use file versioning in URLs</li>
+<li><strong>TTL Configuration</strong>: Set appropriate cache TTLs</li>
+<li><strong>Automation</strong>: Automate invalidation in CI/CD</li>
+<li><strong>Monitoring</strong>: Track cache hit ratios</li>
+</ol>
+<p>GitHub Actions automatically invalidates cache on deployment."</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cloud-cv-advanced-topics"><a class="header" href="#cloud-cv-advanced-topics">Cloud-CV Advanced Topics</a></h1>
 <h2 id="multi-environment-strategy"><a class="header" href="#multi-environment-strategy">Multi-Environment Strategy</a></h2>
 <pre><code class="language-hcl"># Environment-specific configurations
@@ -2641,6 +2674,39 @@ window.addEventListener('load', () =&gt; {
 <li><strong>Sync</strong>: Optional cloud sync (future)</li>
 </ol>
 <p>Would extend LocalStorage with structured progress data."</p>
+<h3 id="q13-how-do-you-handle-browser-compatibility"><a class="header" href="#q13-how-do-you-handle-browser-compatibility">Q13: "How do you handle browser compatibility?"</a></h3>
+<p><strong>Answer:</strong>
+"Browser compatibility strategy:</p>
+<ol>
+<li><strong>ES6+ Support</strong>: Modern JavaScript features</li>
+<li><strong>Polyfills</strong>: Add polyfills for older browsers</li>
+<li><strong>Feature Detection</strong>: Check for API support</li>
+<li><strong>Graceful Degradation</strong>: Fallback for unsupported features</li>
+<li><strong>Testing</strong>: Test on multiple browsers</li>
+</ol>
+<p>The application targets modern browsers with ES6+ support."</p>
+<h3 id="q14-what-would-you-do-if-github-pages-went-down"><a class="header" href="#q14-what-would-you-do-if-github-pages-went-down">Q14: "What would you do if GitHub Pages went down?"</a></h3>
+<p><strong>Answer:</strong>
+"Contingency planning:</p>
+<ol>
+<li><strong>Backup Hosting</strong>: Alternative static hosting (Netlify, Vercel)</li>
+<li><strong>CDN</strong>: Use multiple CDN providers</li>
+<li><strong>Monitoring</strong>: Set up uptime monitoring</li>
+<li><strong>Quick Migration</strong>: Terraform/automation for quick switch</li>
+<li><strong>DNS</strong>: Quick DNS changes for failover</li>
+</ol>
+<p>GitHub Pages has high availability, but having a backup plan is prudent."</p>
+<h3 id="q15-how-would-you-add-analytics-to-track-usage"><a class="header" href="#q15-how-would-you-add-analytics-to-track-usage">Q15: "How would you add analytics to track usage?"</a></h3>
+<p><strong>Answer:</strong>
+"Analytics implementation:</p>
+<ol>
+<li><strong>Privacy-First</strong>: Use privacy-respecting analytics (Plausible, Fathom)</li>
+<li><strong>Client-Side</strong>: JavaScript-based tracking</li>
+<li><strong>No Cookies</strong>: Cookie-free analytics</li>
+<li><strong>GDPR Compliant</strong>: Respect user privacy</li>
+<li><strong>Custom Events</strong>: Track question views, category selections</li>
+</ol>
+<p>Would implement lightweight, privacy-focused analytics."</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="opensource-llm-rag-stack-1"><a class="header" href="#opensource-llm-rag-stack-1">Opensource-LLM-RAG-Stack</a></h1>
 <p>A production-ready, containerized RAG (Retrieval-Augmented Generation) stack with comprehensive monitoring, observability, and enterprise-grade DevOps practices.</p>
 <h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
@@ -4075,6 +4141,42 @@ curl http://localhost:11434/api/tags
 <li><strong>A/B Testing</strong>: Test different configurations</li>
 </ol>
 <p>Continuous improvement based on user feedback and metrics."</p>
+<h3 id="q13-how-do-you-handle-large-document-uploads"><a class="header" href="#q13-how-do-you-handle-large-document-uploads">Q13: "How do you handle large document uploads?"</a></h3>
+<p><strong>Answer:</strong>
+"Large document handling:</p>
+<ol>
+<li><strong>Chunking</strong>: Split large documents into smaller chunks</li>
+<li><strong>Streaming</strong>: Stream document processing</li>
+<li><strong>Async Processing</strong>: Process documents asynchronously</li>
+<li><strong>Progress Tracking</strong>: Show upload progress</li>
+<li><strong>Error Handling</strong>: Handle upload failures gracefully</li>
+<li><strong>Size Limits</strong>: Set reasonable size limits</li>
+</ol>
+<p>Would implement chunked uploads for files &gt; 10MB."</p>
+<h3 id="q14-what-happens-if-chroma-database-becomes-unavailable"><a class="header" href="#q14-what-happens-if-chroma-database-becomes-unavailable">Q14: "What happens if Chroma database becomes unavailable?"</a></h3>
+<p><strong>Answer:</strong>
+"Chroma availability strategy:</p>
+<ol>
+<li><strong>Health Checks</strong>: Monitor Chroma health</li>
+<li><strong>Backup</strong>: Regular backups of vector database</li>
+<li><strong>Replication</strong>: Consider Chroma replication</li>
+<li><strong>Fallback</strong>: Graceful degradation if unavailable</li>
+<li><strong>Recovery</strong>: Automated recovery procedures</li>
+<li><strong>Monitoring</strong>: Alert on service unavailability</li>
+</ol>
+<p>Would implement health checks and automated recovery."</p>
+<h3 id="q15-how-do-you-optimize-llm-token-usage-and-costs"><a class="header" href="#q15-how-do-you-optimize-llm-token-usage-and-costs">Q15: "How do you optimize LLM token usage and costs?"</a></h3>
+<p><strong>Answer:</strong>
+"Token optimization:</p>
+<ol>
+<li><strong>Context Window</strong>: Limit context window size</li>
+<li><strong>Chunk Selection</strong>: Retrieve only relevant chunks</li>
+<li><strong>Prompt Optimization</strong>: Minimize prompt size</li>
+<li><strong>Caching</strong>: Cache common queries and responses</li>
+<li><strong>Model Selection</strong>: Use appropriate model size</li>
+<li><strong>Batch Processing</strong>: Batch similar queries</li>
+</ol>
+<p>These strategies reduce token usage and associated costs."</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-1"><a class="header" href="#kubernetes-gitops-platform-1">Kubernetes GitOps Platform</a></h1>
 <p>A production-ready AWS EKS cluster with complete GitOps platform toolkit, automated deployment, monitoring, and observability.</p>
 <h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
@@ -4093,7 +4195,8 @@ curl http://localhost:11434/api/tags
 <li><strong>High Availability</strong>: Multi-AZ deployment with auto-scaling worker nodes and Horizontal Pod Autoscaler (HPA)</li>
 <li><strong>Zero-Downtime Deployments</strong>: Kubernetes rolling updates ensure continuous service availability</li>
 <li><strong>Complete Observability</strong>: Prometheus, Grafana, Loki, and Promtail for metrics, logs, and dashboards</li>
-<li><strong>SRE-Ready</strong>: Availability testing and sanity checks built-in</li>
+<li><strong>Performance Testing</strong>: k6 integration for smoke, load, stress, and spike testing with Prometheus metrics</li>
+<li><strong>SRE-Ready</strong>: Availability testing, sanity checks, and performance validation built-in</li>
 </ul>
 <h2 id="project-highlights-3"><a class="header" href="#project-highlights-3">Project Highlights</a></h2>
 <p>This project demonstrates:</p>
@@ -5697,6 +5800,492 @@ Max Pods per Node = min(Node Capacity, Pod Limit)
 <li><strong>Queue Depth</strong>: &gt; Limit</li>
 <li><strong>Custom Metrics</strong>: Business-specific</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform---k6-performance-testing"><a class="header" href="#kubernetes-gitops-platform---k6-performance-testing">Kubernetes GitOps Platform - k6 Performance Testing</a></h1>
+<h2 id="what-is-k6"><a class="header" href="#what-is-k6">What is k6?</a></h2>
+<p>k6 is a modern, developer-centric performance testing tool built by Grafana Labs. It's designed for testing the performance of APIs, microservices, and websites using JavaScript.</p>
+<h3 id="key-features-of-k6"><a class="header" href="#key-features-of-k6">Key Features of k6</a></h3>
+<ul>
+<li><strong>JavaScript-based</strong>: Write tests in JavaScript (ES6+)</li>
+<li><strong>Developer-friendly</strong>: Easy to learn and integrate into CI/CD</li>
+<li><strong>Cloud-native</strong>: Designed for containerized environments</li>
+<li><strong>Metrics Integration</strong>: Native Prometheus and StatsD support</li>
+<li><strong>High Performance</strong>: Can generate massive load from a single machine</li>
+<li><strong>Open Source</strong>: Free and open-source tool</li>
+</ul>
+<h3 id="why-k6-for-kubernetes"><a class="header" href="#why-k6-for-kubernetes">Why k6 for Kubernetes?</a></h3>
+<ul>
+<li><strong>Kubernetes-native</strong>: Runs as Kubernetes Jobs</li>
+<li><strong>Resource Efficient</strong>: Single container can generate high load</li>
+<li><strong>GitOps Compatible</strong>: Test scripts stored in Git</li>
+<li><strong>Observability</strong>: Metrics exported to Prometheus</li>
+<li><strong>Automation</strong>: Can be scheduled via CronJobs</li>
+</ul>
+<h2 id="k6-implementation-in-kubernetes-gitops-platform"><a class="header" href="#k6-implementation-in-kubernetes-gitops-platform">k6 Implementation in Kubernetes GitOps Platform</a></h2>
+<h3 id="architecture"><a class="header" href="#architecture">Architecture</a></h3>
+<pre><code>┌─────────────────┐
+│  k6 Test Jobs   │
+│  (Kubernetes)   │
+└────────┬────────┘
+         │
+         │ Metrics Export
+         │
+┌────────▼────────┐    ┌─────────────────┐
+│ StatsD Exporter│────│   Prometheus    │
+│                │    │                 │
+└────────────────┘    └────────┬────────┘
+                               │
+                               │ Query
+                               │
+                       ┌───────▼────────┐
+                       │    Grafana     │
+                       │   Dashboards   │
+                       └────────────────┘
+</code></pre>
+<h3 id="test-types-implemented"><a class="header" href="#test-types-implemented">Test Types Implemented</a></h3>
+<h4 id="1-smoke-test"><a class="header" href="#1-smoke-test">1. Smoke Test</a></h4>
+<p><strong>Purpose</strong>: Basic functionality verification with minimal load</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '1m', target: 1 },   // Ramp up to 1 user
+    { duration: '2m', target: 1 },   // Stay at 1 user
+    { duration: '1m', target: 0 },    // Ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)&lt;2000'],  // 95% &lt; 2s
+    http_req_failed: ['rate&lt;0.01'],     // &lt; 1% errors
+  },
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Quick validation after deployment</li>
+<li>Pre-deployment sanity checks</li>
+<li>CI/CD pipeline integration</li>
+<li>Daily health verification</li>
+</ul>
+<h4 id="2-load-test"><a class="header" href="#2-load-test">2. Load Test</a></h4>
+<p><strong>Purpose</strong>: Normal production load testing</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '2m', target: 50 },   // Ramp to 50 users
+    { duration: '5m', target: 50 },   // Normal load
+    { duration: '2m', target: 100 },  // Ramp to 100 users
+    { duration: '5m', target: 100 },  // Higher load
+    { duration: '2m', target: 0 },    // Ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)&lt;3000', 'p(99)&lt;5000'],
+    http_req_failed: ['rate&lt;0.05'],
+  },
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Validate performance under expected load</li>
+<li>Capacity planning</li>
+<li>Performance baseline establishment</li>
+<li>SLO validation</li>
+</ul>
+<h4 id="3-stress-test"><a class="header" href="#3-stress-test">3. Stress Test</a></h4>
+<p><strong>Purpose</strong>: Find breaking point and maximum capacity</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '2m', target: 100 },
+    { duration: '5m', target: 100 },
+    { duration: '2m', target: 200 },
+    { duration: '5m', target: 200 },
+    { duration: '2m', target: 300 },
+    { duration: '5m', target: 300 },
+    { duration: '2m', target: 400 },
+    { duration: '5m', target: 400 },
+    { duration: '2m', target: 500 },
+    { duration: '5m', target: 500 },
+    { duration: '10m', target: 0 },
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)&lt;10000'],
+    http_req_failed: ['rate&lt;0.20'],
+  },
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Find maximum capacity</li>
+<li>Identify bottlenecks</li>
+<li>Test autoscaling limits</li>
+<li>Disaster recovery planning</li>
+</ul>
+<h4 id="4-spike-test"><a class="header" href="#4-spike-test">4. Spike Test</a></h4>
+<p><strong>Purpose</strong>: Test handling of sudden traffic spikes</p>
+<pre><code class="language-javascript">export const options = {
+  stages: [
+    { duration: '1m', target: 10 },
+    { duration: '30s', target: 500 },   // Sudden spike
+    { duration: '1m', target: 500 },
+    { duration: '30s', target: 10 },
+    { duration: '1m', target: 10 },
+    { duration: '30s', target: 1000 },  // Larger spike
+    { duration: '1m', target: 1000 },
+    { duration: '30s', target: 10 },
+    { duration: '1m', target: 0 },
+  ],
+};
+</code></pre>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Validate autoscaling response</li>
+<li>Test rate limiting</li>
+<li>Verify circuit breakers</li>
+<li>Black Friday scenarios</li>
+</ul>
+<h2 id="test-implementation-details"><a class="header" href="#test-implementation-details">Test Implementation Details</a></h2>
+<h3 id="test-structure"><a class="header" href="#test-structure">Test Structure</a></h3>
+<p>Each test script follows this structure:</p>
+<pre><code class="language-javascript">// 1. Import k6 modules
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+import { Rate } from 'k6/metrics';
+
+// 2. Define custom metrics
+const errorRate = new Rate('errors');
+const frontendErrorRate = new Rate('frontend_errors');
+const backendErrorRate = new Rate('backend_errors');
+
+// 3. Configure test options
+export const options = {
+  stages: [...],
+  thresholds: {...},
+};
+
+// 4. Main test function
+export default function () {
+  // Frontend tests (HTTP)
+  // Backend tests (health checks)
+}
+
+// 5. Summary handler
+export function handleSummary(data) {
+  return { 'stdout': textSummary(data) };
+}
+</code></pre>
+<h3 id="test-scenarios"><a class="header" href="#test-scenarios">Test Scenarios</a></h3>
+<h4 id="frontend-testing"><a class="header" href="#frontend-testing">Frontend Testing</a></h4>
+<ul>
+<li><strong>Homepage Load</strong>: Tests main page accessibility</li>
+<li><strong>Product Pages</strong>: Tests product detail pages</li>
+<li><strong>Error Tracking</strong>: Monitors frontend-specific errors</li>
+</ul>
+<h4 id="backend-testing"><a class="header" href="#backend-testing">Backend Testing</a></h4>
+<ul>
+<li><strong>Health Checks</strong>: Validates backend service health</li>
+<li><strong>Service Integration</strong>: Tests microservice communication</li>
+<li><strong>Error Tracking</strong>: Monitors backend-specific errors</li>
+</ul>
+<h3 id="custom-metrics-1"><a class="header" href="#custom-metrics-1">Custom Metrics</a></h3>
+<pre><code class="language-javascript">// Custom error rate metrics
+const errorRate = new Rate('errors');
+const frontendErrorRate = new Rate('frontend_errors');
+const backendErrorRate = new Rate('backend_errors');
+
+// Track errors in tests
+errorRate.add(!success);
+frontendErrorRate.add(!success);
+backendErrorRate.add(!success);
+</code></pre>
+<h2 id="kubernetes-deployment"><a class="header" href="#kubernetes-deployment">Kubernetes Deployment</a></h2>
+<h3 id="job-configuration"><a class="header" href="#job-configuration">Job Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k6-load-test
+  namespace: performance-testing
+spec:
+  template:
+    spec:
+      containers:
+      - name: k6
+        image: grafana/k6:0.50.0
+        command: ["k6", "run"]
+        args:
+          - "--out"
+          - "statsd"
+          - "/scripts/k6-load-test.js"
+        env:
+        - name: TARGET_URL
+          value: "http://frontend-external.online-boutique.svc.cluster.local"
+        - name: K6_STATSD_ADDR
+          value: "statsd-exporter.performance-testing.svc.cluster.local:9125"
+        volumeMounts:
+        - name: test-scripts
+          mountPath: /scripts
+      volumes:
+      - name: test-scripts
+        configMap:
+          name: k6-test-scripts
+</code></pre>
+<h3 id="configmap-for-test-scripts"><a class="header" href="#configmap-for-test-scripts">ConfigMap for Test Scripts</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6-test-scripts
+  namespace: performance-testing
+data:
+  k6-smoke-test.js: |
+    // Test script content
+  k6-load-test.js: |
+    // Test script content
+  k6-stress-test.js: |
+    // Test script content
+  k6-spike-test.js: |
+    // Test script content
+</code></pre>
+<h3 id="scheduled-testing-cronjob"><a class="header" href="#scheduled-testing-cronjob">Scheduled Testing (CronJob)</a></h3>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: k6-scheduled-test
+  namespace: performance-testing
+spec:
+  schedule: "0 */6 * * *"  # Every 6 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: k6
+            image: grafana/k6:0.50.0
+            command: ["k6", "run", "/scripts/k6-smoke-test.js"]
+</code></pre>
+<h2 id="prometheus-integration"><a class="header" href="#prometheus-integration">Prometheus Integration</a></h2>
+<h3 id="statsd-exporter"><a class="header" href="#statsd-exporter">StatsD Exporter</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: statsd-exporter
+  namespace: performance-testing
+spec:
+  template:
+    spec:
+      containers:
+      - name: statsd-exporter
+        image: prom/statsd-exporter:latest
+        ports:
+        - containerPort: 9125  # StatsD
+        - containerPort: 9102  # Prometheus metrics
+</code></pre>
+<h3 id="metrics-export"><a class="header" href="#metrics-export">Metrics Export</a></h3>
+<p>k6 exports metrics via StatsD to Prometheus:</p>
+<pre><code class="language-javascript">// k6 configuration
+export const options = {
+  // Metrics automatically exported to StatsD
+  // Then scraped by Prometheus
+};
+</code></pre>
+<h3 id="available-metrics"><a class="header" href="#available-metrics">Available Metrics</a></h3>
+<ul>
+<li><code>k6_http_reqs_total</code> - Total HTTP requests</li>
+<li><code>k6_http_req_duration_seconds</code> - Request duration histogram</li>
+<li><code>k6_http_req_failed_total</code> - Failed requests</li>
+<li><code>k6_vus</code> - Current virtual users</li>
+<li><code>k6_data_received_total</code> - Data received</li>
+<li><code>k6_data_sent_total</code> - Data sent</li>
+<li><code>k6_iterations_total</code> - Total test iterations</li>
+</ul>
+<h2 id="grafana-dashboards-2"><a class="header" href="#grafana-dashboards-2">Grafana Dashboards</a></h2>
+<h3 id="official-k6-dashboard"><a class="header" href="#official-k6-dashboard">Official k6 Dashboard</a></h3>
+<ul>
+<li><strong>Dashboard ID</strong>: <code>19665</code></li>
+<li><strong>Source</strong>: Grafana Labs official dashboard</li>
+<li><strong>Features</strong>:
+<ul>
+<li>Request rate visualization</li>
+<li>Response time percentiles (p50, p95, p99)</li>
+<li>Error rate tracking</li>
+<li>Virtual user count</li>
+<li>Data transfer metrics</li>
+</ul>
+</li>
+</ul>
+<h3 id="custom-dashboard"><a class="header" href="#custom-dashboard">Custom Dashboard</a></h3>
+<p>Custom dashboard includes:</p>
+<ul>
+<li>Test type filtering</li>
+<li>Service-specific metrics</li>
+<li>Threshold visualization</li>
+<li>Historical comparison</li>
+<li>Alert integration</li>
+</ul>
+<h2 id="running-tests"><a class="header" href="#running-tests">Running Tests</a></h2>
+<h3 id="quick-test-execution"><a class="header" href="#quick-test-execution">Quick Test Execution</a></h3>
+<pre><code class="language-bash"># Run smoke test
+./deployment/run-test.sh smoke
+
+# Run load test
+./deployment/run-test.sh load
+
+# Run stress test
+./deployment/run-test.sh stress
+
+# Run spike test
+./deployment/run-test.sh spike
+</code></pre>
+<h3 id="manual-execution"><a class="header" href="#manual-execution">Manual Execution</a></h3>
+<pre><code class="language-bash"># Create test job
+kubectl apply -f k8s-manifest/job-load-test.yaml
+
+# Watch logs
+kubectl logs -f job/k6-load-test -n performance-testing
+
+# Check results
+kubectl get job k6-load-test -n performance-testing
+</code></pre>
+<h3 id="scheduled-tests"><a class="header" href="#scheduled-tests">Scheduled Tests</a></h3>
+<pre><code class="language-bash"># Deploy CronJob
+kubectl apply -f k8s-manifest/cronjob-scheduled-test.yaml
+
+# View scheduled jobs
+kubectl get cronjobs -n performance-testing
+
+# View job history
+kubectl get jobs -n performance-testing
+</code></pre>
+<h2 id="test-results-analysis"><a class="header" href="#test-results-analysis">Test Results Analysis</a></h2>
+<h3 id="key-metrics-to-monitor-1"><a class="header" href="#key-metrics-to-monitor-1">Key Metrics to Monitor</a></h3>
+<ol>
+<li>
+<p><strong>Response Times</strong></p>
+<ul>
+<li>p50 (median)</li>
+<li>p95 (95th percentile)</li>
+<li>p99 (99th percentile)</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Rates</strong></p>
+<ul>
+<li>HTTP error rate</li>
+<li>Frontend errors</li>
+<li>Backend errors</li>
+</ul>
+</li>
+<li>
+<p><strong>Throughput</strong></p>
+<ul>
+<li>Requests per second</li>
+<li>Successful requests</li>
+<li>Failed requests</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Usage</strong></p>
+<ul>
+<li>CPU utilization</li>
+<li>Memory usage</li>
+<li>Network bandwidth</li>
+</ul>
+</li>
+</ol>
+<h3 id="interpreting-results"><a class="header" href="#interpreting-results">Interpreting Results</a></h3>
+<p><strong>Good Performance</strong>:</p>
+<pre><code>✓ checks: 100.00%
+✓ thresholds: 100.00%
+http_req_duration: p95=500ms, p99=800ms
+http_req_failed: 0.00%
+</code></pre>
+<p><strong>Performance Issues</strong>:</p>
+<pre><code>✗ checks: 85.00%
+✗ thresholds: 60.00%
+http_req_duration: p95=5000ms, p99=10000ms
+http_req_failed: 15.00%
+</code></pre>
+<h2 id="integration-with-hpa"><a class="header" href="#integration-with-hpa">Integration with HPA</a></h2>
+<h3 id="triggering-autoscaling"><a class="header" href="#triggering-autoscaling">Triggering Autoscaling</a></h3>
+<p>k6 tests can trigger HPA scaling:</p>
+<pre><code class="language-bash"># Run load test
+./deployment/run-test.sh load
+
+# Watch HPA scaling
+kubectl get hpa -w
+
+# Watch pod scaling
+kubectl get pods -w
+</code></pre>
+<h3 id="validating-autoscaling"><a class="header" href="#validating-autoscaling">Validating Autoscaling</a></h3>
+<ol>
+<li><strong>Start Test</strong>: Run k6 load test</li>
+<li><strong>Monitor Metrics</strong>: Watch CPU/memory usage</li>
+<li><strong>Observe Scaling</strong>: HPA creates new pods</li>
+<li><strong>Verify Performance</strong>: Response times remain stable</li>
+<li><strong>Scale Down</strong>: After test, pods scale down</li>
+</ol>
+<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h3 id="1-test-design"><a class="header" href="#1-test-design">1. <strong>Test Design</strong></a></h3>
+<ul>
+<li>Start with smoke tests</li>
+<li>Progress to load tests</li>
+<li>Use stress tests for capacity planning</li>
+<li>Run spike tests for autoscaling validation</li>
+</ul>
+<h3 id="2-thresholds"><a class="header" href="#2-thresholds">2. <strong>Thresholds</strong></a></h3>
+<ul>
+<li>Set realistic thresholds</li>
+<li>Use percentiles (p95, p99)</li>
+<li>Consider business requirements</li>
+<li>Update based on baseline</li>
+</ul>
+<h3 id="3-test-frequency"><a class="header" href="#3-test-frequency">3. <strong>Test Frequency</strong></a></h3>
+<ul>
+<li>Smoke tests: After each deployment</li>
+<li>Load tests: Weekly or monthly</li>
+<li>Stress tests: Quarterly</li>
+<li>Spike tests: Before major events</li>
+</ul>
+<h3 id="4-monitoring"><a class="header" href="#4-monitoring">4. <strong>Monitoring</strong></a></h3>
+<ul>
+<li>Export metrics to Prometheus</li>
+<li>Create Grafana dashboards</li>
+<li>Set up alerts</li>
+<li>Track trends over time</li>
+</ul>
+<h3 id="5-cicd-integration"><a class="header" href="#5-cicd-integration">5. <strong>CI/CD Integration</strong></a></h3>
+<ul>
+<li>Run smoke tests in CI pipeline</li>
+<li>Block deployments on test failures</li>
+<li>Store test results</li>
+<li>Generate reports</li>
+</ul>
+<h2 id="troubleshooting-2"><a class="header" href="#troubleshooting-2">Troubleshooting</a></h2>
+<h3 id="test-failures"><a class="header" href="#test-failures">Test Failures</a></h3>
+<pre><code class="language-bash"># Check job status
+kubectl get job k6-load-test -n performance-testing
+
+# View logs
+kubectl logs job/k6-load-test -n performance-testing
+
+# Check pod events
+kubectl describe job k6-load-test -n performance-testing
+</code></pre>
+<h3 id="metrics-not-appearing"><a class="header" href="#metrics-not-appearing">Metrics Not Appearing</a></h3>
+<pre><code class="language-bash"># Check StatsD exporter
+kubectl get pods -n performance-testing -l app=statsd-exporter
+
+# Check Prometheus scraping
+kubectl port-forward -n monitoring svc/prometheus 9090:9090
+# Access http://localhost:9090/targets
+
+# Verify metrics
+# Query: {__name__=~"k6_.*"}
+</code></pre>
+<h3 id="performance-issues-during-tests"><a class="header" href="#performance-issues-during-tests">Performance Issues During Tests</a></h3>
+<pre><code class="language-bash"># Check application pods
+kubectl get pods -n online-boutique
+
+# Check resource usage
+kubectl top pods -n online-boutique
+
+# Check HPA status
+kubectl get hpa -n online-boutique
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-troubleshooting"><a class="header" href="#kubernetes-gitops-platform-troubleshooting">Kubernetes GitOps Platform Troubleshooting</a></h1>
 <h2 id="cluster-access-issues"><a class="header" href="#cluster-access-issues">Cluster Access Issues</a></h2>
 <h3 id="verify-aws-credentials"><a class="header" href="#verify-aws-credentials">Verify AWS Credentials</a></h3>
@@ -6207,8 +6796,98 @@ kubectl get pods -n kube-system
 <li>Image vulnerability scanning</li>
 <li>Compliance with CIS benchmarks"</li>
 </ul>
+<h2 id="performance-testing-questions"><a class="header" href="#performance-testing-questions">Performance Testing Questions</a></h2>
+<h3 id="q12-tell-me-about-k6-performance-testing-in-your-platform"><a class="header" href="#q12-tell-me-about-k6-performance-testing-in-your-platform">Q12: "Tell me about k6 performance testing in your platform."</a></h3>
+<p><strong>Answer:</strong>
+"k6 is a modern, developer-centric performance testing tool integrated into the platform:</p>
+<ul>
+<li><strong>Test Types</strong>: Smoke, Load, Stress, and Spike tests</li>
+<li><strong>Kubernetes Native</strong>: Runs as Kubernetes Jobs</li>
+<li><strong>GitOps Integrated</strong>: Test scripts stored in Git, deployed via ArgoCD</li>
+<li><strong>Prometheus Integration</strong>: Metrics exported via StatsD exporter</li>
+<li><strong>Grafana Dashboards</strong>: Real-time visualization of test results</li>
+</ul>
+<p>Test scenarios:</p>
+<ul>
+<li><strong>Smoke Test</strong>: Basic functionality (1 user, ~4 minutes)</li>
+<li><strong>Load Test</strong>: Normal production load (50-100 users, ~16 minutes)</li>
+<li><strong>Stress Test</strong>: Find breaking point (100-500 users, ~40 minutes)</li>
+<li><strong>Spike Test</strong>: Sudden traffic spikes (10→500→1000 users, ~6 minutes)</li>
+</ul>
+<p>Each test validates:</p>
+<ul>
+<li>Frontend HTTP endpoints (homepage, product pages)</li>
+<li>Backend health checks</li>
+<li>Error rates and response times</li>
+<li>Custom metrics (frontend_errors, backend_errors)</li>
+</ul>
+<p>Tests can be run manually or scheduled via CronJobs for continuous validation."</p>
+<h3 id="q13-how-does-k6-integrate-with-your-monitoring-stack"><a class="header" href="#q13-how-does-k6-integrate-with-your-monitoring-stack">Q13: "How does k6 integrate with your monitoring stack?"</a></h3>
+<p><strong>Answer:</strong>
+"k6 metrics flow through this pipeline:</p>
+<ol>
+<li><strong>k6 Test Jobs</strong>: Generate load and collect metrics</li>
+<li><strong>StatsD Exporter</strong>: Receives metrics from k6 via StatsD protocol</li>
+<li><strong>Prometheus</strong>: Scrapes StatsD exporter metrics</li>
+<li><strong>Grafana</strong>: Visualizes metrics in dashboards</li>
+</ol>
+<p>Available metrics:</p>
+<ul>
+<li><code>k6_http_reqs_total</code> - Total requests</li>
+<li><code>k6_http_req_duration_seconds</code> - Response time histogram</li>
+<li><code>k6_http_req_failed_total</code> - Failed requests</li>
+<li><code>k6_vus</code> - Current virtual users</li>
+<li>Custom metrics: <code>frontend_errors</code>, <code>backend_errors</code></li>
+</ul>
+<p>We use the official Grafana k6 dashboard (ID: 19665) for visualization, showing:</p>
+<ul>
+<li>Request rate over time</li>
+<li>Response time percentiles (p50, p95, p99)</li>
+<li>Error rates</li>
+<li>Virtual user count</li>
+<li>Data transfer metrics</li>
+</ul>
+<p>This integration allows us to correlate performance test results with application metrics in real-time."</p>
+<h3 id="q14-how-do-you-use-k6-to-validate-autoscaling"><a class="header" href="#q14-how-do-you-use-k6-to-validate-autoscaling">Q14: "How do you use k6 to validate autoscaling?"</a></h3>
+<p><strong>Answer:</strong>
+"k6 tests validate HPA and Cluster Autoscaler:</p>
+<ol>
+<li>
+<p><strong>Load Test</strong>: Gradually increases load to trigger HPA</p>
+<ul>
+<li>Watch HPA create new pods</li>
+<li>Verify response times remain stable</li>
+<li>Confirm pods scale down after test</li>
+</ul>
+</li>
+<li>
+<p><strong>Spike Test</strong>: Sudden load spikes test autoscaling response</p>
+<ul>
+<li>Validates rapid scaling capability</li>
+<li>Tests rate limiting and circuit breakers</li>
+<li>Verifies system recovers after spike</li>
+</ul>
+</li>
+<li>
+<p><strong>Stress Test</strong>: Finds autoscaling limits</p>
+<ul>
+<li>Identifies maximum capacity</li>
+<li>Tests cluster autoscaler node addition</li>
+<li>Validates resource constraints</li>
+</ul>
+</li>
+</ol>
+<p>Process:</p>
+<ul>
+<li>Run k6 test with increasing load</li>
+<li>Monitor HPA status: <code>kubectl get hpa -w</code></li>
+<li>Watch pod scaling: <code>kubectl get pods -w</code></li>
+<li>Verify metrics in Grafana</li>
+<li>Confirm performance remains within thresholds</li>
+</ul>
+<p>This ensures autoscaling works correctly and maintains SLOs under load."</p>
 <h2 id="advanced-questions-3"><a class="header" href="#advanced-questions-3">Advanced Questions</a></h2>
-<h3 id="q12-how-would-you-scale-this-to-production"><a class="header" href="#q12-how-would-you-scale-this-to-production">Q12: "How would you scale this to production?"</a></h3>
+<h3 id="q15-how-would-you-scale-this-to-production"><a class="header" href="#q15-how-would-you-scale-this-to-production">Q15: "How would you scale this to production?"</a></h3>
 <p><strong>Answer:</strong>
 "Production scaling strategies:</p>
 <ol>
@@ -6221,6 +6900,44 @@ kubectl get pods -n kube-system
 <li><strong>Compliance</strong>: Enhanced security and audit logging</li>
 </ol>
 <p>The architecture supports horizontal scaling and can be extended for enterprise production use."</p>
+<h3 id="q16-how-do-you-handle-performance-testing-in-cicd"><a class="header" href="#q16-how-do-you-handle-performance-testing-in-cicd">Q16: "How do you handle performance testing in CI/CD?"</a></h3>
+<p><strong>Answer:</strong>
+"Performance testing integration:</p>
+<ol>
+<li>
+<p><strong>Smoke Tests</strong>: Run after each deployment</p>
+<ul>
+<li>Quick validation (&lt; 5 minutes)</li>
+<li>Blocks deployment on failure</li>
+<li>Integrated in GitHub Actions</li>
+</ul>
+</li>
+<li>
+<p><strong>Scheduled Tests</strong>: CronJobs run regularly</p>
+<ul>
+<li>Load tests weekly</li>
+<li>Stress tests monthly</li>
+<li>Spike tests before major releases</li>
+</ul>
+</li>
+<li>
+<p><strong>Metrics Collection</strong>: All tests export to Prometheus</p>
+<ul>
+<li>Historical trend analysis</li>
+<li>Performance regression detection</li>
+<li>SLO validation</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerting</strong>: Prometheus alerts on threshold violations</p>
+<ul>
+<li>High error rates</li>
+<li>Slow response times</li>
+<li>Test failures</li>
+</ul>
+</li>
+</ol>
+<p>This ensures continuous performance validation and early detection of regressions."</p>
 
                     </main>
 
