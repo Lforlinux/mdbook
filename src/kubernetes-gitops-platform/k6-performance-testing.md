@@ -524,6 +524,41 @@ kubectl port-forward -n monitoring svc/prometheus 9090:9090
 # Query: {__name__=~"k6_.*"}
 ```
 
+#### Verify StatsD Exporter is Receiving Metrics
+
+Check if the statsd-exporter is receiving metrics from k6 by querying its metrics endpoint:
+
+```bash
+kubectl exec -n performance-testing deployment/statsd-exporter -- \
+  wget -qO- http://localhost:9102/metrics 2>/dev/null | \
+  grep -E "statsd_exporter_udp_packets_total|statsd_exporter_samples_total|^k6_http_reqs|^k6_vus"
+```
+
+**Expected Output** (when metrics are being received):
+```
+k6_http_reqs 237
+k6_vus 1
+k6_vus_max 1
+# HELP statsd_exporter_samples_total The total number of StatsD samples received.
+# TYPE statsd_exporter_samples_total counter
+statsd_exporter_samples_total 3798
+# HELP statsd_exporter_udp_packets_total The total number of StatsD packets received over UDP.
+# TYPE statsd_exporter_udp_packets_total counter
+statsd_exporter_udp_packets_total 270
+```
+
+**What to Look For**:
+- `k6_http_reqs` - Should show request count (increases during test)
+- `k6_vus` - Current virtual users (should match test configuration)
+- `statsd_exporter_udp_packets_total` - Should increase as k6 sends metrics
+- `statsd_exporter_samples_total` - Total samples received
+
+**If metrics are missing**:
+1. Verify k6 job is running: `kubectl get jobs -n performance-testing`
+2. Check k6 job logs for StatsD connection errors
+3. Verify `K6_STATSD_ADDR` environment variable in k6 job
+4. Check network connectivity between k6 pod and statsd-exporter
+
 ### Performance Issues During Tests
 
 ```bash

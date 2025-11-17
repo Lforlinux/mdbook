@@ -654,6 +654,37 @@ kubectl port-forward -n monitoring svc/prometheus 9090:9090
 # Verify metrics
 # Query: {__name__=~"k6_.*"}
 </code></pre>
+<h4 id="verify-statsd-exporter-is-receiving-metrics"><a class="header" href="#verify-statsd-exporter-is-receiving-metrics">Verify StatsD Exporter is Receiving Metrics</a></h4>
+<p>Check if the statsd-exporter is receiving metrics from k6 by querying its metrics endpoint:</p>
+<pre><code class="language-bash">kubectl exec -n performance-testing deployment/statsd-exporter -- \
+  wget -qO- http://localhost:9102/metrics 2&gt;/dev/null | \
+  grep -E "statsd_exporter_udp_packets_total|statsd_exporter_samples_total|^k6_http_reqs|^k6_vus"
+</code></pre>
+<p><strong>Expected Output</strong> (when metrics are being received):</p>
+<pre><code>k6_http_reqs 237
+k6_vus 1
+k6_vus_max 1
+# HELP statsd_exporter_samples_total The total number of StatsD samples received.
+# TYPE statsd_exporter_samples_total counter
+statsd_exporter_samples_total 3798
+# HELP statsd_exporter_udp_packets_total The total number of StatsD packets received over UDP.
+# TYPE statsd_exporter_udp_packets_total counter
+statsd_exporter_udp_packets_total 270
+</code></pre>
+<p><strong>What to Look For</strong>:</p>
+<ul>
+<li><code>k6_http_reqs</code> - Should show request count (increases during test)</li>
+<li><code>k6_vus</code> - Current virtual users (should match test configuration)</li>
+<li><code>statsd_exporter_udp_packets_total</code> - Should increase as k6 sends metrics</li>
+<li><code>statsd_exporter_samples_total</code> - Total samples received</li>
+</ul>
+<p><strong>If metrics are missing</strong>:</p>
+<ol>
+<li>Verify k6 job is running: <code>kubectl get jobs -n performance-testing</code></li>
+<li>Check k6 job logs for StatsD connection errors</li>
+<li>Verify <code>K6_STATSD_ADDR</code> environment variable in k6 job</li>
+<li>Check network connectivity between k6 pod and statsd-exporter</li>
+</ol>
 <h3 id="performance-issues-during-tests"><a class="header" href="#performance-issues-during-tests">Performance Issues During Tests</a></h3>
 <pre><code class="language-bash"># Check application pods
 kubectl get pods -n online-boutique
