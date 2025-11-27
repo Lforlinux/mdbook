@@ -535,6 +535,1418 @@
 </li>
 </ol>
 <p>This ensures continuous performance validation and early detection of regressions."</p>
+<h2 id="opa-policy-enforcement-questions"><a class="header" href="#opa-policy-enforcement-questions">OPA Policy Enforcement Questions</a></h2>
+<h3 id="q17-what-is-opa-and-why-did-you-implement-it"><a class="header" href="#q17-what-is-opa-and-why-did-you-implement-it">Q17: "What is OPA and why did you implement it?"</a></h3>
+<p><strong>Answer:</strong>
+"OPA (Open Policy Agent) is a general-purpose policy engine that enables unified policy enforcement. We use OPA Gatekeeper for Kubernetes to enforce security and governance policies automatically.</p>
+<p>Benefits:</p>
+<ol>
+<li><strong>Security</strong>: Automatically enforces security best practices</li>
+<li><strong>Compliance</strong>: Meets regulatory requirements (SOC 2, PCI-DSS, HIPAA)</li>
+<li><strong>Prevention</strong>: Blocks bad configurations before they reach the cluster</li>
+<li><strong>Consistency</strong>: Ensures all resources follow the same policies</li>
+<li><strong>Audit</strong>: Provides compliance reporting and violation tracking</li>
+</ol>
+<p>We implemented 6 core policies:</p>
+<ul>
+<li>Require non-root users</li>
+<li>Require resource limits</li>
+<li>Disallow latest tags</li>
+<li>Require read-only filesystem</li>
+<li>Disallow privileged containers</li>
+<li>Require labels"</li>
+</ul>
+<h3 id="q18-how-does-opa-gatekeeper-enforce-policies"><a class="header" href="#q18-how-does-opa-gatekeeper-enforce-policies">Q18: "How does OPA Gatekeeper enforce policies?"</a></h3>
+<p><strong>Answer:</strong>
+"OPA Gatekeeper enforces policies through Kubernetes admission control:</p>
+<ol>
+<li><strong>Admission Webhook</strong>: Gatekeeper registers as validating admission webhook</li>
+<li><strong>Request Interception</strong>: All pod/deployment creation requests are intercepted</li>
+<li><strong>Policy Evaluation</strong>: Rego policies evaluate the resource against constraints</li>
+<li><strong>Decision</strong>: Allow or deny based on policy evaluation</li>
+<li><strong>Response</strong>: Pod is created or error is returned</li>
+</ol>
+<p>Flow:</p>
+<pre><code>Developer: kubectl apply pod.yaml
+    ↓
+Kubernetes API Server
+    ↓
+Gatekeeper Admission Webhook
+    ↓
+Policy Evaluation (Rego)
+    ↓
+✅ Allow or ❌ Deny
+</code></pre>
+<p>This happens before resources are created, preventing violations from reaching the cluster."</p>
+<h3 id="q19-explain-your-opa-policy-enforcement-modes"><a class="header" href="#q19-explain-your-opa-policy-enforcement-modes">Q19: "Explain your OPA policy enforcement modes."</a></h3>
+<p><strong>Answer:</strong>
+"We support three enforcement modes:</p>
+<ol>
+<li>
+<p><strong>Enforce Mode (Production)</strong>:</p>
+<ul>
+<li>Blocks violations completely</li>
+<li>Pods are rejected if they violate policies</li>
+<li>Use case: Production environments</li>
+</ul>
+</li>
+<li>
+<p><strong>Dryrun Mode (Demo/Audit)</strong>:</p>
+<ul>
+<li>Reports violations but allows deployments</li>
+<li>Pods are created, violations are logged</li>
+<li>Use case: Testing, gradual rollout, demos</li>
+</ul>
+</li>
+<li>
+<p><strong>Warn Mode (Soft Enforcement)</strong>:</p>
+<ul>
+<li>Warnings in events but allows deployments</li>
+<li>Pods are created with warnings</li>
+<li>Use case: Migration period</li>
+</ul>
+</li>
+</ol>
+<p>We use dryrun mode for demos to show policy violations without blocking deployments. In production, we use enforce mode for security-critical policies."</p>
+<h3 id="q20-how-do-you-audit-opa-policy-compliance"><a class="header" href="#q20-how-do-you-audit-opa-policy-compliance">Q20: "How do you audit OPA policy compliance?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple audit approaches:</p>
+<ol>
+<li>
+<p><strong>Automated Audit Script</strong>:</p>
+<pre><code class="language-bash">./opa/audit-policies.sh all
+</code></pre>
+<ul>
+<li>Scans all pods in namespace</li>
+<li>Reports compliant/non-compliant resources</li>
+<li>Color-coded output with summaries</li>
+</ul>
+</li>
+<li>
+<p><strong>Constraint Status</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot
+kubectl describe K8sRequiredNonRoot online-boutique-must-run-nonroot
+</code></pre>
+<ul>
+<li>Shows violation count</li>
+<li>Lists violating resources</li>
+<li>Provides detailed violation messages</li>
+</ul>
+</li>
+<li>
+<p><strong>Prometheus Metrics</strong>:</p>
+<ul>
+<li><code>gatekeeper_violations_total</code> - Total violations</li>
+<li><code>gatekeeper_admission_duration_seconds</code> - Policy evaluation time</li>
+<li>Export to Grafana for visualization</li>
+</ul>
+</li>
+<li>
+<p><strong>Manual kubectl Commands</strong>:</p>
+<ul>
+<li>Check specific resources for compliance</li>
+<li>Query constraint status</li>
+<li>View violation details</li>
+</ul>
+</li>
+</ol>
+<p>This provides comprehensive compliance visibility and audit trails."</p>
+<h2 id="sanity-test-questions"><a class="header" href="#sanity-test-questions">Sanity Test Questions</a></h2>
+<h3 id="q21-what-is-sanity-test-and-how-does-it-work"><a class="header" href="#q21-what-is-sanity-test-and-how-does-it-work">Q21: "What is Sanity Test and how does it work?"</a></h3>
+<p><strong>Answer:</strong>
+"Sanity Test is an automated health check application that continuously monitors all microservices:</p>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>Tests 11 microservices every 60 seconds</li>
+<li>Supports HTTP, gRPC, and TCP protocols</li>
+<li>Real-time dashboard showing service status</li>
+<li>Response time tracking</li>
+<li>History of last 50 test runs</li>
+</ul>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li>Discovers services in target namespace</li>
+<li>Tests each service's health endpoint</li>
+<li>Measures response times</li>
+<li>Tracks pass/fail status</li>
+<li>Updates dashboard in real-time</li>
+</ol>
+<p><strong>Tested Services</strong>:</p>
+<ul>
+<li>HTTP: frontend, cartservice, productcatalogservice, etc.</li>
+<li>gRPC: paymentservice, shippingservice</li>
+<li>TCP: redis-cart</li>
+</ul>
+<p>The application runs as a Kubernetes deployment with 2 replicas for high availability."</p>
+<h3 id="q22-how-does-sanity-test-handle-different-service-protocols"><a class="header" href="#q22-how-does-sanity-test-handle-different-service-protocols">Q22: "How does Sanity Test handle different service protocols?"</a></h3>
+<p><strong>Answer:</strong>
+"Sanity Test supports multiple protocols:</p>
+<ol>
+<li>
+<p><strong>HTTP Services</strong>:</p>
+<ul>
+<li>Tests <code>/health</code> or <code>/_healthz</code> endpoints</li>
+<li>Validates HTTP status codes (200 = healthy)</li>
+<li>Measures response time</li>
+<li>Example: frontend service</li>
+</ul>
+</li>
+<li>
+<p><strong>gRPC Services</strong>:</p>
+<ul>
+<li>Uses TCP socket connection test</li>
+<li>Tests port connectivity</li>
+<li>Validates service is listening</li>
+<li>Example: paymentservice, shippingservice</li>
+</ul>
+</li>
+<li>
+<p><strong>TCP Services</strong>:</p>
+<ul>
+<li>Tests port connectivity</li>
+<li>Validates service is reachable</li>
+<li>Example: redis-cart</li>
+</ul>
+</li>
+</ol>
+<p>The application uses Python's socket library for TCP/gRPC and requests library for HTTP, with configurable timeouts for each check."</p>
+<h3 id="q23-how-do-you-integrate-sanity-test-with-monitoring"><a class="header" href="#q23-how-do-you-integrate-sanity-test-with-monitoring">Q23: "How do you integrate Sanity Test with monitoring?"</a></h3>
+<p><strong>Answer:</strong>
+"Sanity Test can be integrated with monitoring:</p>
+<ol>
+<li>
+<p><strong>Prometheus Metrics</strong> (potential):</p>
+<ul>
+<li><code>sanity_test_total</code> - Total test runs</li>
+<li><code>sanity_test_passed</code> - Passed test count</li>
+<li><code>sanity_test_failed</code> - Failed test count</li>
+<li><code>sanity_test_service_health</code> - Per-service health (0/1)</li>
+<li><code>sanity_test_response_time</code> - Per-service response time</li>
+</ul>
+</li>
+<li>
+<p><strong>Grafana Dashboards</strong>:</p>
+<ul>
+<li>Test success rate over time</li>
+<li>Service health trends</li>
+<li>Response time percentiles</li>
+<li>Service availability percentage</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerting</strong>:</p>
+<ul>
+<li>Alert on test failures</li>
+<li>Alert on service degradation</li>
+<li>Alert on high response times</li>
+<li>Alert on consecutive failures</li>
+</ul>
+</li>
+<li>
+<p><strong>API Integration</strong>:</p>
+<ul>
+<li>REST API for programmatic access</li>
+<li><code>/api/status</code> endpoint for monitoring tools</li>
+<li><code>/api/run-test</code> for manual triggers</li>
+</ul>
+</li>
+</ol>
+<p>This provides comprehensive visibility into service health."</p>
+<h2 id="availability-test-questions"><a class="header" href="#availability-test-questions">Availability Test Questions</a></h2>
+<h3 id="q24-what-is-availability-test-and-how-does-it-differ-from-sanity-test"><a class="header" href="#q24-what-is-availability-test-and-how-does-it-differ-from-sanity-test">Q24: "What is Availability Test and how does it differ from Sanity Test?"</a></h3>
+<p><strong>Answer:</strong>
+"Availability Test is an SRE-style testing application that simulates real user workflows:</p>
+<p><strong>Key Differences</strong>:</p>
+<ul>
+<li><strong>Sanity Test</strong>: Tests individual service health endpoints</li>
+<li><strong>Availability Test</strong>: Tests complete user journeys (end-to-end)</li>
+</ul>
+<p><strong>Availability Test Features</strong>:</p>
+<ul>
+<li>Simulates real user workflows (visit → browse → add to cart → remove)</li>
+<li>Calculates SRE metrics (uptime percentage, consecutive failures)</li>
+<li>Jenkins-like dashboard with build numbers</li>
+<li>Tests every 5 minutes</li>
+<li>Provides error budgets and MTTR metrics</li>
+</ul>
+<p><strong>Test Workflow</strong>:</p>
+<ol>
+<li>User visits website (frontend accessibility)</li>
+<li>User browses products (catalog verification)</li>
+<li>User adds product to cart (cart service integration)</li>
+<li>User removes product from cart (cart state management)</li>
+<li>Health check verification (backend services)</li>
+</ol>
+<p>This validates that the entire system works together, not just individual services."</p>
+<h3 id="q25-how-do-you-calculate-sre-metrics-in-availability-test"><a class="header" href="#q25-how-do-you-calculate-sre-metrics-in-availability-test">Q25: "How do you calculate SRE metrics in Availability Test?"</a></h3>
+<p><strong>Answer:</strong>
+"SRE metrics calculation:</p>
+<ol>
+<li>
+<p><strong>Uptime Percentage</strong>:</p>
+<pre><code class="language-python">uptime_percentage = (successful_tests / total_tests) * 100
+</code></pre>
+<ul>
+<li>Tracks overall system availability</li>
+<li>Target: 99.9% or higher</li>
+</ul>
+</li>
+<li>
+<p><strong>Consecutive Failures</strong>:</p>
+<pre><code class="language-python">if test_failed:
+    consecutive_failures += 1
+else:
+    consecutive_failures = 0
+</code></pre>
+<ul>
+<li>Monitors continuous failures</li>
+<li>Used for alerting thresholds</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Budget</strong>:</p>
+<pre><code class="language-python">error_budget = 100 - uptime_percentage
+</code></pre>
+<ul>
+<li>Remaining error budget</li>
+<li>Tracks SLA compliance</li>
+</ul>
+</li>
+<li>
+<p><strong>Test Duration</strong>:</p>
+<ul>
+<li>Measures how long tests take</li>
+<li>Performance monitoring</li>
+<li>Identifies slow services</li>
+</ul>
+</li>
+<li>
+<p><strong>Success Rate</strong>:</p>
+<ul>
+<li>Pass/fail ratio over time</li>
+<li>Trend analysis</li>
+<li>Historical comparison</li>
+</ul>
+</li>
+</ol>
+<p>These metrics provide SRE-style visibility into system reliability."</p>
+<h3 id="q26-how-does-availability-test-integrate-with-sre-practices"><a class="header" href="#q26-how-does-availability-test-integrate-with-sre-practices">Q26: "How does Availability Test integrate with SRE practices?"</a></h3>
+<p><strong>Answer:</strong>
+"Availability Test implements SRE best practices:</p>
+<ol>
+<li>
+<p><strong>SLI/SLO Tracking</strong>:</p>
+<ul>
+<li>Uptime percentage as SLI</li>
+<li>99.9% uptime as SLO</li>
+<li>Error budget tracking</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerting Criteria</strong>:</p>
+<ul>
+<li>Red status: Consecutive failures &gt; 0</li>
+<li>Green status: All tests passing</li>
+<li>Uptime &lt; 95%: Service degradation threshold</li>
+</ul>
+</li>
+<li>
+<p><strong>Incident Detection</strong>:</p>
+<ul>
+<li>Early warning of service issues</li>
+<li>Real user workflow validation</li>
+<li>Automated testing reduces MTTR</li>
+</ul>
+</li>
+<li>
+<p><strong>Dashboard Design</strong>:</p>
+<ul>
+<li>Jenkins-like interface (familiar to DevOps teams)</li>
+<li>Build numbers for test runs</li>
+<li>Visual status indicators (green/red)</li>
+</ul>
+</li>
+<li>
+<p><strong>Metrics Export</strong>:</p>
+<ul>
+<li>Can export to Prometheus</li>
+<li>Grafana dashboards for trends</li>
+<li>Historical analysis</li>
+</ul>
+</li>
+</ol>
+<p>This provides production-ready SRE monitoring capabilities."</p>
+<h2 id="argocd-gitops-questions"><a class="header" href="#argocd-gitops-questions">ArgoCD GitOps Questions</a></h2>
+<h3 id="q27-how-does-the-app-of-apps-pattern-work-in-your-setup"><a class="header" href="#q27-how-does-the-app-of-apps-pattern-work-in-your-setup">Q27: "How does the app-of-apps pattern work in your setup?"</a></h3>
+<p><strong>Answer:</strong>
+"App-of-apps pattern implementation:</p>
+<p><strong>Root Application</strong>:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-platform-toolkit
+spec:
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    path: argocd/apps
+    directory:
+      recurse: true  # Discovers all applications
+</code></pre>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li>Root application references <code>argocd/apps</code> directory</li>
+<li><code>recurse: true</code> discovers all application YAML files</li>
+<li>Each child application is automatically created</li>
+<li>All applications sync from Git automatically</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Single point of management</li>
+<li>Automatic application discovery</li>
+<li>Consistent deployment patterns</li>
+<li>Easy to add new applications (just add YAML file)</li>
+</ul>
+<p><strong>Child Applications</strong>:</p>
+<ul>
+<li>monitoring-stack</li>
+<li>logging-stack</li>
+<li>sanity-test</li>
+<li>availability-test</li>
+<li>online-boutique</li>
+<li>performance-testing</li>
+</ul>
+<p>All managed by the root application automatically."</p>
+<h3 id="q28-explain-argocd-sync-waves-and-why-you-use-them"><a class="header" href="#q28-explain-argocd-sync-waves-and-why-you-use-them">Q28: "Explain ArgoCD sync waves and why you use them."</a></h3>
+<p><strong>Answer:</strong>
+"Sync waves control deployment order using annotations:</p>
+<pre><code class="language-yaml">annotations:
+  argocd.argoproj.io/sync-wave: "1"  # Deploy first
+</code></pre>
+<p><strong>Our Sync Wave Order</strong>:</p>
+<ol>
+<li><strong>Wave 1</strong>: Testing infrastructure (sanity-test, availability-test)</li>
+<li><strong>Wave 2</strong>: Demo applications (online-boutique)</li>
+<li><strong>Wave 3</strong>: Monitoring stack (Prometheus, Grafana)</li>
+<li><strong>Wave 4</strong>: Logging stack (Loki)</li>
+<li><strong>Wave 5</strong>: Log collection (Promtail)</li>
+</ol>
+<p><strong>Why Use Sync Waves</strong>:</p>
+<ul>
+<li><strong>Dependencies</strong>: Some services depend on others</li>
+<li><strong>Order Matters</strong>: Monitoring should deploy before applications</li>
+<li><strong>Reliability</strong>: Ensures proper startup sequence</li>
+<li><strong>Predictability</strong>: Consistent deployment order</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>Promtail (wave 5) needs Loki (wave 4) to be ready</li>
+<li>Applications (wave 2) can be monitored by Prometheus (wave 3)</li>
+<li>Testing (wave 1) validates everything works</li>
+</ul>
+<p>This ensures dependencies are met and deployments are reliable."</p>
+<h3 id="q29-how-does-argocd-self-healing-work"><a class="header" href="#q29-how-does-argocd-self-healing-work">Q29: "How does ArgoCD self-healing work?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD self-healing automatically corrects drift:</p>
+<p><strong>Configuration</strong>:</p>
+<pre><code class="language-yaml">syncPolicy:
+  automated:
+    selfHeal: true
+</code></pre>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li><strong>Drift Detection</strong>: ArgoCD continuously compares Git state with cluster state</li>
+<li><strong>Manual Changes Detected</strong>: If someone manually changes resources</li>
+<li><strong>Automatic Correction</strong>: ArgoCD reverts changes to match Git</li>
+<li><strong>Continuous Reconciliation</strong>: Happens automatically every few minutes</li>
+</ol>
+<p><strong>Example Scenario</strong>:</p>
+<pre><code>Developer: kubectl scale deployment frontend --replicas=5
+    ↓
+ArgoCD detects: Git says 3 replicas, cluster has 5
+    ↓
+ArgoCD corrects: Scales back to 3 replicas
+</code></pre>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Prevents configuration drift</li>
+<li>Maintains Git as source of truth</li>
+<li>Automatic recovery from manual changes</li>
+<li>No manual intervention needed</li>
+</ul>
+<p><strong>When to Use</strong>:</p>
+<ul>
+<li>Production environments</li>
+<li>Critical applications</li>
+<li>Compliance requirements</li>
+<li>Multi-team environments"</li>
+</ul>
+<h3 id="q30-how-do-you-handle-rollbacks-in-argocd"><a class="header" href="#q30-how-do-you-handle-rollbacks-in-argocd">Q30: "How do you handle rollbacks in ArgoCD?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple rollback strategies:</p>
+<ol>
+<li>
+<p><strong>Git Revert (Recommended)</strong>:</p>
+<pre><code class="language-bash">git revert &lt;commit-hash&gt;
+git push origin main
+</code></pre>
+<ul>
+<li>ArgoCD automatically syncs</li>
+<li>Maintains Git history</li>
+<li>Full audit trail</li>
+</ul>
+</li>
+<li>
+<p><strong>ArgoCD Rollback</strong>:</p>
+<pre><code class="language-bash">argocd app rollback monitoring-stack
+argocd app rollback monitoring-stack &lt;revision&gt;
+</code></pre>
+<ul>
+<li>Rollback to previous revision</li>
+<li>Quick recovery</li>
+<li>View history: <code>argocd app history monitoring-stack</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Manual Sync to Previous Revision</strong>:</p>
+<pre><code class="language-bash">argocd app sync monitoring-stack --revision &lt;revision&gt;
+</code></pre>
+</li>
+</ol>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Always use Git revert for production</li>
+<li>Keep revision history (default: 10 revisions)</li>
+<li>Test rollbacks in staging first</li>
+<li>Document rollback procedures</li>
+</ul>
+<p><strong>Rollback Process</strong>:</p>
+<ol>
+<li>Identify problematic revision</li>
+<li>Revert in Git or use ArgoCD rollback</li>
+<li>ArgoCD syncs automatically</li>
+<li>Verify application health</li>
+<li>Monitor for issues"</li>
+</ol>
+<h2 id="monitoring--observability-questions"><a class="header" href="#monitoring--observability-questions">Monitoring &amp; Observability Questions</a></h2>
+<h3 id="q31-how-does-prometheus-scrape-metrics-in-your-setup"><a class="header" href="#q31-how-does-prometheus-scrape-metrics-in-your-setup">Q31: "How does Prometheus scrape metrics in your setup?"</a></h3>
+<p><strong>Answer:</strong>
+"Prometheus uses service discovery and static configurations:</p>
+<p><strong>Service Discovery</strong>:</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+</code></pre>
+<p><strong>Scraping Methods</strong>:</p>
+<ol>
+<li><strong>Pod Annotations</strong>: Pods with <code>prometheus.io/scrape: "true"</code> are scraped</li>
+<li><strong>Service Discovery</strong>: Automatic discovery of Kubernetes pods</li>
+<li><strong>Static Targets</strong>: Fixed endpoints (Prometheus, Grafana)</li>
+<li><strong>Service Monitors</strong>: Custom resource for advanced configuration</li>
+</ol>
+<p><strong>Key Metrics Collected</strong>:</p>
+<ul>
+<li>Application metrics (request rate, latency, errors)</li>
+<li>Infrastructure metrics (CPU, memory, disk)</li>
+<li>Kubernetes metrics (pod status, deployments)</li>
+<li>Custom business metrics</li>
+</ul>
+<p><strong>Scrape Interval</strong>: 15 seconds (configurable)
+<strong>Retention</strong>: 30 days (configurable)</p>
+<p>This provides comprehensive metrics collection from all services."</p>
+<h3 id="q32-how-do-you-create-and-manage-grafana-dashboards"><a class="header" href="#q32-how-do-you-create-and-manage-grafana-dashboards">Q32: "How do you create and manage Grafana dashboards?"</a></h3>
+<p><strong>Answer:</strong>
+"Grafana dashboard management:</p>
+<p><strong>Pre-configured Dashboards</strong>:</p>
+<ol>
+<li><strong>Official k6 Dashboard</strong>: ID 19665 (imported from Grafana Labs)</li>
+<li><strong>Kubernetes Cluster Overview</strong>: Cluster health and resources</li>
+<li><strong>Online Boutique Dashboard</strong>: Microservices metrics</li>
+<li><strong>Node Exporter Dashboard</strong>: Node-level system metrics</li>
+</ol>
+<p><strong>Dashboard Import</strong>:</p>
+<ol>
+<li>Access Grafana UI</li>
+<li>Go to Dashboards → Import</li>
+<li>Enter Dashboard ID or upload JSON</li>
+<li>Select Prometheus as data source</li>
+<li>Save dashboard</li>
+</ol>
+<p><strong>Custom Dashboards</strong>:</p>
+<ul>
+<li>Create dashboards in Grafana UI</li>
+<li>Export as JSON</li>
+<li>Store in Git repository</li>
+<li>Deploy via ArgoCD</li>
+</ul>
+<p><strong>Dashboard Features</strong>:</p>
+<ul>
+<li>Request rate visualization</li>
+<li>Response time percentiles (p50, p95, p99)</li>
+<li>Error rate tracking</li>
+<li>Resource utilization</li>
+<li>Historical trends</li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Use official dashboards when available</li>
+<li>Customize for specific needs</li>
+<li>Version control dashboard JSON</li>
+<li>Document dashboard purposes"</li>
+</ul>
+<h3 id="q33-how-does-loki-aggregate-logs-from-all-pods"><a class="header" href="#q33-how-does-loki-aggregate-logs-from-all-pods">Q33: "How does Loki aggregate logs from all pods?"</a></h3>
+<p><strong>Answer:</strong>
+"Loki log aggregation pipeline:</p>
+<p><strong>Components</strong>:</p>
+<ol>
+<li><strong>Promtail</strong>: Log collection agent (DaemonSet on each node)</li>
+<li><strong>Loki</strong>: Log aggregation server</li>
+<li><strong>Grafana</strong>: Log visualization</li>
+</ol>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li>
+<p><strong>Promtail Discovery</strong>:</p>
+<ul>
+<li>Runs on every node</li>
+<li>Discovers pods automatically</li>
+<li>Reads log files from <code>/var/log/pods</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Log Collection</strong>:</p>
+<ul>
+<li>Promtail tails log files</li>
+<li>Adds Kubernetes labels (namespace, pod, container)</li>
+<li>Sends logs to Loki via HTTP</li>
+</ul>
+</li>
+<li>
+<p><strong>Loki Storage</strong>:</p>
+<ul>
+<li>Indexes by labels (not log content)</li>
+<li>Efficient storage (compressed)</li>
+<li>Fast queries by label</li>
+</ul>
+</li>
+<li>
+<p><strong>Grafana Queries</strong>:</p>
+<ul>
+<li>LogQL query language</li>
+<li>Filter by labels</li>
+<li>Search log content</li>
+<li>Visualize in dashboards</li>
+</ul>
+</li>
+</ol>
+<p><strong>Configuration</strong>:</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: kubernetes-pods
+    kubernetes_sd_configs:
+      - role: pod
+</code></pre>
+<p>This provides centralized logging with efficient storage and fast queries."</p>
+<h2 id="logging-questions"><a class="header" href="#logging-questions">Logging Questions</a></h2>
+<h3 id="q34-how-does-promtail-collect-logs-from-kubernetes-pods"><a class="header" href="#q34-how-does-promtail-collect-logs-from-kubernetes-pods">Q34: "How does Promtail collect logs from Kubernetes pods?"</a></h3>
+<p><strong>Answer:</strong>
+"Promtail log collection process:</p>
+<p><strong>DaemonSet Deployment</strong>:</p>
+<ul>
+<li>One Promtail pod per node</li>
+<li>Runs with hostPath volume mounts</li>
+<li>Accesses <code>/var/log/pods</code> directory</li>
+</ul>
+<p><strong>Log Discovery</strong>:</p>
+<ol>
+<li>
+<p><strong>Kubernetes Service Discovery</strong>:</p>
+<ul>
+<li>Discovers pods automatically</li>
+<li>Reads pod metadata</li>
+<li>Extracts labels and annotations</li>
+</ul>
+</li>
+<li>
+<p><strong>Log File Reading</strong>:</p>
+<ul>
+<li>Reads from <code>/var/log/pods/&lt;namespace&gt;_&lt;pod&gt;_&lt;uid&gt;/&lt;container&gt;/&lt;log-file&gt;</code></li>
+<li>Tails log files in real-time</li>
+<li>Handles log rotation</li>
+</ul>
+</li>
+<li>
+<p><strong>Label Enrichment</strong>:</p>
+<ul>
+<li>Adds Kubernetes labels (namespace, pod, container, node)</li>
+<li>Adds custom labels from annotations</li>
+<li>Creates unique log stream identifiers</li>
+</ul>
+</li>
+<li>
+<p><strong>Log Shipping</strong>:</p>
+<ul>
+<li>Sends logs to Loki via HTTP POST</li>
+<li>Batches logs for efficiency</li>
+<li>Retries on failures</li>
+</ul>
+</li>
+</ol>
+<p><strong>Configuration</strong>:</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: kubernetes-pods
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        target_label: __host__
+</code></pre>
+<p>This provides automatic log collection from all pods without manual configuration."</p>
+<h3 id="q35-how-do-you-query-logs-in-loki-using-logql"><a class="header" href="#q35-how-do-you-query-logs-in-loki-using-logql">Q35: "How do you query logs in Loki using LogQL?"</a></h3>
+<p><strong>Answer:</strong>
+"LogQL (Log Query Language) examples:</p>
+<p><strong>Basic Queries</strong>:</p>
+<pre><code class="language-logql"># Query logs by namespace
+{namespace="online-boutique"}
+
+# Query logs by service
+{namespace="online-boutique", service="frontend"}
+
+# Filter by log level
+{namespace="online-boutique"} |= "error"
+</code></pre>
+<p><strong>Advanced Queries</strong>:</p>
+<pre><code class="language-logql"># Count errors
+count_over_time({namespace="online-boutique"} |= "error" [5m])
+
+# Rate of errors
+rate({namespace="online-boutique"} |= "error" [1m])
+
+# Filter and aggregate
+{namespace="online-boutique"} 
+  |= "error" 
+  | json 
+  | line_format "{{.timestamp}} {{.message}}"
+</code></pre>
+<p><strong>Query Features</strong>:</p>
+<ul>
+<li>Label matching</li>
+<li>Log content filtering</li>
+<li>Aggregation functions</li>
+<li>Time range queries</li>
+<li>Log parsing and formatting</li>
+</ul>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Error investigation</li>
+<li>Performance analysis</li>
+<li>Security auditing</li>
+<li>Compliance reporting</li>
+</ul>
+<p>This provides powerful log querying capabilities similar to PromQL for metrics."</p>
+<h2 id="security-questions-1"><a class="header" href="#security-questions-1">Security Questions</a></h2>
+<h3 id="q36-how-do-you-implement-network-policies-in-your-cluster"><a class="header" href="#q36-how-do-you-implement-network-policies-in-your-cluster">Q36: "How do you implement network policies in your cluster?"</a></h3>
+<p><strong>Answer:</strong>
+"Network policies provide pod-to-pod network isolation:</p>
+<p><strong>Policy Example</strong>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: loadbalancer
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: cartservice
+      ports:
+        - protocol: TCP
+          port: 7070
+</code></pre>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Network segmentation</li>
+<li>Least privilege networking</li>
+<li>Multi-tenant isolation</li>
+<li>Security compliance</li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Start with deny-all, allow specific</li>
+<li>Use labels for policy matching</li>
+<li>Test policies in staging first</li>
+<li>Document allowed communications"</li>
+</ul>
+<h3 id="q37-how-do-you-manage-secrets-in-kubernetes"><a class="header" href="#q37-how-do-you-manage-secrets-in-kubernetes">Q37: "How do you manage secrets in Kubernetes?"</a></h3>
+<p><strong>Answer:</strong>
+"Multi-layered secrets management:</p>
+<ol>
+<li>
+<p><strong>Kubernetes Secrets</strong>:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+data:
+  password: &lt;base64-encoded&gt;
+</code></pre>
+<ul>
+<li>Encrypted at rest (if enabled)</li>
+<li>RBAC protected</li>
+<li>Mounted as volumes or env vars</li>
+</ul>
+</li>
+<li>
+<p><strong>AWS Secrets Manager Integration</strong>:</p>
+<pre><code class="language-hcl">data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = "production/database/password"
+}
+</code></pre>
+<ul>
+<li>External secrets management</li>
+<li>Automatic rotation</li>
+<li>Audit logging</li>
+</ul>
+</li>
+<li>
+<p><strong>Sealed Secrets</strong> (optional):</p>
+<ul>
+<li>Encrypt secrets in Git</li>
+<li>Decrypt in cluster</li>
+<li>GitOps friendly</li>
+</ul>
+</li>
+</ol>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Never commit secrets to Git</li>
+<li>Use external secrets manager for production</li>
+<li>Rotate secrets regularly</li>
+<li>Limit secret access via RBAC</li>
+<li>Audit secret access"</li>
+</ul>
+<h3 id="q38-how-does-rbac-work-in-your-argocd-setup"><a class="header" href="#q38-how-does-rbac-work-in-your-argocd-setup">Q38: "How does RBAC work in your ArgoCD setup?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD RBAC configuration:</p>
+<p><strong>ConfigMap</strong>:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:admin, applications, *, */*, allow
+    p, role:admin, clusters, get, *, allow
+    g, admins, role:admin
+</code></pre>
+<p><strong>Roles</strong>:</p>
+<ul>
+<li><strong>readonly</strong>: Default role, read-only access</li>
+<li><strong>admin</strong>: Full access to applications and clusters</li>
+</ul>
+<p><strong>Policies</strong>:</p>
+<ul>
+<li><code>p</code>: Policy definition (subject, resource, action, object, effect)</li>
+<li><code>g</code>: Group membership</li>
+</ul>
+<p><strong>Access Control</strong>:</p>
+<ul>
+<li>Application-level permissions</li>
+<li>Cluster-level permissions</li>
+<li>Project-based isolation</li>
+<li>OIDC integration (optional)</li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Least privilege principle</li>
+<li>Separate roles for different teams</li>
+<li>Regular access reviews</li>
+<li>Audit access logs"</li>
+</ul>
+<h2 id="infrastructure-questions-1"><a class="header" href="#infrastructure-questions-1">Infrastructure Questions</a></h2>
+<h3 id="q39-how-do-you-manage-terraform-state-in-your-infrastructure"><a class="header" href="#q39-how-do-you-manage-terraform-state-in-your-infrastructure">Q39: "How do you manage Terraform state in your infrastructure?"</a></h3>
+<p><strong>Answer:</strong>
+"Terraform state management:</p>
+<p><strong>Current Setup</strong>:</p>
+<ul>
+<li>Local state file (for demo/single-user)</li>
+<li>State file backed up to Git (not recommended for production)</li>
+</ul>
+<p><strong>Production Best Practices</strong>:</p>
+<ol>
+<li>
+<p><strong>Remote State Backend</strong>:</p>
+<pre><code class="language-hcl">terraform {
+  backend "s3" {
+    bucket = "terraform-state-bucket"
+    key    = "eks-cluster/terraform.tfstate"
+    region = "us-east-1"
+    encrypt = true
+  }
+}
+</code></pre>
+<ul>
+<li>S3 for state storage</li>
+<li>DynamoDB for state locking</li>
+<li>Encryption enabled</li>
+</ul>
+</li>
+<li>
+<p><strong>State Locking</strong>:</p>
+<ul>
+<li>Prevents concurrent modifications</li>
+<li>Uses DynamoDB table</li>
+<li>Automatic lock release</li>
+</ul>
+</li>
+<li>
+<p><strong>State Security</strong>:</p>
+<ul>
+<li>Encrypted at rest</li>
+<li>Access controlled via IAM</li>
+<li>Versioned in S3</li>
+<li>Backup and recovery</li>
+</ul>
+</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Team collaboration</li>
+<li>State consistency</li>
+<li>Disaster recovery</li>
+<li>Audit trail"</li>
+</ul>
+<h3 id="q40-how-do-you-handle-eks-cluster-upgrades"><a class="header" href="#q40-how-do-you-handle-eks-cluster-upgrades">Q40: "How do you handle EKS cluster upgrades?"</a></h3>
+<p><strong>Answer:</strong>
+"EKS cluster upgrade strategy:</p>
+<p><strong>Control Plane Upgrade</strong>:</p>
+<ol>
+<li><strong>AWS Managed</strong>: Control plane upgrades via AWS Console/CLI</li>
+<li><strong>Zero Downtime</strong>: AWS handles upgrade automatically</li>
+<li><strong>Version Compatibility</strong>: Check Kubernetes version compatibility</li>
+</ol>
+<p><strong>Node Group Upgrade</strong>:</p>
+<ol>
+<li><strong>Create New Node Group</strong>: New nodes with updated AMI</li>
+<li><strong>Drain Old Nodes</strong>: <code>kubectl drain</code> to move workloads</li>
+<li><strong>Verify</strong>: Ensure all pods are running on new nodes</li>
+<li><strong>Delete Old Node Group</strong>: Remove old nodes</li>
+</ol>
+<p><strong>Application Upgrade</strong>:</p>
+<ol>
+<li><strong>Git Update</strong>: Update manifests in Git</li>
+<li><strong>ArgoCD Sync</strong>: Automatic sync via GitOps</li>
+<li><strong>Rolling Update</strong>: Kubernetes rolling update strategy</li>
+<li><strong>Health Checks</strong>: Readiness probes validate deployment</li>
+</ol>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Test upgrades in staging first</li>
+<li>Upgrade control plane before nodes</li>
+<li>Use rolling updates for zero downtime</li>
+<li>Monitor during upgrades</li>
+<li>Have rollback plan ready"</li>
+</ul>
+<h2 id="advanced-scaling-questions"><a class="header" href="#advanced-scaling-questions">Advanced Scaling Questions</a></h2>
+<h3 id="q41-how-do-you-configure-hpa-for-different-workloads"><a class="header" href="#q41-how-do-you-configure-hpa-for-different-workloads">Q41: "How do you configure HPA for different workloads?"</a></h3>
+<p><strong>Answer:</strong>
+"HPA configuration strategies:</p>
+<p><strong>CPU-Based Scaling</strong>:</p>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+</code></pre>
+<p><strong>Memory-Based Scaling</strong>:</p>
+<pre><code class="language-yaml">metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+</code></pre>
+<p><strong>Custom Metrics Scaling</strong>:</p>
+<pre><code class="language-yaml">metrics:
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "100"
+</code></pre>
+<p><strong>Scaling Behavior</strong>:</p>
+<pre><code class="language-yaml">behavior:
+  scaleDown:
+    stabilizationWindowSeconds: 300
+    policies:
+      - type: Percent
+        value: 50
+  scaleUp:
+    stabilizationWindowSeconds: 0
+    policies:
+      - type: Percent
+        value: 100
+</code></pre>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Set appropriate min/max replicas</li>
+<li>Use multiple metrics for better decisions</li>
+<li>Configure stabilization windows</li>
+<li>Test scaling behavior under load"</li>
+</ul>
+<h3 id="q42-how-does-cluster-autoscaler-work-with-your-node-groups"><a class="header" href="#q42-how-does-cluster-autoscaler-work-with-your-node-groups">Q42: "How does Cluster Autoscaler work with your node groups?"</a></h3>
+<p><strong>Answer:</strong>
+"Cluster Autoscaler integration:</p>
+<p><strong>Node Group Configuration</strong>:</p>
+<pre><code class="language-hcl">eks_managed_node_groups = {
+  application = {
+    name = "application-nodes"
+    min_size     = 1
+    max_size     = 10
+    desired_size = 3
+    
+    labels = {
+      "k8s.io/cluster-autoscaler/enabled" = "true"
+      "k8s.io/cluster-autoscaler/${cluster_name}" = "owned"
+    }
+  }
+}
+</code></pre>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li><strong>Unschedulable Pods</strong>: Cluster Autoscaler monitors pods that can't be scheduled</li>
+<li><strong>Node Addition</strong>: Adds nodes when pods are pending</li>
+<li><strong>Node Removal</strong>: Removes nodes when underutilized</li>
+<li><strong>Pod Disruption Budgets</strong>: Respects PDBs during scale-down</li>
+</ol>
+<p><strong>Scaling Triggers</strong>:</p>
+<ul>
+<li>Pods pending due to insufficient resources</li>
+<li>Node utilization below threshold</li>
+<li>Pod affinity/anti-affinity requirements</li>
+</ul>
+<p><strong>Configuration</strong>:</p>
+<ul>
+<li>Expansion strategy: least-waste (preferred)</li>
+<li>Scale-down delay: 10 minutes</li>
+<li>Node utilization threshold: 50%</li>
+</ul>
+<p>This ensures optimal resource utilization and cost efficiency."</p>
+<h2 id="troubleshooting-questions"><a class="header" href="#troubleshooting-questions">Troubleshooting Questions</a></h2>
+<h3 id="q43-how-do-you-troubleshoot-argocd-sync-failures"><a class="header" href="#q43-how-do-you-troubleshoot-argocd-sync-failures">Q43: "How do you troubleshoot ArgoCD sync failures?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD troubleshooting steps:</p>
+<ol>
+<li>
+<p><strong>Check Application Status</strong>:</p>
+<pre><code class="language-bash">argocd app get &lt;app-name&gt;
+argocd app get &lt;app-name&gt; --refresh
+</code></pre>
+</li>
+<li>
+<p><strong>View Sync Operation</strong>:</p>
+<pre><code class="language-bash">argocd app sync &lt;app-name&gt; --dry-run
+argocd app sync &lt;app-name&gt; --prune
+</code></pre>
+</li>
+<li>
+<p><strong>Check Logs</strong>:</p>
+<pre><code class="language-bash">argocd app logs &lt;app-name&gt;
+kubectl logs -n argocd deployment/argocd-application-controller
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Repository Access</strong>:</p>
+<pre><code class="language-bash">argocd repo list
+argocd repo get &lt;repo-url&gt;
+</code></pre>
+</li>
+<li>
+<p><strong>Check Resource Events</strong>:</p>
+<pre><code class="language-bash">kubectl get events -n &lt;namespace&gt;
+kubectl describe &lt;resource&gt; -n &lt;namespace&gt;
+</code></pre>
+</li>
+</ol>
+<p><strong>Common Issues</strong>:</p>
+<ul>
+<li>Repository authentication failures</li>
+<li>Manifest validation errors</li>
+<li>Resource conflicts</li>
+<li>Network connectivity issues</li>
+<li>RBAC permission problems"</li>
+</ul>
+<h3 id="q44-how-do-you-debug-prometheus-scraping-issues"><a class="header" href="#q44-how-do-you-debug-prometheus-scraping-issues">Q44: "How do you debug Prometheus scraping issues?"</a></h3>
+<p><strong>Answer:</strong>
+"Prometheus troubleshooting:</p>
+<ol>
+<li>
+<p><strong>Check Targets</strong>:</p>
+<ul>
+<li>Access Prometheus UI: <code>http://localhost:9090/targets</code></li>
+<li>View scrape status for each target</li>
+<li>Check for down/unreachable targets</li>
+</ul>
+</li>
+<li>
+<p><strong>Verify Service Discovery</strong>:</p>
+<pre><code class="language-bash">kubectl get pods -n &lt;namespace&gt; -o yaml | grep prometheus.io
+</code></pre>
+</li>
+<li>
+<p><strong>Check Prometheus Logs</strong>:</p>
+<pre><code class="language-bash">kubectl logs -n monitoring deployment/prometheus
+</code></pre>
+</li>
+<li>
+<p><strong>Test Scraping Manually</strong>:</p>
+<pre><code class="language-bash">kubectl port-forward -n monitoring svc/prometheus 9090:9090
+curl http://localhost:9090/api/v1/targets
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Metrics Endpoint</strong>:</p>
+<pre><code class="language-bash">kubectl exec -n &lt;namespace&gt; &lt;pod-name&gt; -- wget -qO- http://localhost:9090/metrics
+</code></pre>
+</li>
+</ol>
+<p><strong>Common Issues</strong>:</p>
+<ul>
+<li>Missing pod annotations</li>
+<li>Network policies blocking access</li>
+<li>Incorrect service discovery config</li>
+<li>Authentication/authorization issues"</li>
+</ul>
+<h3 id="q45-how-do-you-troubleshoot-opa-policy-violations"><a class="header" href="#q45-how-do-you-troubleshoot-opa-policy-violations">Q45: "How do you troubleshoot OPA policy violations?"</a></h3>
+<p><strong>Answer:</strong>
+"OPA troubleshooting:</p>
+<ol>
+<li>
+<p><strong>Check Gatekeeper Status</strong>:</p>
+<pre><code class="language-bash">kubectl get pods -n gatekeeper-system
+kubectl logs -n gatekeeper-system -l control-plane=controller-manager
+</code></pre>
+</li>
+<li>
+<p><strong>View Constraint Status</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot
+kubectl describe K8sRequiredNonRoot &lt;constraint-name&gt;
+</code></pre>
+</li>
+<li>
+<p><strong>Check Violations</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot &lt;constraint-name&gt; -o jsonpath='{.status.violations}'
+</code></pre>
+</li>
+<li>
+<p><strong>Test Policy</strong>:</p>
+<pre><code class="language-bash"># Try to create violating resource
+kubectl run test-pod --image=nginx -n online-boutique
+# Check error message
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Enforcement Mode</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot &lt;constraint-name&gt; -o yaml | grep enforcementAction
+</code></pre>
+</li>
+</ol>
+<p><strong>Common Issues</strong>:</p>
+<ul>
+<li>Constraint templates not installed</li>
+<li>CRDs not ready</li>
+<li>Enforcement mode misconfiguration</li>
+<li>Policy logic errors in Rego"</li>
+</ul>
+<h2 id="cost-optimization-questions"><a class="header" href="#cost-optimization-questions">Cost Optimization Questions</a></h2>
+<h3 id="q46-how-do-you-optimize-costs-in-your-eks-cluster"><a class="header" href="#q46-how-do-you-optimize-costs-in-your-eks-cluster">Q46: "How do you optimize costs in your EKS cluster?"</a></h3>
+<p><strong>Answer:</strong>
+"Cost optimization strategies:</p>
+<ol>
+<li>
+<p><strong>Right-Sizing</strong>:</p>
+<ul>
+<li>Analyze actual resource usage</li>
+<li>Set appropriate requests/limits</li>
+<li>Use VPA recommendations</li>
+</ul>
+</li>
+<li>
+<p><strong>Auto-Scaling</strong>:</p>
+<ul>
+<li>HPA for pod scaling</li>
+<li>Cluster Autoscaler for node scaling</li>
+<li>Scale down during low usage</li>
+</ul>
+</li>
+<li>
+<p><strong>Instance Types</strong>:</p>
+<ul>
+<li>Use appropriate instance sizes</li>
+<li>Consider spot instances for non-critical workloads</li>
+<li>Reserved instances for predictable workloads</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Quotas</strong>:</p>
+<ul>
+<li>Set namespace-level quotas</li>
+<li>Prevent resource waste</li>
+<li>Enforce via OPA policies</li>
+</ul>
+</li>
+<li>
+<p><strong>Monitoring</strong>:</p>
+<ul>
+<li>Track resource usage</li>
+<li>Identify idle resources</li>
+<li>Cost allocation by namespace/team</li>
+</ul>
+</li>
+</ol>
+<p><strong>Expected Costs</strong>:</p>
+<ul>
+<li>EKS Control Plane: ~$73/month</li>
+<li>Worker Nodes: Variable based on usage</li>
+<li>Load Balancers: ~$20-30/month each</li>
+<li>Data Transfer: Variable</li>
+</ul>
+<p><strong>Optimization Results</strong>:</p>
+<ul>
+<li>30-40% cost reduction through right-sizing</li>
+<li>20-30% savings with spot instances</li>
+<li>Better resource utilization"</li>
+</ul>
+<h2 id="disaster-recovery-questions"><a class="header" href="#disaster-recovery-questions">Disaster Recovery Questions</a></h2>
+<h3 id="q47-what-is-your-disaster-recovery-strategy"><a class="header" href="#q47-what-is-your-disaster-recovery-strategy">Q47: "What is your disaster recovery strategy?"</a></h3>
+<p><strong>Answer:</strong>
+"Disaster recovery approach:</p>
+<ol>
+<li>
+<p><strong>Infrastructure as Code</strong>:</p>
+<ul>
+<li>All infrastructure in Terraform</li>
+<li>Quick recreation from Git</li>
+<li>Version controlled</li>
+</ul>
+</li>
+<li>
+<p><strong>GitOps for Applications</strong>:</p>
+<ul>
+<li>All applications in Git</li>
+<li>Automatic deployment via ArgoCD</li>
+<li>Reproducible deployments</li>
+</ul>
+</li>
+<li>
+<p><strong>Backup Strategy</strong>:</p>
+<ul>
+<li><strong>ETCD Backups</strong>: EKS control plane (AWS managed)</li>
+<li><strong>Application Data</strong>: Database backups, persistent volumes</li>
+<li><strong>Configuration</strong>: All in Git (source of truth)</li>
+</ul>
+</li>
+<li>
+<p><strong>Recovery Process</strong>:</p>
+<ul>
+<li>Recreate cluster from Terraform</li>
+<li>Restore from backups</li>
+<li>ArgoCD syncs applications automatically</li>
+<li>Verify with sanity/availability tests</li>
+</ul>
+</li>
+<li>
+<p><strong>RTO/RPO</strong>:</p>
+<ul>
+<li><strong>RTO</strong>: &lt; 1 hour (recovery time objective)</li>
+<li><strong>RPO</strong>: &lt; 15 minutes (recovery point objective)</li>
+</ul>
+</li>
+</ol>
+<p><strong>Testing</strong>:</p>
+<ul>
+<li>Regular DR drills</li>
+<li>Test cluster recreation</li>
+<li>Verify backup restoration</li>
+<li>Document procedures"</li>
+</ul>
+<h2 id="advanced-integration-questions"><a class="header" href="#advanced-integration-questions">Advanced Integration Questions</a></h2>
+<h3 id="q48-how-would-you-integrate-this-platform-with-cicd-pipelines"><a class="header" href="#q48-how-would-you-integrate-this-platform-with-cicd-pipelines">Q48: "How would you integrate this platform with CI/CD pipelines?"</a></h3>
+<p><strong>Answer:</strong>
+"CI/CD integration strategy:</p>
+<ol>
+<li>
+<p><strong>GitHub Actions Workflow</strong>:</p>
+<pre><code class="language-yaml">- name: Deploy Infrastructure
+  run: terraform apply
+
+- name: Run Sanity Tests
+  run: kubectl apply -f sanity-test-job.yaml
+
+- name: Verify Deployment
+  run: argocd app wait monitoring-stack --health
+</code></pre>
+</li>
+<li>
+<p><strong>Pipeline Stages</strong>:</p>
+<ul>
+<li><strong>Build</strong>: Container image builds</li>
+<li><strong>Test</strong>: Unit tests, integration tests</li>
+<li><strong>Deploy</strong>: ArgoCD syncs from Git</li>
+<li><strong>Validate</strong>: Sanity tests, availability tests</li>
+<li><strong>Monitor</strong>: Prometheus alerts</li>
+</ul>
+</li>
+<li>
+<p><strong>GitOps Integration</strong>:</p>
+<ul>
+<li>Changes committed to Git</li>
+<li>ArgoCD automatically syncs</li>
+<li>No manual kubectl commands</li>
+<li>Full audit trail</li>
+</ul>
+</li>
+<li>
+<p><strong>Testing Integration</strong>:</p>
+<ul>
+<li>Smoke tests after deployment</li>
+<li>Performance tests on schedule</li>
+<li>Automated rollback on failure</li>
+</ul>
+</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Automated deployments</li>
+<li>Consistent process</li>
+<li>Fast feedback</li>
+<li>Easy rollbacks"</li>
+</ul>
+<h3 id="q49-how-would-you-extend-this-platform-for-multi-cluster-management"><a class="header" href="#q49-how-would-you-extend-this-platform-for-multi-cluster-management">Q49: "How would you extend this platform for multi-cluster management?"</a></h3>
+<p><strong>Answer:</strong>
+"Multi-cluster extension:</p>
+<ol>
+<li>
+<p><strong>ArgoCD Multi-Cluster</strong>:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+spec:
+  destination:
+    server: https://prod-cluster.example.com
+</code></pre>
+</li>
+<li>
+<p><strong>Cluster Management</strong>:</p>
+<ul>
+<li>Register clusters in ArgoCD</li>
+<li>Manage from single ArgoCD instance</li>
+<li>Environment-specific applications</li>
+</ul>
+</li>
+<li>
+<p><strong>Federation</strong>:</p>
+<ul>
+<li>Prometheus federation for metrics</li>
+<li>Centralized logging</li>
+<li>Cross-cluster monitoring</li>
+</ul>
+</li>
+<li>
+<p><strong>GitOps Patterns</strong>:</p>
+<ul>
+<li>Environment-specific branches</li>
+<li>Cluster-specific overlays (Kustomize)</li>
+<li>Centralized configuration</li>
+</ul>
+</li>
+</ol>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Dev/Staging/Production separation</li>
+<li>Multi-region deployments</li>
+<li>Disaster recovery clusters</li>
+<li>Blue-green deployments"</li>
+</ul>
+<h3 id="q50-how-do-you-ensure-platform-reliability-and-observability"><a class="header" href="#q50-how-do-you-ensure-platform-reliability-and-observability">Q50: "How do you ensure platform reliability and observability?"</a></h3>
+<p><strong>Answer:</strong>
+"Comprehensive reliability strategy:</p>
+<ol>
+<li>
+<p><strong>Monitoring</strong>:</p>
+<ul>
+<li>Prometheus for metrics</li>
+<li>Grafana for visualization</li>
+<li>Alerting on thresholds</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging</strong>:</p>
+<ul>
+<li>Loki for log aggregation</li>
+<li>Promtail for collection</li>
+<li>Centralized querying</li>
+</ul>
+</li>
+<li>
+<p><strong>Testing</strong>:</p>
+<ul>
+<li>Sanity tests (health checks)</li>
+<li>Availability tests (SRE metrics)</li>
+<li>k6 performance tests</li>
+</ul>
+</li>
+<li>
+<p><strong>Observability</strong>:</p>
+<ul>
+<li>Metrics, logs, traces (3 pillars)</li>
+<li>Dashboards for visibility</li>
+<li>Alerts for proactive response</li>
+</ul>
+</li>
+<li>
+<p><strong>Reliability</strong>:</p>
+<ul>
+<li>High availability (multi-replica)</li>
+<li>Auto-scaling (HPA, Cluster Autoscaler)</li>
+<li>Self-healing (ArgoCD, health probes)</li>
+<li>Circuit breakers (application level)</li>
+</ul>
+</li>
+</ol>
+<p><strong>SLOs</strong>:</p>
+<ul>
+<li>Uptime: 99.9%</li>
+<li>Response Time: p95 &lt; 500ms</li>
+<li>Error Rate: &lt; 0.1%</li>
+</ul>
+<p>This ensures production-ready reliability and full observability."</p>
 
                     </main>
 

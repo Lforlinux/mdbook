@@ -6317,6 +6317,1627 @@ kubectl top pods -n online-boutique
 # Check HPA status
 kubectl get hpa -n online-boutique
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform---opa-policy-enforcement"><a class="header" href="#kubernetes-gitops-platform---opa-policy-enforcement">Kubernetes GitOps Platform - OPA Policy Enforcement</a></h1>
+<h2 id="what-is-opa-open-policy-agent"><a class="header" href="#what-is-opa-open-policy-agent">What is OPA (Open Policy Agent)?</a></h2>
+<p>Open Policy Agent (OPA) is an open-source, general-purpose policy engine that enables unified, context-aware policy enforcement across the entire stack. In Kubernetes, OPA is implemented via Gatekeeper, which provides policy enforcement for Kubernetes resources.</p>
+<h3 id="key-concepts"><a class="header" href="#key-concepts">Key Concepts</a></h3>
+<ul>
+<li><strong>Policy as Code</strong>: Policies are written in Rego, a declarative language</li>
+<li><strong>Admission Control</strong>: Policies are enforced at the Kubernetes API level</li>
+<li><strong>Gatekeeper</strong>: Kubernetes-native implementation of OPA</li>
+<li><strong>ConstraintTemplates</strong>: Define reusable policy logic</li>
+<li><strong>Constraints</strong>: Apply policies to specific resources/namespaces</li>
+</ul>
+<h2 id="why-opa-for-kubernetes"><a class="header" href="#why-opa-for-kubernetes">Why OPA for Kubernetes?</a></h2>
+<h3 id="benefits"><a class="header" href="#benefits">Benefits</a></h3>
+<ol>
+<li><strong>Security</strong>: Enforce security best practices automatically</li>
+<li><strong>Compliance</strong>: Meet regulatory requirements (SOC 2, PCI-DSS, HIPAA)</li>
+<li><strong>Governance</strong>: Ensure consistent resource configurations</li>
+<li><strong>Prevention</strong>: Block bad configurations before they reach the cluster</li>
+<li><strong>Audit</strong>: Track policy violations for compliance reporting</li>
+</ol>
+<h3 id="real-world-impact"><a class="header" href="#real-world-impact">Real-World Impact</a></h3>
+<p><strong>Without OPA:</strong></p>
+<ul>
+<li>Developers accidentally deploy insecure configurations</li>
+<li>Manual security reviews are time-consuming</li>
+<li>Inconsistent security postures across teams</li>
+<li>Compliance violations discovered after deployment</li>
+</ul>
+<p><strong>With OPA:</strong></p>
+<ul>
+<li>Bad configurations are blocked automatically</li>
+<li>Security is enforced consistently</li>
+<li>Compliance is built into the deployment process</li>
+<li>Violations are caught before production</li>
+</ul>
+<h2 id="opa-implementation-in-kubernetes-gitops-platform"><a class="header" href="#opa-implementation-in-kubernetes-gitops-platform">OPA Implementation in Kubernetes GitOps Platform</a></h2>
+<h3 id="architecture-1"><a class="header" href="#architecture-1">Architecture</a></h3>
+<pre><code>┌─────────────────┐
+│  Developer      │
+│  kubectl apply  │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Kubernetes API  │
+│     Server      │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ OPA Gatekeeper  │
+│  Validates      │
+│  Policies       │
+└────────┬────────┘
+         │
+    ✅ Allow or ❌ Deny
+</code></pre>
+<h3 id="components-1"><a class="header" href="#components-1">Components</a></h3>
+<ol>
+<li><strong>Gatekeeper Controller</strong>: Validates resources against policies</li>
+<li><strong>ConstraintTemplates</strong>: Define policy logic in Rego</li>
+<li><strong>Constraints</strong>: Apply policies to specific resources</li>
+<li><strong>Audit</strong>: Continuously validates existing resources</li>
+</ol>
+<h2 id="implemented-policies"><a class="header" href="#implemented-policies">Implemented Policies</a></h2>
+<h3 id="1-require-non-root-users"><a class="header" href="#1-require-non-root-users">1. Require Non-Root Users</a></h3>
+<p><strong>Purpose</strong>: Ensures all containers run as non-root users for security compliance.</p>
+<p><strong>Policy Definition</strong>:</p>
+<pre><code class="language-yaml">apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequirednonroot
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredNonRoot
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequirednonroot
+        
+        violation[{"msg": msg}] {
+            container := input.review.object.spec.containers[_]
+            not container.securityContext.runAsNonRoot
+            not container.securityContext.runAsUser
+            msg := sprintf("Container '%v' must run as non-root user", [container.name])
+        }
+</code></pre>
+<p><strong>Enforcement</strong>:</p>
+<pre><code class="language-yaml">apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredNonRoot
+metadata:
+  name: online-boutique-must-run-nonroot
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces: ["online-boutique"]
+  parameters: {}
+</code></pre>
+<p><strong>What It Blocks</strong>:</p>
+<ul>
+<li>Pods without <code>securityContext.runAsNonRoot: true</code></li>
+<li>Containers with <code>runAsUser: 0</code> (root)</li>
+<li>Pods missing security context configuration</li>
+</ul>
+<h3 id="2-require-resource-limits"><a class="header" href="#2-require-resource-limits">2. Require Resource Limits</a></h3>
+<p><strong>Purpose</strong>: Forces CPU and memory limits on all containers to prevent resource exhaustion.</p>
+<p><strong>What It Enforces</strong>:</p>
+<ul>
+<li>CPU limits on all containers</li>
+<li>Memory limits on all containers</li>
+<li>Prevents "noisy neighbor" problems</li>
+<li>Enables fair resource scheduling</li>
+</ul>
+<p><strong>Example Violation</strong>:</p>
+<pre><code class="language-yaml"># This pod would be blocked
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: app
+    image: nginx
+    # Missing resources.limits
+</code></pre>
+<h3 id="3-disallow-latest-tags"><a class="header" href="#3-disallow-latest-tags">3. Disallow Latest Tags</a></h3>
+<p><strong>Purpose</strong>: Blocks images with <code>:latest</code> tag for production stability.</p>
+<p><strong>Why It Matters</strong>:</p>
+<ul>
+<li><code>:latest</code> tags are unpredictable</li>
+<li>Can break deployments unexpectedly</li>
+<li>Makes rollbacks difficult</li>
+<li>Violates reproducible deployments</li>
+</ul>
+<p><strong>What It Blocks</strong>:</p>
+<ul>
+<li>Images with <code>:latest</code> tag</li>
+<li>Images without explicit tags</li>
+<li>Unversioned images</li>
+</ul>
+<h3 id="4-require-read-only-root-filesystem"><a class="header" href="#4-require-read-only-root-filesystem">4. Require Read-Only Root Filesystem</a></h3>
+<p><strong>Purpose</strong>: Forces containers to use read-only root filesystem for security.</p>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Prevents malicious code from writing to filesystem</li>
+<li>Immutable container principle</li>
+<li>Reduces attack surface</li>
+<li>Security hardening</li>
+</ul>
+<h3 id="5-disallow-privileged-containers"><a class="header" href="#5-disallow-privileged-containers">5. Disallow Privileged Containers</a></h3>
+<p><strong>Purpose</strong>: Blocks containers with <code>privileged: true</code> for security.</p>
+<p><strong>Why Critical</strong>:</p>
+<ul>
+<li>Privileged containers have full host access</li>
+<li>Can escape container isolation</li>
+<li>Major security risk</li>
+<li>Should be extremely rare</li>
+</ul>
+<h3 id="6-require-labels"><a class="header" href="#6-require-labels">6. Require Labels</a></h3>
+<p><strong>Purpose</strong>: Forces pods to have required labels for organization and monitoring.</p>
+<p><strong>Required Labels</strong>:</p>
+<ul>
+<li><code>app</code>: Application name</li>
+<li><code>team</code>: Team ownership</li>
+<li><code>environment</code>: Environment (dev, staging, prod)</li>
+</ul>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Cost tracking and allocation</li>
+<li>Monitoring and alerting</li>
+<li>Resource organization</li>
+<li>Multi-tenant governance</li>
+</ul>
+<h2 id="enforcement-modes"><a class="header" href="#enforcement-modes">Enforcement Modes</a></h2>
+<h3 id="1-enforce-mode-production"><a class="header" href="#1-enforce-mode-production">1. Enforce Mode (Production)</a></h3>
+<p><strong>Behavior</strong>: Blocks violations completely</p>
+<pre><code class="language-yaml">spec:
+  enforcementAction: deny  # Default
+</code></pre>
+<p><strong>Result</strong>: Pods are rejected if they violate policies</p>
+<p><strong>Use Case</strong>: Production environments where security is critical</p>
+<h3 id="2-dryrun-mode-demoaudit"><a class="header" href="#2-dryrun-mode-demoaudit">2. Dryrun Mode (Demo/Audit)</a></h3>
+<p><strong>Behavior</strong>: Reports violations but allows deployments</p>
+<pre><code class="language-yaml">spec:
+  enforcementAction: dryrun
+</code></pre>
+<p><strong>Result</strong>: Pods are created, violations are logged</p>
+<p><strong>Use Case</strong>: Demo environments, testing, gradual rollout</p>
+<h3 id="3-warn-mode-soft-enforcement"><a class="header" href="#3-warn-mode-soft-enforcement">3. Warn Mode (Soft Enforcement)</a></h3>
+<p><strong>Behavior</strong>: Warnings in events but allows deployments</p>
+<pre><code class="language-yaml">spec:
+  enforcementAction: warn
+</code></pre>
+<p><strong>Result</strong>: Pods are created with warnings in Kubernetes events</p>
+<p><strong>Use Case</strong>: Migration period, gradual adoption</p>
+<h3 id="switching-enforcement-modes"><a class="header" href="#switching-enforcement-modes">Switching Enforcement Modes</a></h3>
+<pre><code class="language-bash"># Switch to dryrun mode (non-blocking)
+cd opa/deployment
+./switch-enforcement-mode.sh dryrun online-boutique-must-run-nonroot
+
+# Switch to enforce mode (blocking)
+./switch-enforcement-mode.sh enforce online-boutique-must-run-nonroot
+
+# Switch to warn mode (soft)
+./switch-enforcement-mode.sh warn online-boutique-must-run-nonroot
+</code></pre>
+<h2 id="deployment-1"><a class="header" href="#deployment-1">Deployment</a></h2>
+<h3 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h3>
+<p>Gatekeeper must be installed (via Helm in <code>k8s-infrastructure-as-code</code> repo).</p>
+<h3 id="deploy-all-policies"><a class="header" href="#deploy-all-policies">Deploy All Policies</a></h3>
+<pre><code class="language-bash"># Deploy all OPA policies
+./opa/deploy-opa-policies.sh
+
+# Or manually with Kustomize
+kubectl apply -k opa/k8s-policy-manifest/
+</code></pre>
+<h3 id="deployment-order"><a class="header" href="#deployment-order">Deployment Order</a></h3>
+<ol>
+<li><strong>Gatekeeper Installation</strong>: Via Helm (creates CRDs)</li>
+<li><strong>ConstraintTemplates</strong>: Applied first (creates Constraint CRDs)</li>
+<li><strong>Constraints</strong>: Applied second (may need retry if CRDs not ready)</li>
+</ol>
+<pre><code class="language-bash"># If constraints fail, wait and retry
+sleep 10 &amp;&amp; kubectl apply -k opa/k8s-policy-manifest/
+</code></pre>
+<h2 id="policy-validation-flow"><a class="header" href="#policy-validation-flow">Policy Validation Flow</a></h2>
+<h3 id="step-by-step-process"><a class="header" href="#step-by-step-process">Step-by-Step Process</a></h3>
+<ol>
+<li><strong>Developer Action</strong>: <code>kubectl apply -f pod.yaml</code></li>
+<li><strong>API Server</strong>: Receives request</li>
+<li><strong>Gatekeeper</strong>: Intercepts via admission webhook</li>
+<li><strong>Policy Evaluation</strong>: Rego policies are evaluated</li>
+<li><strong>Decision</strong>: Allow or deny based on policies</li>
+<li><strong>Response</strong>: Pod created or error returned</li>
+</ol>
+<h3 id="example-non-root-policy"><a class="header" href="#example-non-root-policy">Example: Non-Root Policy</a></h3>
+<pre><code class="language-bash"># Try to create pod as root (will be blocked)
+kubectl run test-root-pod --image=nginx --restart=Never \
+  -n online-boutique \
+  --overrides='{"spec":{"containers":[{"name":"test","securityContext":{"runAsUser":0}}]}}'
+
+# Error: admission webhook "validation.gatekeeper.sh" denied the request
+</code></pre>
+<h2 id="audit-and-compliance"><a class="header" href="#audit-and-compliance">Audit and Compliance</a></h2>
+<h3 id="audit-existing-resources"><a class="header" href="#audit-existing-resources">Audit Existing Resources</a></h3>
+<pre><code class="language-bash"># Audit all policies
+./opa/audit-policies.sh all
+
+# Audit specific policy
+./opa/audit-policies.sh resource-limits online-boutique
+
+# Audit all namespaces
+./opa/audit-policies.sh all-namespace
+</code></pre>
+<h3 id="view-violations"><a class="header" href="#view-violations">View Violations</a></h3>
+<pre><code class="language-bash"># Check constraint status
+kubectl get K8sRequiredNonRoot online-boutique-must-run-nonroot
+
+# View detailed violations
+kubectl describe K8sRequiredNonRoot online-boutique-must-run-nonroot
+
+# Get violation count
+kubectl get K8sRequiredNonRoot online-boutique-must-run-nonroot \
+  -o jsonpath='{.status.totalViolations}'
+</code></pre>
+<h3 id="compliance-reporting"><a class="header" href="#compliance-reporting">Compliance Reporting</a></h3>
+<p>OPA provides:</p>
+<ul>
+<li><strong>Real-time Violations</strong>: Current policy violations</li>
+<li><strong>Audit Trail</strong>: Historical violation tracking</li>
+<li><strong>Compliance Status</strong>: Per-policy compliance metrics</li>
+<li><strong>Resource Coverage</strong>: Percentage of resources compliant</li>
+</ul>
+<h2 id="integration-with-gitops"><a class="header" href="#integration-with-gitops">Integration with GitOps</a></h2>
+<h3 id="argocd-integration"><a class="header" href="#argocd-integration">ArgoCD Integration</a></h3>
+<p>OPA policies work seamlessly with ArgoCD:</p>
+<ol>
+<li><strong>Git Commit</strong>: Developer commits configuration</li>
+<li><strong>ArgoCD Sync</strong>: Attempts to deploy to cluster</li>
+<li><strong>OPA Validation</strong>: Gatekeeper validates resources</li>
+<li><strong>Result</strong>: Deployment succeeds or fails based on policies</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Bad configurations from Git are blocked</li>
+<li>GitOps safety net</li>
+<li>Automatic policy enforcement</li>
+<li>No manual review needed</li>
+</ul>
+<h3 id="sync-waves-1"><a class="header" href="#sync-waves-1">Sync Waves</a></h3>
+<p>OPA policies can be deployed in sync waves:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opa-policies
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"  # Deploy before applications
+</code></pre>
+<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
+<h3 id="policy-not-working"><a class="header" href="#policy-not-working">Policy Not Working</a></h3>
+<pre><code class="language-bash"># Check Gatekeeper is running
+kubectl get pods -n gatekeeper-system
+
+# Check constraint template is installed
+kubectl get constrainttemplate
+
+# Check constraint status
+kubectl get K8sRequiredNonRoot
+
+# View Gatekeeper logs
+kubectl logs -n gatekeeper-system -l control-plane=controller-manager
+</code></pre>
+<h3 id="policy-blocking-valid-pods"><a class="header" href="#policy-blocking-valid-pods">Policy Blocking Valid Pods</a></h3>
+<pre><code class="language-bash"># Switch to dryrun mode for testing
+cd opa/deployment
+./switch-enforcement-mode.sh dryrun &lt;constraint-name&gt;
+
+# Or temporarily disable constraint
+kubectl delete -f opa/k8s-policy-manifest/constraint-online-boutique-nonroot.yaml
+</code></pre>
+<h3 id="crd-not-ready"><a class="header" href="#crd-not-ready">CRD Not Ready</a></h3>
+<pre><code class="language-bash"># Wait for CRDs to be established
+kubectl wait --for condition=established crd/constrainttemplates.templates.gatekeeper.sh
+
+# Retry constraint deployment
+kubectl apply -k opa/k8s-policy-manifest/
+</code></pre>
+<h2 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h2>
+<h3 id="1-start-with-security-policies"><a class="header" href="#1-start-with-security-policies">1. Start with Security Policies</a></h3>
+<ul>
+<li>Non-root users</li>
+<li>Read-only filesystem</li>
+<li>No privileged containers</li>
+</ul>
+<h3 id="2-add-resource-management"><a class="header" href="#2-add-resource-management">2. Add Resource Management</a></h3>
+<ul>
+<li>Resource limits</li>
+<li>Resource requests</li>
+<li>Quotas</li>
+</ul>
+<h3 id="3-enforce-image-security"><a class="header" href="#3-enforce-image-security">3. Enforce Image Security</a></h3>
+<ul>
+<li>No latest tags</li>
+<li>Approved registries</li>
+<li>Image digests</li>
+</ul>
+<h3 id="4-use-dryrun-first"><a class="header" href="#4-use-dryrun-first">4. Use Dryrun First</a></h3>
+<ul>
+<li>Test policies in dryrun mode</li>
+<li>Identify violations</li>
+<li>Fix issues before enforcing</li>
+</ul>
+<h3 id="5-monitor-violations"><a class="header" href="#5-monitor-violations">5. Monitor Violations</a></h3>
+<ul>
+<li>Regular audit checks</li>
+<li>Track violation trends</li>
+<li>Update policies as needed</li>
+</ul>
+<h2 id="advanced-use-cases"><a class="header" href="#advanced-use-cases">Advanced Use Cases</a></h2>
+<h3 id="custom-policies"><a class="header" href="#custom-policies">Custom Policies</a></h3>
+<p>Create custom ConstraintTemplates for organization-specific requirements:</p>
+<pre><code class="language-rego">package custompolicy
+
+violation[{"msg": msg}] {
+    # Custom policy logic
+    input.review.object.spec.containers[_]
+    # Your validation rules
+    msg := "Custom policy violation"
+}
+</code></pre>
+<h3 id="multi-namespace-policies"><a class="header" href="#multi-namespace-policies">Multi-Namespace Policies</a></h3>
+<p>Apply policies across multiple namespaces:</p>
+<pre><code class="language-yaml">spec:
+  match:
+    namespaces: ["production", "staging"]
+</code></pre>
+<h3 id="exemptions"><a class="header" href="#exemptions">Exemptions</a></h3>
+<p>Exempt specific resources from policies:</p>
+<pre><code class="language-yaml">spec:
+  match:
+    excludedNamespaces: ["kube-system", "gatekeeper-system"]
+</code></pre>
+<h2 id="metrics-and-monitoring"><a class="header" href="#metrics-and-monitoring">Metrics and Monitoring</a></h2>
+<h3 id="gatekeeper-metrics"><a class="header" href="#gatekeeper-metrics">Gatekeeper Metrics</a></h3>
+<ul>
+<li>Policy evaluation count</li>
+<li>Violation count</li>
+<li>Admission latency</li>
+<li>Audit scan duration</li>
+</ul>
+<h3 id="prometheus-integration-1"><a class="header" href="#prometheus-integration-1">Prometheus Integration</a></h3>
+<p>Gatekeeper exposes metrics for Prometheus:</p>
+<ul>
+<li><code>gatekeeper_violations_total</code></li>
+<li><code>gatekeeper_admission_duration_seconds</code></li>
+<li><code>gatekeeper_audit_duration_seconds</code></li>
+</ul>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>OPA Gatekeeper provides:</p>
+<ul>
+<li><strong>Automatic Security</strong>: No manual checks needed</li>
+<li><strong>Consistent Enforcement</strong>: Same rules for everyone</li>
+<li><strong>GitOps Safety</strong>: Bad configs from Git are blocked</li>
+<li><strong>Compliance</strong>: Automatic audit trail</li>
+<li><strong>Prevention</strong>: Issues caught before deployment</li>
+</ul>
+<p>This ensures your Kubernetes cluster maintains security and compliance standards automatically, without requiring manual intervention or review.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform---sanity-test"><a class="header" href="#kubernetes-gitops-platform---sanity-test">Kubernetes GitOps Platform - Sanity Test</a></h1>
+<h2 id="what-is-sanity-test"><a class="header" href="#what-is-sanity-test">What is Sanity Test?</a></h2>
+<p>Sanity Test is an automated health check application that continuously monitors the health of all microservices in the Kubernetes cluster. It performs periodic health checks and provides a real-time dashboard showing the status of each service.</p>
+<h3 id="key-features-4"><a class="header" href="#key-features-4">Key Features</a></h3>
+<ul>
+<li><strong>Automated Health Checks</strong>: Tests all microservices every 60 seconds</li>
+<li><strong>Real-time Dashboard</strong>: Web UI showing test results and service status</li>
+<li><strong>Individual Service Monitoring</strong>: Tracks each microservice separately</li>
+<li><strong>Response Time Metrics</strong>: Measures and displays response times</li>
+<li><strong>History Tracking</strong>: Maintains last 50 test runs for trend analysis</li>
+<li><strong>REST API</strong>: Programmatic access to test results</li>
+</ul>
+<h2 id="architecture-2"><a class="header" href="#architecture-2">Architecture</a></h2>
+<pre><code>┌─────────────────┐
+│  Sanity Test    │
+│   Application   │
+└────────┬────────┘
+         │
+         │ Health Checks
+         │
+┌────────▼────────────────────────────┐
+│  Online Boutique Microservices     │
+│  - frontend                         │
+│  - cartservice                      │
+│  - productcatalogservice            │
+│  - recommendationservice            │
+│  - currencyservice                  │
+│  - paymentservice (gRPC)            │
+│  - shippingservice (gRPC)           │
+│  - checkoutservice                  │
+│  - emailservice                     │
+│  - adservice                        │
+│  - redis-cart                       │
+└─────────────────────────────────────┘
+</code></pre>
+<h2 id="implementation-details"><a class="header" href="#implementation-details">Implementation Details</a></h2>
+<h3 id="deployment-configuration"><a class="header" href="#deployment-configuration">Deployment Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sanity-test-app
+  namespace: sanity-test
+spec:
+  replicas: 2  # High availability
+  template:
+    spec:
+      containers:
+      - name: sanity-test
+        image: python:3.11-slim
+        command: ["/bin/bash"]
+        args:
+          - -c
+          - |
+            pip install Flask Flask-CORS requests gunicorn
+            python /app/app.py
+        env:
+        - name: NAMESPACE
+          value: "online-boutique"
+        - name: TEST_INTERVAL
+          value: "60"  # 1 minute
+        - name: TIMEOUT
+          value: "5"   # 5 seconds
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+</code></pre>
+<h3 id="health-check-logic"><a class="header" href="#health-check-logic">Health Check Logic</a></h3>
+<p>The application tests each microservice by:</p>
+<ol>
+<li>
+<p><strong>HTTP Health Endpoints</strong>: For HTTP-based services</p>
+<ul>
+<li>Tests <code>/health</code> or <code>/healthz</code> endpoints</li>
+<li>Validates HTTP status codes (200 = healthy)</li>
+<li>Measures response time</li>
+</ul>
+</li>
+<li>
+<p><strong>gRPC Health Checks</strong>: For gRPC services</p>
+<ul>
+<li>Uses gRPC health checking protocol</li>
+<li>Tests service availability</li>
+<li>Validates service responses</li>
+</ul>
+</li>
+<li>
+<p><strong>Redis Health Check</strong>: For Redis cache</p>
+<ul>
+<li>Tests Redis connectivity</li>
+<li>Validates PING command</li>
+<li>Checks response time</li>
+</ul>
+</li>
+</ol>
+<h3 id="tested-microservices"><a class="header" href="#tested-microservices">Tested Microservices</a></h3>
+<h4 id="http-services"><a class="header" href="#http-services">HTTP Services</a></h4>
+<ul>
+<li><strong>frontend</strong>: Main web interface</li>
+<li><strong>cartservice</strong>: Shopping cart management</li>
+<li><strong>productcatalogservice</strong>: Product information</li>
+<li><strong>recommendationservice</strong>: Product recommendations</li>
+<li><strong>currencyservice</strong>: Currency conversion</li>
+<li><strong>checkoutservice</strong>: Checkout process</li>
+<li><strong>emailservice</strong>: Email notifications</li>
+<li><strong>adservice</strong>: Advertisement service</li>
+</ul>
+<h4 id="grpc-services"><a class="header" href="#grpc-services">gRPC Services</a></h4>
+<ul>
+<li><strong>paymentservice</strong>: Payment processing (gRPC)</li>
+<li><strong>shippingservice</strong>: Shipping calculations (gRPC)</li>
+</ul>
+<h4 id="data-stores"><a class="header" href="#data-stores">Data Stores</a></h4>
+<ul>
+<li><strong>redis-cart</strong>: Redis cache for cart data</li>
+</ul>
+<h2 id="api-endpoints"><a class="header" href="#api-endpoints">API Endpoints</a></h2>
+<h3 id="dashboard-ui"><a class="header" href="#dashboard-ui">Dashboard UI</a></h3>
+<pre><code>GET /
+</code></pre>
+<p>Returns HTML dashboard showing all test results.</p>
+<h3 id="status-api"><a class="header" href="#status-api">Status API</a></h3>
+<pre><code>GET /api/status
+</code></pre>
+<p>Returns JSON with current test status:</p>
+<pre><code class="language-json">{
+  "status": "passed",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "services": {
+    "frontend": {
+      "status": "healthy",
+      "response_time": 0.15,
+      "last_check": "2024-01-15T10:30:00Z"
+    },
+    "cartservice": {
+      "status": "healthy",
+      "response_time": 0.08,
+      "last_check": "2024-01-15T10:30:00Z"
+    }
+  },
+  "summary": {
+    "total": 11,
+    "healthy": 11,
+    "unhealthy": 0
+  }
+}
+</code></pre>
+<h3 id="manual-test-trigger"><a class="header" href="#manual-test-trigger">Manual Test Trigger</a></h3>
+<pre><code>GET /api/run-test
+</code></pre>
+<p>Triggers an immediate test run and returns results.</p>
+<h3 id="health-check"><a class="header" href="#health-check">Health Check</a></h3>
+<pre><code>GET /api/health
+</code></pre>
+<p>Returns application health status (for Kubernetes probes).</p>
+<h2 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h2>
+<h3 id="environment-variables-1"><a class="header" href="#environment-variables-1">Environment Variables</a></h3>
+<ul>
+<li><strong>NAMESPACE</strong>: Target namespace to test (default: <code>online-boutique</code>)</li>
+<li><strong>TEST_INTERVAL</strong>: Seconds between test runs (default: <code>60</code>)</li>
+<li><strong>TIMEOUT</strong>: Request timeout in seconds (default: <code>5</code>)</li>
+</ul>
+<h3 id="service-discovery"><a class="header" href="#service-discovery">Service Discovery</a></h3>
+<p>The application discovers services by:</p>
+<ol>
+<li>Querying Kubernetes API for services in target namespace</li>
+<li>Filtering services based on labels/annotations</li>
+<li>Testing each service's health endpoint</li>
+</ol>
+<h2 id="deployment-2"><a class="header" href="#deployment-2">Deployment</a></h2>
+<h3 id="via-argocd-recommended"><a class="header" href="#via-argocd-recommended">Via ArgoCD (Recommended)</a></h3>
+<pre><code class="language-bash"># Deploy via ArgoCD application
+kubectl apply -f argocd/apps/sanity-test-app.yaml
+</code></pre>
+<h3 id="manual-deployment"><a class="header" href="#manual-deployment">Manual Deployment</a></h3>
+<pre><code class="language-bash"># Create namespace
+kubectl apply -f sanity-test/namespace.yaml
+
+# Deploy application
+kubectl apply -f sanity-test/deployment.yaml
+
+# Deploy service
+kubectl apply -f sanity-test/service.yaml
+
+# Expose via LoadBalancer (optional)
+kubectl apply -f sanity-test/sanity-test-ingress-alb.yaml
+</code></pre>
+<h2 id="access"><a class="header" href="#access">Access</a></h2>
+<h3 id="loadbalancer-url"><a class="header" href="#loadbalancer-url">LoadBalancer URL</a></h3>
+<pre><code class="language-bash"># Get external URL
+kubectl get svc sanity-test-service -n sanity-test
+
+# Access dashboard
+http://&lt;loadbalancer-external-ip&gt;
+</code></pre>
+<h3 id="port-forward"><a class="header" href="#port-forward">Port Forward</a></h3>
+<pre><code class="language-bash"># Port forward to local machine
+kubectl port-forward -n sanity-test svc/sanity-test-service 8080:80
+
+# Access dashboard
+http://localhost:8080
+</code></pre>
+<h2 id="dashboard-features"><a class="header" href="#dashboard-features">Dashboard Features</a></h2>
+<h3 id="real-time-status"><a class="header" href="#real-time-status">Real-time Status</a></h3>
+<ul>
+<li><strong>Overall Status</strong>: Pass/Fail indicator</li>
+<li><strong>Service Status</strong>: Individual service health</li>
+<li><strong>Response Times</strong>: Per-service response time metrics</li>
+<li><strong>Last Check</strong>: Timestamp of last health check</li>
+<li><strong>History</strong>: Last 50 test runs</li>
+</ul>
+<h3 id="visual-indicators"><a class="header" href="#visual-indicators">Visual Indicators</a></h3>
+<ul>
+<li><strong>Green</strong>: Service is healthy</li>
+<li><strong>Red</strong>: Service is unhealthy</li>
+<li><strong>Yellow</strong>: Service check in progress</li>
+<li><strong>Gray</strong>: Service not tested yet</li>
+</ul>
+<h3 id="metrics-display"><a class="header" href="#metrics-display">Metrics Display</a></h3>
+<ul>
+<li>Total services tested</li>
+<li>Healthy services count</li>
+<li>Unhealthy services count</li>
+<li>Average response time</li>
+<li>Test run history</li>
+</ul>
+<h2 id="test-results-interpretation"><a class="header" href="#test-results-interpretation">Test Results Interpretation</a></h2>
+<h3 id="pass-criteria"><a class="header" href="#pass-criteria">Pass Criteria</a></h3>
+<p>A test <strong>passes</strong> if:</p>
+<ul>
+<li>All services return HTTP 200 status</li>
+<li>All services respond within timeout</li>
+<li>No connection errors occur</li>
+<li>All gRPC services are reachable</li>
+</ul>
+<h3 id="fail-criteria"><a class="header" href="#fail-criteria">Fail Criteria</a></h3>
+<p>A test <strong>fails</strong> if:</p>
+<ul>
+<li>Any service returns non-200 status</li>
+<li>Any service times out</li>
+<li>Connection errors occur</li>
+<li>gRPC services are unreachable</li>
+</ul>
+<h3 id="example-output"><a class="header" href="#example-output">Example Output</a></h3>
+<p><strong>Successful Test</strong>:</p>
+<pre><code>Status: ✅ PASSED
+Services: 11/11 Healthy
+Average Response Time: 0.12s
+Last Check: 2024-01-15 10:30:00
+</code></pre>
+<p><strong>Failed Test</strong>:</p>
+<pre><code>Status: ❌ FAILED
+Services: 9/11 Healthy
+Unhealthy: cartservice, redis-cart
+Average Response Time: 0.45s
+Last Check: 2024-01-15 10:30:00
+</code></pre>
+<h2 id="integration-with-monitoring"><a class="header" href="#integration-with-monitoring">Integration with Monitoring</a></h2>
+<h3 id="prometheus-metrics-1"><a class="header" href="#prometheus-metrics-1">Prometheus Metrics</a></h3>
+<p>Sanity test results can be exported to Prometheus:</p>
+<ul>
+<li><code>sanity_test_total</code> - Total test runs</li>
+<li><code>sanity_test_passed</code> - Passed test count</li>
+<li><code>sanity_test_failed</code> - Failed test count</li>
+<li><code>sanity_test_service_health</code> - Per-service health (0/1)</li>
+<li><code>sanity_test_response_time</code> - Per-service response time</li>
+</ul>
+<h3 id="grafana-dashboard"><a class="header" href="#grafana-dashboard">Grafana Dashboard</a></h3>
+<p>Create dashboards showing:</p>
+<ul>
+<li>Test success rate over time</li>
+<li>Service health trends</li>
+<li>Response time percentiles</li>
+<li>Service availability percentage</li>
+</ul>
+<h3 id="alerting-2"><a class="header" href="#alerting-2">Alerting</a></h3>
+<p>Set up alerts for:</p>
+<ul>
+<li>Test failures</li>
+<li>Service degradation</li>
+<li>High response times</li>
+<li>Consecutive failures</li>
+</ul>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h2>
+<h3 id="1-post-deployment-validation"><a class="header" href="#1-post-deployment-validation">1. Post-Deployment Validation</a></h3>
+<p>After deploying new versions:</p>
+<pre><code class="language-bash"># Deploy new version
+kubectl apply -f new-deployment.yaml
+
+# Check sanity test dashboard
+# Verify all services are healthy
+</code></pre>
+<h3 id="2-continuous-monitoring"><a class="header" href="#2-continuous-monitoring">2. Continuous Monitoring</a></h3>
+<p>Monitor service health continuously:</p>
+<ul>
+<li>Automated checks every 60 seconds</li>
+<li>Real-time dashboard updates</li>
+<li>Historical trend analysis</li>
+</ul>
+<h3 id="3-troubleshooting"><a class="header" href="#3-troubleshooting">3. Troubleshooting</a></h3>
+<p>Identify problematic services:</p>
+<ul>
+<li>Dashboard shows which services are failing</li>
+<li>Response times indicate performance issues</li>
+<li>History shows when issues started</li>
+</ul>
+<h3 id="4-cicd-integration"><a class="header" href="#4-cicd-integration">4. CI/CD Integration</a></h3>
+<p>Integrate into deployment pipelines:</p>
+<pre><code class="language-yaml"># GitHub Actions example
+- name: Run Sanity Test
+  run: |
+    kubectl port-forward -n sanity-test svc/sanity-test-service 8080:80 &amp;
+    sleep 5
+    curl http://localhost:8080/api/run-test
+    # Verify all services are healthy
+</code></pre>
+<h2 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h2>
+<h3 id="1-high-availability"><a class="header" href="#1-high-availability">1. High Availability</a></h3>
+<p>Deploy with multiple replicas:</p>
+<pre><code class="language-yaml">spec:
+  replicas: 2  # Ensures availability if one pod fails
+</code></pre>
+<h3 id="2-resource-limits"><a class="header" href="#2-resource-limits">2. Resource Limits</a></h3>
+<p>Set appropriate resource limits:</p>
+<pre><code class="language-yaml">resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+</code></pre>
+<h3 id="3-health-probes"><a class="header" href="#3-health-probes">3. Health Probes</a></h3>
+<p>Configure proper health checks:</p>
+<pre><code class="language-yaml">livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 5000
+  initialDelaySeconds: 30
+  periodSeconds: 30
+</code></pre>
+<h3 id="4-monitoring-1"><a class="header" href="#4-monitoring-1">4. Monitoring</a></h3>
+<p>Integrate with monitoring stack:</p>
+<ul>
+<li>Export metrics to Prometheus</li>
+<li>Create Grafana dashboards</li>
+<li>Set up alerts</li>
+</ul>
+<h2 id="troubleshooting-4"><a class="header" href="#troubleshooting-4">Troubleshooting</a></h2>
+<h3 id="application-not-starting"><a class="header" href="#application-not-starting">Application Not Starting</a></h3>
+<pre><code class="language-bash"># Check pod status
+kubectl get pods -n sanity-test
+
+# View logs
+kubectl logs -n sanity-test deployment/sanity-test-app
+
+# Check events
+kubectl describe pod -n sanity-test &lt;pod-name&gt;
+</code></pre>
+<h3 id="services-not-being-tested"><a class="header" href="#services-not-being-tested">Services Not Being Tested</a></h3>
+<pre><code class="language-bash"># Verify namespace configuration
+kubectl get deployment sanity-test-app -n sanity-test -o yaml | grep NAMESPACE
+
+# Check service discovery
+kubectl get svc -n online-boutique
+
+# Verify network connectivity
+kubectl exec -n sanity-test deployment/sanity-test-app -- curl http://frontend.online-boutique.svc.cluster.local/health
+</code></pre>
+<h3 id="dashboard-not-accessible"><a class="header" href="#dashboard-not-accessible">Dashboard Not Accessible</a></h3>
+<pre><code class="language-bash"># Check service
+kubectl get svc -n sanity-test
+
+# Check port forwarding
+kubectl port-forward -n sanity-test svc/sanity-test-service 8080:80
+
+# Check LoadBalancer
+kubectl get svc sanity-test-service -n sanity-test -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+</code></pre>
+<h2 id="summary-1"><a class="header" href="#summary-1">Summary</a></h2>
+<p>Sanity Test provides:</p>
+<ul>
+<li><strong>Automated Health Monitoring</strong>: Continuous service health checks</li>
+<li><strong>Real-time Dashboard</strong>: Visual status of all services</li>
+<li><strong>Quick Validation</strong>: Fast post-deployment verification</li>
+<li><strong>Troubleshooting Aid</strong>: Identify problematic services quickly</li>
+<li><strong>CI/CD Integration</strong>: Automated validation in pipelines</li>
+</ul>
+<p>This ensures all microservices are healthy and accessible, providing early detection of issues and maintaining system reliability.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform---availability-test"><a class="header" href="#kubernetes-gitops-platform---availability-test">Kubernetes GitOps Platform - Availability Test</a></h1>
+<h2 id="what-is-availability-test"><a class="header" href="#what-is-availability-test">What is Availability Test?</a></h2>
+<p>Availability Test is an SRE-style testing application that simulates real user workflows to validate end-to-end system availability. Unlike simple health checks, it tests complete user journeys and provides SRE metrics like uptime percentage, consecutive failures, and error budgets.</p>
+<h3 id="key-features-5"><a class="header" href="#key-features-5">Key Features</a></h3>
+<ul>
+<li><strong>Real User Simulation</strong>: Tests actual user workflows (not just health endpoints)</li>
+<li><strong>SRE Metrics</strong>: Calculates uptime percentage, MTTR, error budgets</li>
+<li><strong>Jenkins-like Dashboard</strong>: Visual status indicators (green/red) similar to CI/CD pipelines</li>
+<li><strong>Automated Testing</strong>: Runs every 5 minutes automatically</li>
+<li><strong>Manual Trigger</strong>: On-demand test execution</li>
+<li><strong>Consecutive Failure Tracking</strong>: Monitors continuous failures for alerting</li>
+</ul>
+<h2 id="architecture-3"><a class="header" href="#architecture-3">Architecture</a></h2>
+<pre><code>┌─────────────────┐
+│  Availability   │
+│  Test App       │
+└────────┬────────┘
+         │
+         │ Simulates User Workflow
+         │
+┌────────▼────────────────────────────┐
+│  User Journey Simulation            │
+│  1. Visit Website (Frontend)        │
+│  2. Browse Products                 │
+│  3. Add Product to Cart             │
+│  4. Remove Product from Cart        │
+│  5. Verify Cart Service Health      │
+└─────────────────────────────────────┘
+</code></pre>
+<h2 id="test-workflow"><a class="header" href="#test-workflow">Test Workflow</a></h2>
+<h3 id="complete-user-journey"><a class="header" href="#complete-user-journey">Complete User Journey</a></h3>
+<p>The application simulates a real user shopping experience:</p>
+<ol>
+<li>
+<p><strong>User Visits Website</strong></p>
+<ul>
+<li>Tests frontend accessibility</li>
+<li>Verifies homepage loads</li>
+<li>Validates HTTP 200 response</li>
+</ul>
+</li>
+<li>
+<p><strong>User Browses Products</strong></p>
+<ul>
+<li>Checks product catalog is accessible</li>
+<li>Verifies product data is loaded</li>
+<li>Validates frontend functionality</li>
+</ul>
+</li>
+<li>
+<p><strong>User Adds Product to Cart</strong></p>
+<ul>
+<li>Simulates adding product to cart</li>
+<li>Tests cart service integration</li>
+<li>Validates cart functionality</li>
+</ul>
+</li>
+<li>
+<p><strong>User Removes Product from Cart</strong></p>
+<ul>
+<li>Simulates removing product from cart</li>
+<li>Tests cart service removal</li>
+<li>Validates cart state management</li>
+</ul>
+</li>
+<li>
+<p><strong>Health Check Verification</strong></p>
+<ul>
+<li>Verifies cart service health endpoints</li>
+<li>Validates backend service status</li>
+<li>Confirms microservices integration</li>
+</ul>
+</li>
+</ol>
+<h2 id="implementation-details-1"><a class="header" href="#implementation-details-1">Implementation Details</a></h2>
+<h3 id="application-structure"><a class="header" href="#application-structure">Application Structure</a></h3>
+<pre><code class="language-python">class AvailabilityTester:
+    """Manages availability testing"""
+    
+    def run_cart_services_test(self):
+        """Run complete cart service test"""
+        # Step 1: Frontend accessibility
+        # Step 2: Product browsing
+        # Step 3: Add to cart
+        # Step 4: Remove from cart
+        # Step 5: Health verification
+</code></pre>
+<h3 id="test-execution"><a class="header" href="#test-execution">Test Execution</a></h3>
+<pre><code class="language-python"># Test configuration
+CART_SERVICE_URL = "http://cartservice:7070"
+FRONTEND_URL = "http://frontend:8080"
+TEST_INTERVAL = 300  # 5 minutes
+
+# Test execution
+test_result = {
+    'timestamp': datetime.now(),
+    'status': 'passed' | 'failed',
+    'duration': 0.0,
+    'steps': [],
+    'error': None
+}
+</code></pre>
+<h3 id="sre-metrics-calculation"><a class="header" href="#sre-metrics-calculation">SRE Metrics Calculation</a></h3>
+<pre><code class="language-python"># Uptime percentage
+uptime_percentage = (successful_tests / total_tests) * 100
+
+# Consecutive failures
+if test_failed:
+    consecutive_failures += 1
+else:
+    consecutive_failures = 0
+
+# Error budget
+error_budget = 100 - uptime_percentage
+</code></pre>
+<h2 id="deployment-configuration-1"><a class="header" href="#deployment-configuration-1">Deployment Configuration</a></h2>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: availability-test-app
+  namespace: availability-test
+spec:
+  replicas: 2  # High availability
+  template:
+    spec:
+      containers:
+      - name: availability-test
+        image: python:3.11-slim
+        env:
+        - name: CART_SERVICE_URL
+          value: "http://cartservice.default.svc.cluster.local:7070"
+        - name: FRONTEND_URL
+          value: "http://frontend.default.svc.cluster.local:80"
+        - name: TEST_INTERVAL
+          value: "300"  # 5 minutes
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+</code></pre>
+<h2 id="dashboard-features-1"><a class="header" href="#dashboard-features-1">Dashboard Features</a></h2>
+<h3 id="jenkins-like-interface"><a class="header" href="#jenkins-like-interface">Jenkins-like Interface</a></h3>
+<ul>
+<li><strong>Build Number</strong>: Sequential test run numbers</li>
+<li><strong>Status Indicators</strong>: Green (pass) / Red (fail)</li>
+<li><strong>Test Details</strong>: Step-by-step test execution</li>
+<li><strong>Timestamps</strong>: When each test ran</li>
+<li><strong>Error Messages</strong>: Detailed failure information</li>
+</ul>
+<h3 id="sre-metrics-display"><a class="header" href="#sre-metrics-display">SRE Metrics Display</a></h3>
+<ul>
+<li><strong>Uptime Percentage</strong>: Overall system availability</li>
+<li><strong>Consecutive Failures</strong>: Continuous failure count</li>
+<li><strong>Test Duration</strong>: How long tests take</li>
+<li><strong>Success Rate</strong>: Pass/fail ratio over time</li>
+</ul>
+<h3 id="real-time-updates"><a class="header" href="#real-time-updates">Real-time Updates</a></h3>
+<ul>
+<li>Auto-refresh every 30 seconds</li>
+<li>Manual refresh button</li>
+<li>On-demand test execution</li>
+<li>Historical test results</li>
+</ul>
+<h2 id="api-endpoints-1"><a class="header" href="#api-endpoints-1">API Endpoints</a></h2>
+<h3 id="dashboard"><a class="header" href="#dashboard">Dashboard</a></h3>
+<pre><code>GET /
+</code></pre>
+<p>Returns HTML dashboard with test results.</p>
+<h3 id="status-api-1"><a class="header" href="#status-api-1">Status API</a></h3>
+<pre><code>GET /api/status
+</code></pre>
+<p>Returns current test status:</p>
+<pre><code class="language-json">{
+  "status": "passed",
+  "uptime_percentage": 99.5,
+  "consecutive_failures": 0,
+  "last_test": {
+    "timestamp": "2024-01-15T10:30:00Z",
+    "status": "passed",
+    "duration": 1.2,
+    "steps": [...]
+  },
+  "test_history": [...]
+}
+</code></pre>
+<h3 id="manual-test-trigger-1"><a class="header" href="#manual-test-trigger-1">Manual Test Trigger</a></h3>
+<pre><code>GET /api/run-test
+</code></pre>
+<p>Triggers immediate test execution.</p>
+<h3 id="health-check-1"><a class="header" href="#health-check-1">Health Check</a></h3>
+<pre><code>GET /api/health
+</code></pre>
+<p>Returns application health status.</p>
+<h2 id="sre-integration"><a class="header" href="#sre-integration">SRE Integration</a></h2>
+<h3 id="alerting-criteria"><a class="header" href="#alerting-criteria">Alerting Criteria</a></h3>
+<ul>
+<li><strong>Red Status</strong>: Consecutive failures &gt; 0</li>
+<li><strong>Green Status</strong>: All tests passing</li>
+<li><strong>Uptime &lt; 95%</strong>: Service degradation threshold</li>
+<li><strong>Consecutive Failures &gt; 3</strong>: Critical alert</li>
+</ul>
+<h3 id="metrics-for-prometheus"><a class="header" href="#metrics-for-prometheus">Metrics for Prometheus</a></h3>
+<pre><code class="language-python"># Export metrics
+uptime_gauge.set(uptime_percentage)
+consecutive_failures_gauge.set(consecutive_failures)
+test_duration_histogram.observe(test_duration)
+test_status_gauge.set(1 if passed else 0)
+</code></pre>
+<h3 id="grafana-dashboard-1"><a class="header" href="#grafana-dashboard-1">Grafana Dashboard</a></h3>
+<p>Create dashboards showing:</p>
+<ul>
+<li>Uptime percentage over time</li>
+<li>Consecutive failure trends</li>
+<li>Test duration percentiles</li>
+<li>Success rate trends</li>
+<li>Error budget consumption</li>
+</ul>
+<h2 id="use-cases-1"><a class="header" href="#use-cases-1">Use Cases</a></h2>
+<h3 id="1-sre-monitoring"><a class="header" href="#1-sre-monitoring">1. SRE Monitoring</a></h3>
+<p>Monitor system availability:</p>
+<ul>
+<li>Track uptime percentage</li>
+<li>Monitor consecutive failures</li>
+<li>Calculate error budgets</li>
+<li>Set up alerting</li>
+</ul>
+<h3 id="2-post-deployment-validation"><a class="header" href="#2-post-deployment-validation">2. Post-Deployment Validation</a></h3>
+<p>After deploying new versions:</p>
+<pre><code class="language-bash"># Deploy new version
+kubectl apply -f new-deployment.yaml
+
+# Check availability test dashboard
+# Verify user workflows still work
+</code></pre>
+<h3 id="3-performance-monitoring"><a class="header" href="#3-performance-monitoring">3. Performance Monitoring</a></h3>
+<p>Track system performance:</p>
+<ul>
+<li>Test duration trends</li>
+<li>Response time monitoring</li>
+<li>Service degradation detection</li>
+</ul>
+<h3 id="4-incident-response"><a class="header" href="#4-incident-response">4. Incident Response</a></h3>
+<p>During incidents:</p>
+<ul>
+<li>Check availability test status</li>
+<li>Identify which steps are failing</li>
+<li>Track recovery time</li>
+<li>Monitor consecutive failures</li>
+</ul>
+<h2 id="test-cases"><a class="header" href="#test-cases">Test Cases</a></h2>
+<h3 id="cart-services-test"><a class="header" href="#cart-services-test">Cart Services Test</a></h3>
+<p><strong>Test Name</strong>: <code>cart_services_test</code></p>
+<p><strong>Steps</strong>:</p>
+<ol>
+<li>Frontend accessibility check</li>
+<li>Product catalog verification</li>
+<li>Add product to cart simulation</li>
+<li>Remove product from cart simulation</li>
+<li>Cart service health verification</li>
+<li>Microservices integration check</li>
+</ol>
+<p><strong>Success Criteria</strong>:</p>
+<ul>
+<li>All steps complete successfully</li>
+<li>No errors in test execution</li>
+<li>Response times within thresholds</li>
+</ul>
+<h3 id="adding-new-test-cases"><a class="header" href="#adding-new-test-cases">Adding New Test Cases</a></h3>
+<ol>
+<li>Create test method in <code>TestCaseManager</code>:</li>
+</ol>
+<pre><code class="language-python">def run_new_test_case(self):
+    """Run new test case"""
+    test_result = {
+        'test_name': 'new_test',
+        'status': 'failed',
+        'steps': []
+    }
+    # Test logic
+    return test_result
+</code></pre>
+<ol start="2">
+<li>Register in test suite:</li>
+</ol>
+<pre><code class="language-python">self.test_cases = {
+    'new_test': {
+        'name': 'New Test Case',
+        'description': 'Test description',
+        'enabled': True
+    }
+}
+</code></pre>
+<ol start="3">
+<li>Update dashboard template to display results</li>
+</ol>
+<h2 id="configuration-2"><a class="header" href="#configuration-2">Configuration</a></h2>
+<h3 id="environment-variables-2"><a class="header" href="#environment-variables-2">Environment Variables</a></h3>
+<ul>
+<li><strong>CART_SERVICE_URL</strong>: Cart service endpoint (default: <code>http://cartservice:7070</code>)</li>
+<li><strong>FRONTEND_URL</strong>: Frontend service endpoint (default: <code>http://frontend:8080</code>)</li>
+<li><strong>TEST_INTERVAL</strong>: Test execution interval in seconds (default: <code>300</code> = 5 minutes)</li>
+</ul>
+<h3 id="kubernetes-resources"><a class="header" href="#kubernetes-resources">Kubernetes Resources</a></h3>
+<ul>
+<li><strong>Namespace</strong>: <code>availability-test</code></li>
+<li><strong>Deployment</strong>: 2 replicas for high availability</li>
+<li><strong>Service</strong>: ClusterIP for internal communication</li>
+<li><strong>LoadBalancer</strong>: External access via AWS ELB</li>
+<li><strong>Ingress</strong>: ALB configuration for custom domain</li>
+</ul>
+<h2 id="deployment-3"><a class="header" href="#deployment-3">Deployment</a></h2>
+<h3 id="via-argocd-recommended-1"><a class="header" href="#via-argocd-recommended-1">Via ArgoCD (Recommended)</a></h3>
+<pre><code class="language-bash"># Deploy via ArgoCD application
+kubectl apply -f argocd/apps/availability-test-app.yaml
+</code></pre>
+<h3 id="manual-deployment-1"><a class="header" href="#manual-deployment-1">Manual Deployment</a></h3>
+<pre><code class="language-bash"># Create namespace
+kubectl apply -f availability-test/namespace.yaml
+
+# Deploy application
+kubectl apply -f availability-test/deployment.yaml
+
+# Expose via LoadBalancer
+kubectl apply -f availability-test/loadbalancer.yaml
+</code></pre>
+<h2 id="access-1"><a class="header" href="#access-1">Access</a></h2>
+<h3 id="loadbalancer-url-1"><a class="header" href="#loadbalancer-url-1">LoadBalancer URL</a></h3>
+<pre><code class="language-bash"># Get external URL
+kubectl get svc availability-test-loadbalancer -n availability-test
+
+# Access dashboard
+http://&lt;loadbalancer-external-ip&gt;
+</code></pre>
+<h3 id="port-forward-1"><a class="header" href="#port-forward-1">Port Forward</a></h3>
+<pre><code class="language-bash"># Port forward to local machine
+kubectl port-forward -n availability-test svc/availability-test-service 8080:80
+
+# Access dashboard
+http://localhost:8080
+</code></pre>
+<h2 id="troubleshooting-5"><a class="header" href="#troubleshooting-5">Troubleshooting</a></h2>
+<h3 id="test-failures-1"><a class="header" href="#test-failures-1">Test Failures</a></h3>
+<pre><code class="language-bash"># Check application logs
+kubectl logs -f deployment/availability-test-app -n availability-test
+
+# Check pod status
+kubectl get pods -n availability-test
+
+# Check service connectivity
+kubectl exec -n availability-test deployment/availability-test-app -- \
+  curl http://frontend.default.svc.cluster.local
+</code></pre>
+<h3 id="service-unreachable"><a class="header" href="#service-unreachable">Service Unreachable</a></h3>
+<pre><code class="language-bash"># Verify services are running
+kubectl get pods -n default -l app=frontend
+kubectl get pods -n default -l app=cartservice
+
+# Check service endpoints
+kubectl get endpoints -n default
+
+# Test connectivity
+kubectl run -it --rm debug --image=busybox --restart=Never -- \
+  wget -O- http://frontend.default.svc.cluster.local
+</code></pre>
+<h3 id="dashboard-not-loading"><a class="header" href="#dashboard-not-loading">Dashboard Not Loading</a></h3>
+<pre><code class="language-bash"># Check service
+kubectl get svc -n availability-test
+
+# Check LoadBalancer
+kubectl get svc availability-test-loadbalancer -n availability-test
+
+# Check ingress
+kubectl get ingress -n availability-test
+</code></pre>
+<h2 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h2>
+<h3 id="1-test-frequency"><a class="header" href="#1-test-frequency">1. Test Frequency</a></h3>
+<ul>
+<li><strong>Production</strong>: Every 5 minutes (default)</li>
+<li><strong>Staging</strong>: Every 10 minutes</li>
+<li><strong>Development</strong>: Every 15 minutes</li>
+</ul>
+<h3 id="2-alerting-thresholds"><a class="header" href="#2-alerting-thresholds">2. Alerting Thresholds</a></h3>
+<ul>
+<li><strong>Critical</strong>: Consecutive failures &gt; 3</li>
+<li><strong>Warning</strong>: Consecutive failures &gt; 1</li>
+<li><strong>Info</strong>: Uptime &lt; 99%</li>
+</ul>
+<h3 id="3-high-availability"><a class="header" href="#3-high-availability">3. High Availability</a></h3>
+<p>Deploy with multiple replicas:</p>
+<pre><code class="language-yaml">spec:
+  replicas: 2  # Ensures availability if one pod fails
+</code></pre>
+<h3 id="4-resource-limits"><a class="header" href="#4-resource-limits">4. Resource Limits</a></h3>
+<p>Set appropriate resource limits:</p>
+<pre><code class="language-yaml">resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+</code></pre>
+<h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
+<p>Availability Test provides:</p>
+<ul>
+<li><strong>Real User Simulation</strong>: Tests actual workflows, not just health endpoints</li>
+<li><strong>SRE Metrics</strong>: Uptime percentage, consecutive failures, error budgets</li>
+<li><strong>Visual Dashboard</strong>: Jenkins-like interface for quick status checks</li>
+<li><strong>Automated Monitoring</strong>: Continuous availability validation</li>
+<li><strong>Incident Detection</strong>: Early warning of service issues</li>
+</ul>
+<p>This ensures your system maintains high availability and provides early detection of issues that affect real users.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform---argocd-gitops"><a class="header" href="#kubernetes-gitops-platform---argocd-gitops">Kubernetes GitOps Platform - ArgoCD GitOps</a></h1>
+<h2 id="what-is-argocd"><a class="header" href="#what-is-argocd">What is ArgoCD?</a></h2>
+<p>ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes. It automates the deployment of applications to Kubernetes clusters by continuously monitoring Git repositories and automatically syncing the desired state defined in Git with the actual state in the cluster.</p>
+<h3 id="key-concepts-1"><a class="header" href="#key-concepts-1">Key Concepts</a></h3>
+<ul>
+<li><strong>GitOps</strong>: Git as the single source of truth</li>
+<li><strong>Declarative</strong>: Define desired state, ArgoCD makes it happen</li>
+<li><strong>Continuous Sync</strong>: Automatically detects and applies changes</li>
+<li><strong>Self-Healing</strong>: Automatically corrects drift from desired state</li>
+<li><strong>Multi-Environment</strong>: Manage multiple clusters and environments</li>
+</ul>
+<h2 id="why-argocd-for-kubernetes"><a class="header" href="#why-argocd-for-kubernetes">Why ArgoCD for Kubernetes?</a></h2>
+<h3 id="benefits-1"><a class="header" href="#benefits-1">Benefits</a></h3>
+<ol>
+<li><strong>Automation</strong>: Automatic deployment from Git</li>
+<li><strong>Consistency</strong>: Same process for all applications</li>
+<li><strong>Audit Trail</strong>: All changes tracked in Git</li>
+<li><strong>Rollback</strong>: Easy rollback via Git revert</li>
+<li><strong>Multi-Cluster</strong>: Manage multiple clusters from one place</li>
+<li><strong>RBAC</strong>: Fine-grained access control</li>
+<li><strong>UI &amp; CLI</strong>: Both web interface and command-line tools</li>
+</ol>
+<h3 id="gitops-principles"><a class="header" href="#gitops-principles">GitOps Principles</a></h3>
+<ol>
+<li><strong>Git as Source of Truth</strong>: All configurations in Git</li>
+<li><strong>Declarative Descriptions</strong>: Define what you want, not how</li>
+<li><strong>Automated Sync</strong>: Changes automatically applied</li>
+<li><strong>Reconciliation</strong>: Continuous state verification</li>
+<li><strong>Observability</strong>: Full visibility into deployments</li>
+</ol>
+<h2 id="argocd-implementation-in-kubernetes-gitops-platform"><a class="header" href="#argocd-implementation-in-kubernetes-gitops-platform">ArgoCD Implementation in Kubernetes GitOps Platform</a></h2>
+<h3 id="architecture-4"><a class="header" href="#architecture-4">Architecture</a></h3>
+<pre><code>┌─────────────────┐
+│  Git Repository │
+│  (Source of     │
+│   Truth)        │
+└────────┬────────┘
+         │
+         │ Monitors
+         │
+┌────────▼────────┐
+│   ArgoCD        │
+│   Controller    │
+└────────┬────────┘
+         │
+         │ Syncs
+         │
+┌────────▼────────┐
+│  Kubernetes     │
+│  Cluster        │
+└─────────────────┘
+</code></pre>
+<h3 id="components-2"><a class="header" href="#components-2">Components</a></h3>
+<ol>
+<li><strong>ArgoCD Server</strong>: API server and UI</li>
+<li><strong>Application Controller</strong>: Syncs applications</li>
+<li><strong>Repo Server</strong>: Clones and caches Git repositories</li>
+<li><strong>Redis</strong>: Caching and session storage</li>
+</ol>
+<h2 id="app-of-apps-pattern-2"><a class="header" href="#app-of-apps-pattern-2">App-of-Apps Pattern</a></h2>
+<h3 id="what-is-app-of-apps"><a class="header" href="#what-is-app-of-apps">What is App-of-Apps?</a></h3>
+<p>App-of-Apps is an ArgoCD pattern where a root application manages multiple child applications. This provides centralized management and consistent deployment patterns.</p>
+<h3 id="implementation"><a class="header" href="#implementation">Implementation</a></h3>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-platform-toolkit
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    targetRevision: HEAD
+    path: argocd/apps
+    directory:
+      recurse: true  # Discovers all applications
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true      # Remove resources not in Git
+      selfHeal: true   # Auto-correct drift
+    syncOptions:
+      - CreateNamespace=true
+</code></pre>
+<h3 id="benefits-2"><a class="header" href="#benefits-2">Benefits</a></h3>
+<ul>
+<li><strong>Centralized Management</strong>: Single point of control</li>
+<li><strong>Automatic Discovery</strong>: Discovers all applications recursively</li>
+<li><strong>Consistent Patterns</strong>: Same deployment approach for all apps</li>
+<li><strong>Easy Scaling</strong>: Add new apps by adding files to Git</li>
+</ul>
+<h2 id="application-definitions"><a class="header" href="#application-definitions">Application Definitions</a></h2>
+<h3 id="monitoring-stack-application"><a class="header" href="#monitoring-stack-application">Monitoring Stack Application</a></h3>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-stack
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"  # Deploy in wave 3
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    path: monitoring
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+</code></pre>
+<h3 id="sync-waves-2"><a class="header" href="#sync-waves-2">Sync Waves</a></h3>
+<p>Sync waves control deployment order:</p>
+<pre><code class="language-yaml">annotations:
+  argocd.argoproj.io/sync-wave: "1"  # Deploy first
+  argocd.argoproj.io/sync-wave: "2"  # Deploy second
+  argocd.argoproj.io/sync-wave: "3"  # Deploy third
+</code></pre>
+<p><strong>Typical Order</strong>:</p>
+<ol>
+<li><strong>Wave 1</strong>: Testing infrastructure (sanity-test, availability-test)</li>
+<li><strong>Wave 2</strong>: Demo applications (online-boutique)</li>
+<li><strong>Wave 3</strong>: Monitoring stack (Prometheus, Grafana)</li>
+<li><strong>Wave 4</strong>: Logging stack (Loki)</li>
+<li><strong>Wave 5</strong>: Log collection (Promtail)</li>
+</ol>
+<h2 id="deployment-workflow-1"><a class="header" href="#deployment-workflow-1">Deployment Workflow</a></h2>
+<h3 id="gitops-flow-1"><a class="header" href="#gitops-flow-1">GitOps Flow</a></h3>
+<ol>
+<li><strong>Developer</strong>: Makes changes in Git repository</li>
+<li><strong>Commit &amp; Push</strong>: Changes pushed to main branch</li>
+<li><strong>ArgoCD Detection</strong>: ArgoCD detects changes automatically</li>
+<li><strong>Sync</strong>: Applications sync with desired state</li>
+<li><strong>Verification</strong>: Health checks validate deployment</li>
+<li><strong>Monitoring</strong>: Continuous state reconciliation</li>
+</ol>
+<h3 id="automated-sync"><a class="header" href="#automated-sync">Automated Sync</a></h3>
+<pre><code class="language-yaml">syncPolicy:
+  automated:
+    prune: true      # Delete resources not in Git
+    selfHeal: true   # Auto-correct manual changes
+</code></pre>
+<p><strong>What It Does</strong>:</p>
+<ul>
+<li><strong>Prune</strong>: Removes resources deleted from Git</li>
+<li><strong>Self-Heal</strong>: Reverts manual changes to match Git</li>
+<li><strong>Auto-Sync</strong>: Automatically syncs on Git changes</li>
+</ul>
+<h3 id="manual-sync"><a class="header" href="#manual-sync">Manual Sync</a></h3>
+<pre><code class="language-bash"># Sync specific application
+argocd app sync monitoring-stack
+
+# Sync all applications
+argocd app sync --all
+
+# Force refresh
+argocd app get monitoring-stack --refresh
+</code></pre>
+<h2 id="application-management"><a class="header" href="#application-management">Application Management</a></h2>
+<h3 id="list-applications"><a class="header" href="#list-applications">List Applications</a></h3>
+<pre><code class="language-bash"># List all applications
+argocd app list
+
+# Get application details
+argocd app get monitoring-stack
+
+# View application status
+argocd app get monitoring-stack --refresh
+</code></pre>
+<h3 id="application-status"><a class="header" href="#application-status">Application Status</a></h3>
+<p><strong>Healthy</strong>: Application is synced and all resources are healthy
+<strong>Syncing</strong>: Application is currently syncing
+<strong>OutOfSync</strong>: Git and cluster states differ
+<strong>Unknown</strong>: Status cannot be determined
+<strong>Degraded</strong>: Some resources are unhealthy</p>
+<h3 id="viewing-resources"><a class="header" href="#viewing-resources">Viewing Resources</a></h3>
+<pre><code class="language-bash"># View application resources
+argocd app resources monitoring-stack
+
+# View application logs
+argocd app logs monitoring-stack
+
+# View application events
+argocd app events monitoring-stack
+</code></pre>
+<h2 id="access-and-authentication"><a class="header" href="#access-and-authentication">Access and Authentication</a></h2>
+<h3 id="initial-setup"><a class="header" href="#initial-setup">Initial Setup</a></h3>
+<pre><code class="language-bash"># Get admin password
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+
+# Port forward to access UI
+kubectl port-forward -n argocd svc/argocd-server 8080:443
+
+# Access UI
+https://localhost:8080
+</code></pre>
+<h3 id="login"><a class="header" href="#login">Login</a></h3>
+<pre><code class="language-bash"># CLI login
+argocd login localhost:8080
+
+# Or with username/password
+argocd login localhost:8080 --username admin --password &lt;password&gt;
+</code></pre>
+<h3 id="rbac-configuration-1"><a class="header" href="#rbac-configuration-1">RBAC Configuration</a></h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:admin, applications, *, */*, allow
+    p, role:admin, clusters, get, *, allow
+    g, admins, role:admin
+</code></pre>
+<h2 id="sync-strategies"><a class="header" href="#sync-strategies">Sync Strategies</a></h2>
+<h3 id="automatic-sync"><a class="header" href="#automatic-sync">Automatic Sync</a></h3>
+<pre><code class="language-yaml">syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+</code></pre>
+<p><strong>When It Syncs</strong>:</p>
+<ul>
+<li>Git repository changes detected</li>
+<li>Manual sync triggered</li>
+<li>Self-healing corrections</li>
+</ul>
+<h3 id="manual-sync-1"><a class="header" href="#manual-sync-1">Manual Sync</a></h3>
+<pre><code class="language-yaml">syncPolicy:
+  automated: {}  # Disabled
+</code></pre>
+<p><strong>When It Syncs</strong>:</p>
+<ul>
+<li>Manual sync via UI or CLI</li>
+<li>Scheduled sync (if configured)</li>
+</ul>
+<h3 id="sync-options"><a class="header" href="#sync-options">Sync Options</a></h3>
+<pre><code class="language-yaml">syncOptions:
+  - CreateNamespace=true      # Auto-create namespaces
+  - PrunePropagationPolicy=foreground
+  - PruneLast=true            # Prune after sync
+  - ApplyOutOfSyncOnly=true   # Only sync out-of-sync resources
+</code></pre>
+<h2 id="rollback-and-history"><a class="header" href="#rollback-and-history">Rollback and History</a></h2>
+<h3 id="view-history"><a class="header" href="#view-history">View History</a></h3>
+<pre><code class="language-bash"># View application history
+argocd app history monitoring-stack
+
+# View specific revision
+argocd app get monitoring-stack --revision &lt;revision&gt;
+</code></pre>
+<h3 id="rollback"><a class="header" href="#rollback">Rollback</a></h3>
+<pre><code class="language-bash"># Rollback to previous version
+argocd app rollback monitoring-stack
+
+# Rollback to specific revision
+argocd app rollback monitoring-stack &lt;revision&gt;
+</code></pre>
+<h3 id="git-revert"><a class="header" href="#git-revert">Git Revert</a></h3>
+<pre><code class="language-bash"># Revert in Git (recommended)
+git revert &lt;commit-hash&gt;
+git push origin main
+
+# ArgoCD automatically syncs
+</code></pre>
+<h2 id="multi-environment-management"><a class="header" href="#multi-environment-management">Multi-Environment Management</a></h2>
+<h3 id="environment-specific-applications"><a class="header" href="#environment-specific-applications">Environment-Specific Applications</a></h3>
+<pre><code class="language-yaml"># Production
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-stack-prod
+spec:
+  source:
+    path: monitoring
+    targetRevision: main
+  destination:
+    server: https://prod-cluster.example.com
+    namespace: monitoring
+
+# Staging
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-stack-staging
+spec:
+  source:
+    path: monitoring
+    targetRevision: develop
+  destination:
+    server: https://staging-cluster.example.com
+    namespace: monitoring
+</code></pre>
+<h2 id="integration-with-cicd"><a class="header" href="#integration-with-cicd">Integration with CI/CD</a></h2>
+<h3 id="github-actions-integration"><a class="header" href="#github-actions-integration">GitHub Actions Integration</a></h3>
+<pre><code class="language-yaml"># .github/workflows/deploy.yml
+- name: Deploy to ArgoCD
+  run: |
+    argocd app sync monitoring-stack
+    argocd app wait monitoring-stack --health
+</code></pre>
+<h3 id="webhook-integration"><a class="header" href="#webhook-integration">Webhook Integration</a></h3>
+<p>Configure Git webhooks for faster sync:</p>
+<ul>
+<li>GitHub webhooks</li>
+<li>GitLab webhooks</li>
+<li>Bitbucket webhooks</li>
+</ul>
+<h2 id="troubleshooting-6"><a class="header" href="#troubleshooting-6">Troubleshooting</a></h2>
+<h3 id="application-not-syncing"><a class="header" href="#application-not-syncing">Application Not Syncing</a></h3>
+<pre><code class="language-bash"># Check application status
+argocd app get &lt;app-name&gt;
+
+# Check for sync errors
+argocd app get &lt;app-name&gt; --refresh
+
+# View application logs
+argocd app logs &lt;app-name&gt;
+
+# Check repository connectivity
+argocd repo list
+</code></pre>
+<h3 id="sync-failures"><a class="header" href="#sync-failures">Sync Failures</a></h3>
+<pre><code class="language-bash"># View sync operation details
+argocd app get &lt;app-name&gt; --refresh
+
+# Check resource events
+kubectl get events -n &lt;namespace&gt;
+
+# View ArgoCD server logs
+kubectl logs -n argocd deployment/argocd-server
+</code></pre>
+<h3 id="repository-access-issues"><a class="header" href="#repository-access-issues">Repository Access Issues</a></h3>
+<pre><code class="language-bash"># List repositories
+argocd repo list
+
+# Add repository
+argocd repo add https://github.com/user/repo.git
+
+# Test repository access
+argocd repo get https://github.com/user/repo.git
+</code></pre>
+<h2 id="best-practices-6"><a class="header" href="#best-practices-6">Best Practices</a></h2>
+<h3 id="1-use-app-of-apps-pattern"><a class="header" href="#1-use-app-of-apps-pattern">1. Use App-of-Apps Pattern</a></h3>
+<p>Centralize application management:</p>
+<ul>
+<li>Single root application</li>
+<li>Recursive application discovery</li>
+<li>Consistent deployment patterns</li>
+</ul>
+<h3 id="2-enable-automated-sync"><a class="header" href="#2-enable-automated-sync">2. Enable Automated Sync</a></h3>
+<p>For most applications:</p>
+<pre><code class="language-yaml">syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+</code></pre>
+<h3 id="3-use-sync-waves"><a class="header" href="#3-use-sync-waves">3. Use Sync Waves</a></h3>
+<p>Control deployment order:</p>
+<pre><code class="language-yaml">annotations:
+  argocd.argoproj.io/sync-wave: "1"
+</code></pre>
+<h3 id="4-implement-rbac"><a class="header" href="#4-implement-rbac">4. Implement RBAC</a></h3>
+<p>Control access:</p>
+<ul>
+<li>Read-only for most users</li>
+<li>Admin for operators</li>
+<li>Project-based access control</li>
+</ul>
+<h3 id="5-monitor-applications"><a class="header" href="#5-monitor-applications">5. Monitor Applications</a></h3>
+<p>Set up monitoring:</p>
+<ul>
+<li>Application health metrics</li>
+<li>Sync status alerts</li>
+<li>Failure notifications</li>
+</ul>
+<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
+<p>ArgoCD provides:</p>
+<ul>
+<li><strong>GitOps Automation</strong>: Automatic deployment from Git</li>
+<li><strong>Self-Healing</strong>: Auto-corrects drift from desired state</li>
+<li><strong>Multi-Environment</strong>: Manage multiple clusters</li>
+<li><strong>Audit Trail</strong>: All changes tracked in Git</li>
+<li><strong>Easy Rollback</strong>: Simple rollback via Git revert</li>
+<li><strong>UI &amp; CLI</strong>: Both web interface and command-line tools</li>
+</ul>
+<p>This ensures your Kubernetes applications are always in sync with Git, providing a reliable and auditable deployment process.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-gitops-platform-troubleshooting"><a class="header" href="#kubernetes-gitops-platform-troubleshooting">Kubernetes GitOps Platform Troubleshooting</a></h1>
 <h2 id="cluster-access-issues"><a class="header" href="#cluster-access-issues">Cluster Access Issues</a></h2>
 <h3 id="verify-aws-credentials"><a class="header" href="#verify-aws-credentials">Verify AWS Credentials</a></h3>
@@ -6969,6 +8590,1418 @@ kubectl get pods -n kube-system
 </li>
 </ol>
 <p>This ensures continuous performance validation and early detection of regressions."</p>
+<h2 id="opa-policy-enforcement-questions"><a class="header" href="#opa-policy-enforcement-questions">OPA Policy Enforcement Questions</a></h2>
+<h3 id="q17-what-is-opa-and-why-did-you-implement-it"><a class="header" href="#q17-what-is-opa-and-why-did-you-implement-it">Q17: "What is OPA and why did you implement it?"</a></h3>
+<p><strong>Answer:</strong>
+"OPA (Open Policy Agent) is a general-purpose policy engine that enables unified policy enforcement. We use OPA Gatekeeper for Kubernetes to enforce security and governance policies automatically.</p>
+<p>Benefits:</p>
+<ol>
+<li><strong>Security</strong>: Automatically enforces security best practices</li>
+<li><strong>Compliance</strong>: Meets regulatory requirements (SOC 2, PCI-DSS, HIPAA)</li>
+<li><strong>Prevention</strong>: Blocks bad configurations before they reach the cluster</li>
+<li><strong>Consistency</strong>: Ensures all resources follow the same policies</li>
+<li><strong>Audit</strong>: Provides compliance reporting and violation tracking</li>
+</ol>
+<p>We implemented 6 core policies:</p>
+<ul>
+<li>Require non-root users</li>
+<li>Require resource limits</li>
+<li>Disallow latest tags</li>
+<li>Require read-only filesystem</li>
+<li>Disallow privileged containers</li>
+<li>Require labels"</li>
+</ul>
+<h3 id="q18-how-does-opa-gatekeeper-enforce-policies"><a class="header" href="#q18-how-does-opa-gatekeeper-enforce-policies">Q18: "How does OPA Gatekeeper enforce policies?"</a></h3>
+<p><strong>Answer:</strong>
+"OPA Gatekeeper enforces policies through Kubernetes admission control:</p>
+<ol>
+<li><strong>Admission Webhook</strong>: Gatekeeper registers as validating admission webhook</li>
+<li><strong>Request Interception</strong>: All pod/deployment creation requests are intercepted</li>
+<li><strong>Policy Evaluation</strong>: Rego policies evaluate the resource against constraints</li>
+<li><strong>Decision</strong>: Allow or deny based on policy evaluation</li>
+<li><strong>Response</strong>: Pod is created or error is returned</li>
+</ol>
+<p>Flow:</p>
+<pre><code>Developer: kubectl apply pod.yaml
+    ↓
+Kubernetes API Server
+    ↓
+Gatekeeper Admission Webhook
+    ↓
+Policy Evaluation (Rego)
+    ↓
+✅ Allow or ❌ Deny
+</code></pre>
+<p>This happens before resources are created, preventing violations from reaching the cluster."</p>
+<h3 id="q19-explain-your-opa-policy-enforcement-modes"><a class="header" href="#q19-explain-your-opa-policy-enforcement-modes">Q19: "Explain your OPA policy enforcement modes."</a></h3>
+<p><strong>Answer:</strong>
+"We support three enforcement modes:</p>
+<ol>
+<li>
+<p><strong>Enforce Mode (Production)</strong>:</p>
+<ul>
+<li>Blocks violations completely</li>
+<li>Pods are rejected if they violate policies</li>
+<li>Use case: Production environments</li>
+</ul>
+</li>
+<li>
+<p><strong>Dryrun Mode (Demo/Audit)</strong>:</p>
+<ul>
+<li>Reports violations but allows deployments</li>
+<li>Pods are created, violations are logged</li>
+<li>Use case: Testing, gradual rollout, demos</li>
+</ul>
+</li>
+<li>
+<p><strong>Warn Mode (Soft Enforcement)</strong>:</p>
+<ul>
+<li>Warnings in events but allows deployments</li>
+<li>Pods are created with warnings</li>
+<li>Use case: Migration period</li>
+</ul>
+</li>
+</ol>
+<p>We use dryrun mode for demos to show policy violations without blocking deployments. In production, we use enforce mode for security-critical policies."</p>
+<h3 id="q20-how-do-you-audit-opa-policy-compliance"><a class="header" href="#q20-how-do-you-audit-opa-policy-compliance">Q20: "How do you audit OPA policy compliance?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple audit approaches:</p>
+<ol>
+<li>
+<p><strong>Automated Audit Script</strong>:</p>
+<pre><code class="language-bash">./opa/audit-policies.sh all
+</code></pre>
+<ul>
+<li>Scans all pods in namespace</li>
+<li>Reports compliant/non-compliant resources</li>
+<li>Color-coded output with summaries</li>
+</ul>
+</li>
+<li>
+<p><strong>Constraint Status</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot
+kubectl describe K8sRequiredNonRoot online-boutique-must-run-nonroot
+</code></pre>
+<ul>
+<li>Shows violation count</li>
+<li>Lists violating resources</li>
+<li>Provides detailed violation messages</li>
+</ul>
+</li>
+<li>
+<p><strong>Prometheus Metrics</strong>:</p>
+<ul>
+<li><code>gatekeeper_violations_total</code> - Total violations</li>
+<li><code>gatekeeper_admission_duration_seconds</code> - Policy evaluation time</li>
+<li>Export to Grafana for visualization</li>
+</ul>
+</li>
+<li>
+<p><strong>Manual kubectl Commands</strong>:</p>
+<ul>
+<li>Check specific resources for compliance</li>
+<li>Query constraint status</li>
+<li>View violation details</li>
+</ul>
+</li>
+</ol>
+<p>This provides comprehensive compliance visibility and audit trails."</p>
+<h2 id="sanity-test-questions"><a class="header" href="#sanity-test-questions">Sanity Test Questions</a></h2>
+<h3 id="q21-what-is-sanity-test-and-how-does-it-work"><a class="header" href="#q21-what-is-sanity-test-and-how-does-it-work">Q21: "What is Sanity Test and how does it work?"</a></h3>
+<p><strong>Answer:</strong>
+"Sanity Test is an automated health check application that continuously monitors all microservices:</p>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>Tests 11 microservices every 60 seconds</li>
+<li>Supports HTTP, gRPC, and TCP protocols</li>
+<li>Real-time dashboard showing service status</li>
+<li>Response time tracking</li>
+<li>History of last 50 test runs</li>
+</ul>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li>Discovers services in target namespace</li>
+<li>Tests each service's health endpoint</li>
+<li>Measures response times</li>
+<li>Tracks pass/fail status</li>
+<li>Updates dashboard in real-time</li>
+</ol>
+<p><strong>Tested Services</strong>:</p>
+<ul>
+<li>HTTP: frontend, cartservice, productcatalogservice, etc.</li>
+<li>gRPC: paymentservice, shippingservice</li>
+<li>TCP: redis-cart</li>
+</ul>
+<p>The application runs as a Kubernetes deployment with 2 replicas for high availability."</p>
+<h3 id="q22-how-does-sanity-test-handle-different-service-protocols"><a class="header" href="#q22-how-does-sanity-test-handle-different-service-protocols">Q22: "How does Sanity Test handle different service protocols?"</a></h3>
+<p><strong>Answer:</strong>
+"Sanity Test supports multiple protocols:</p>
+<ol>
+<li>
+<p><strong>HTTP Services</strong>:</p>
+<ul>
+<li>Tests <code>/health</code> or <code>/_healthz</code> endpoints</li>
+<li>Validates HTTP status codes (200 = healthy)</li>
+<li>Measures response time</li>
+<li>Example: frontend service</li>
+</ul>
+</li>
+<li>
+<p><strong>gRPC Services</strong>:</p>
+<ul>
+<li>Uses TCP socket connection test</li>
+<li>Tests port connectivity</li>
+<li>Validates service is listening</li>
+<li>Example: paymentservice, shippingservice</li>
+</ul>
+</li>
+<li>
+<p><strong>TCP Services</strong>:</p>
+<ul>
+<li>Tests port connectivity</li>
+<li>Validates service is reachable</li>
+<li>Example: redis-cart</li>
+</ul>
+</li>
+</ol>
+<p>The application uses Python's socket library for TCP/gRPC and requests library for HTTP, with configurable timeouts for each check."</p>
+<h3 id="q23-how-do-you-integrate-sanity-test-with-monitoring"><a class="header" href="#q23-how-do-you-integrate-sanity-test-with-monitoring">Q23: "How do you integrate Sanity Test with monitoring?"</a></h3>
+<p><strong>Answer:</strong>
+"Sanity Test can be integrated with monitoring:</p>
+<ol>
+<li>
+<p><strong>Prometheus Metrics</strong> (potential):</p>
+<ul>
+<li><code>sanity_test_total</code> - Total test runs</li>
+<li><code>sanity_test_passed</code> - Passed test count</li>
+<li><code>sanity_test_failed</code> - Failed test count</li>
+<li><code>sanity_test_service_health</code> - Per-service health (0/1)</li>
+<li><code>sanity_test_response_time</code> - Per-service response time</li>
+</ul>
+</li>
+<li>
+<p><strong>Grafana Dashboards</strong>:</p>
+<ul>
+<li>Test success rate over time</li>
+<li>Service health trends</li>
+<li>Response time percentiles</li>
+<li>Service availability percentage</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerting</strong>:</p>
+<ul>
+<li>Alert on test failures</li>
+<li>Alert on service degradation</li>
+<li>Alert on high response times</li>
+<li>Alert on consecutive failures</li>
+</ul>
+</li>
+<li>
+<p><strong>API Integration</strong>:</p>
+<ul>
+<li>REST API for programmatic access</li>
+<li><code>/api/status</code> endpoint for monitoring tools</li>
+<li><code>/api/run-test</code> for manual triggers</li>
+</ul>
+</li>
+</ol>
+<p>This provides comprehensive visibility into service health."</p>
+<h2 id="availability-test-questions"><a class="header" href="#availability-test-questions">Availability Test Questions</a></h2>
+<h3 id="q24-what-is-availability-test-and-how-does-it-differ-from-sanity-test"><a class="header" href="#q24-what-is-availability-test-and-how-does-it-differ-from-sanity-test">Q24: "What is Availability Test and how does it differ from Sanity Test?"</a></h3>
+<p><strong>Answer:</strong>
+"Availability Test is an SRE-style testing application that simulates real user workflows:</p>
+<p><strong>Key Differences</strong>:</p>
+<ul>
+<li><strong>Sanity Test</strong>: Tests individual service health endpoints</li>
+<li><strong>Availability Test</strong>: Tests complete user journeys (end-to-end)</li>
+</ul>
+<p><strong>Availability Test Features</strong>:</p>
+<ul>
+<li>Simulates real user workflows (visit → browse → add to cart → remove)</li>
+<li>Calculates SRE metrics (uptime percentage, consecutive failures)</li>
+<li>Jenkins-like dashboard with build numbers</li>
+<li>Tests every 5 minutes</li>
+<li>Provides error budgets and MTTR metrics</li>
+</ul>
+<p><strong>Test Workflow</strong>:</p>
+<ol>
+<li>User visits website (frontend accessibility)</li>
+<li>User browses products (catalog verification)</li>
+<li>User adds product to cart (cart service integration)</li>
+<li>User removes product from cart (cart state management)</li>
+<li>Health check verification (backend services)</li>
+</ol>
+<p>This validates that the entire system works together, not just individual services."</p>
+<h3 id="q25-how-do-you-calculate-sre-metrics-in-availability-test"><a class="header" href="#q25-how-do-you-calculate-sre-metrics-in-availability-test">Q25: "How do you calculate SRE metrics in Availability Test?"</a></h3>
+<p><strong>Answer:</strong>
+"SRE metrics calculation:</p>
+<ol>
+<li>
+<p><strong>Uptime Percentage</strong>:</p>
+<pre><code class="language-python">uptime_percentage = (successful_tests / total_tests) * 100
+</code></pre>
+<ul>
+<li>Tracks overall system availability</li>
+<li>Target: 99.9% or higher</li>
+</ul>
+</li>
+<li>
+<p><strong>Consecutive Failures</strong>:</p>
+<pre><code class="language-python">if test_failed:
+    consecutive_failures += 1
+else:
+    consecutive_failures = 0
+</code></pre>
+<ul>
+<li>Monitors continuous failures</li>
+<li>Used for alerting thresholds</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Budget</strong>:</p>
+<pre><code class="language-python">error_budget = 100 - uptime_percentage
+</code></pre>
+<ul>
+<li>Remaining error budget</li>
+<li>Tracks SLA compliance</li>
+</ul>
+</li>
+<li>
+<p><strong>Test Duration</strong>:</p>
+<ul>
+<li>Measures how long tests take</li>
+<li>Performance monitoring</li>
+<li>Identifies slow services</li>
+</ul>
+</li>
+<li>
+<p><strong>Success Rate</strong>:</p>
+<ul>
+<li>Pass/fail ratio over time</li>
+<li>Trend analysis</li>
+<li>Historical comparison</li>
+</ul>
+</li>
+</ol>
+<p>These metrics provide SRE-style visibility into system reliability."</p>
+<h3 id="q26-how-does-availability-test-integrate-with-sre-practices"><a class="header" href="#q26-how-does-availability-test-integrate-with-sre-practices">Q26: "How does Availability Test integrate with SRE practices?"</a></h3>
+<p><strong>Answer:</strong>
+"Availability Test implements SRE best practices:</p>
+<ol>
+<li>
+<p><strong>SLI/SLO Tracking</strong>:</p>
+<ul>
+<li>Uptime percentage as SLI</li>
+<li>99.9% uptime as SLO</li>
+<li>Error budget tracking</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerting Criteria</strong>:</p>
+<ul>
+<li>Red status: Consecutive failures &gt; 0</li>
+<li>Green status: All tests passing</li>
+<li>Uptime &lt; 95%: Service degradation threshold</li>
+</ul>
+</li>
+<li>
+<p><strong>Incident Detection</strong>:</p>
+<ul>
+<li>Early warning of service issues</li>
+<li>Real user workflow validation</li>
+<li>Automated testing reduces MTTR</li>
+</ul>
+</li>
+<li>
+<p><strong>Dashboard Design</strong>:</p>
+<ul>
+<li>Jenkins-like interface (familiar to DevOps teams)</li>
+<li>Build numbers for test runs</li>
+<li>Visual status indicators (green/red)</li>
+</ul>
+</li>
+<li>
+<p><strong>Metrics Export</strong>:</p>
+<ul>
+<li>Can export to Prometheus</li>
+<li>Grafana dashboards for trends</li>
+<li>Historical analysis</li>
+</ul>
+</li>
+</ol>
+<p>This provides production-ready SRE monitoring capabilities."</p>
+<h2 id="argocd-gitops-questions"><a class="header" href="#argocd-gitops-questions">ArgoCD GitOps Questions</a></h2>
+<h3 id="q27-how-does-the-app-of-apps-pattern-work-in-your-setup"><a class="header" href="#q27-how-does-the-app-of-apps-pattern-work-in-your-setup">Q27: "How does the app-of-apps pattern work in your setup?"</a></h3>
+<p><strong>Answer:</strong>
+"App-of-apps pattern implementation:</p>
+<p><strong>Root Application</strong>:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-platform-toolkit
+spec:
+  source:
+    repoURL: https://github.com/Lforlinux/k8s-platform-toolkit.git
+    path: argocd/apps
+    directory:
+      recurse: true  # Discovers all applications
+</code></pre>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li>Root application references <code>argocd/apps</code> directory</li>
+<li><code>recurse: true</code> discovers all application YAML files</li>
+<li>Each child application is automatically created</li>
+<li>All applications sync from Git automatically</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Single point of management</li>
+<li>Automatic application discovery</li>
+<li>Consistent deployment patterns</li>
+<li>Easy to add new applications (just add YAML file)</li>
+</ul>
+<p><strong>Child Applications</strong>:</p>
+<ul>
+<li>monitoring-stack</li>
+<li>logging-stack</li>
+<li>sanity-test</li>
+<li>availability-test</li>
+<li>online-boutique</li>
+<li>performance-testing</li>
+</ul>
+<p>All managed by the root application automatically."</p>
+<h3 id="q28-explain-argocd-sync-waves-and-why-you-use-them"><a class="header" href="#q28-explain-argocd-sync-waves-and-why-you-use-them">Q28: "Explain ArgoCD sync waves and why you use them."</a></h3>
+<p><strong>Answer:</strong>
+"Sync waves control deployment order using annotations:</p>
+<pre><code class="language-yaml">annotations:
+  argocd.argoproj.io/sync-wave: "1"  # Deploy first
+</code></pre>
+<p><strong>Our Sync Wave Order</strong>:</p>
+<ol>
+<li><strong>Wave 1</strong>: Testing infrastructure (sanity-test, availability-test)</li>
+<li><strong>Wave 2</strong>: Demo applications (online-boutique)</li>
+<li><strong>Wave 3</strong>: Monitoring stack (Prometheus, Grafana)</li>
+<li><strong>Wave 4</strong>: Logging stack (Loki)</li>
+<li><strong>Wave 5</strong>: Log collection (Promtail)</li>
+</ol>
+<p><strong>Why Use Sync Waves</strong>:</p>
+<ul>
+<li><strong>Dependencies</strong>: Some services depend on others</li>
+<li><strong>Order Matters</strong>: Monitoring should deploy before applications</li>
+<li><strong>Reliability</strong>: Ensures proper startup sequence</li>
+<li><strong>Predictability</strong>: Consistent deployment order</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>Promtail (wave 5) needs Loki (wave 4) to be ready</li>
+<li>Applications (wave 2) can be monitored by Prometheus (wave 3)</li>
+<li>Testing (wave 1) validates everything works</li>
+</ul>
+<p>This ensures dependencies are met and deployments are reliable."</p>
+<h3 id="q29-how-does-argocd-self-healing-work"><a class="header" href="#q29-how-does-argocd-self-healing-work">Q29: "How does ArgoCD self-healing work?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD self-healing automatically corrects drift:</p>
+<p><strong>Configuration</strong>:</p>
+<pre><code class="language-yaml">syncPolicy:
+  automated:
+    selfHeal: true
+</code></pre>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li><strong>Drift Detection</strong>: ArgoCD continuously compares Git state with cluster state</li>
+<li><strong>Manual Changes Detected</strong>: If someone manually changes resources</li>
+<li><strong>Automatic Correction</strong>: ArgoCD reverts changes to match Git</li>
+<li><strong>Continuous Reconciliation</strong>: Happens automatically every few minutes</li>
+</ol>
+<p><strong>Example Scenario</strong>:</p>
+<pre><code>Developer: kubectl scale deployment frontend --replicas=5
+    ↓
+ArgoCD detects: Git says 3 replicas, cluster has 5
+    ↓
+ArgoCD corrects: Scales back to 3 replicas
+</code></pre>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Prevents configuration drift</li>
+<li>Maintains Git as source of truth</li>
+<li>Automatic recovery from manual changes</li>
+<li>No manual intervention needed</li>
+</ul>
+<p><strong>When to Use</strong>:</p>
+<ul>
+<li>Production environments</li>
+<li>Critical applications</li>
+<li>Compliance requirements</li>
+<li>Multi-team environments"</li>
+</ul>
+<h3 id="q30-how-do-you-handle-rollbacks-in-argocd"><a class="header" href="#q30-how-do-you-handle-rollbacks-in-argocd">Q30: "How do you handle rollbacks in ArgoCD?"</a></h3>
+<p><strong>Answer:</strong>
+"Multiple rollback strategies:</p>
+<ol>
+<li>
+<p><strong>Git Revert (Recommended)</strong>:</p>
+<pre><code class="language-bash">git revert &lt;commit-hash&gt;
+git push origin main
+</code></pre>
+<ul>
+<li>ArgoCD automatically syncs</li>
+<li>Maintains Git history</li>
+<li>Full audit trail</li>
+</ul>
+</li>
+<li>
+<p><strong>ArgoCD Rollback</strong>:</p>
+<pre><code class="language-bash">argocd app rollback monitoring-stack
+argocd app rollback monitoring-stack &lt;revision&gt;
+</code></pre>
+<ul>
+<li>Rollback to previous revision</li>
+<li>Quick recovery</li>
+<li>View history: <code>argocd app history monitoring-stack</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Manual Sync to Previous Revision</strong>:</p>
+<pre><code class="language-bash">argocd app sync monitoring-stack --revision &lt;revision&gt;
+</code></pre>
+</li>
+</ol>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Always use Git revert for production</li>
+<li>Keep revision history (default: 10 revisions)</li>
+<li>Test rollbacks in staging first</li>
+<li>Document rollback procedures</li>
+</ul>
+<p><strong>Rollback Process</strong>:</p>
+<ol>
+<li>Identify problematic revision</li>
+<li>Revert in Git or use ArgoCD rollback</li>
+<li>ArgoCD syncs automatically</li>
+<li>Verify application health</li>
+<li>Monitor for issues"</li>
+</ol>
+<h2 id="monitoring--observability-questions"><a class="header" href="#monitoring--observability-questions">Monitoring &amp; Observability Questions</a></h2>
+<h3 id="q31-how-does-prometheus-scrape-metrics-in-your-setup"><a class="header" href="#q31-how-does-prometheus-scrape-metrics-in-your-setup">Q31: "How does Prometheus scrape metrics in your setup?"</a></h3>
+<p><strong>Answer:</strong>
+"Prometheus uses service discovery and static configurations:</p>
+<p><strong>Service Discovery</strong>:</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+</code></pre>
+<p><strong>Scraping Methods</strong>:</p>
+<ol>
+<li><strong>Pod Annotations</strong>: Pods with <code>prometheus.io/scrape: "true"</code> are scraped</li>
+<li><strong>Service Discovery</strong>: Automatic discovery of Kubernetes pods</li>
+<li><strong>Static Targets</strong>: Fixed endpoints (Prometheus, Grafana)</li>
+<li><strong>Service Monitors</strong>: Custom resource for advanced configuration</li>
+</ol>
+<p><strong>Key Metrics Collected</strong>:</p>
+<ul>
+<li>Application metrics (request rate, latency, errors)</li>
+<li>Infrastructure metrics (CPU, memory, disk)</li>
+<li>Kubernetes metrics (pod status, deployments)</li>
+<li>Custom business metrics</li>
+</ul>
+<p><strong>Scrape Interval</strong>: 15 seconds (configurable)
+<strong>Retention</strong>: 30 days (configurable)</p>
+<p>This provides comprehensive metrics collection from all services."</p>
+<h3 id="q32-how-do-you-create-and-manage-grafana-dashboards"><a class="header" href="#q32-how-do-you-create-and-manage-grafana-dashboards">Q32: "How do you create and manage Grafana dashboards?"</a></h3>
+<p><strong>Answer:</strong>
+"Grafana dashboard management:</p>
+<p><strong>Pre-configured Dashboards</strong>:</p>
+<ol>
+<li><strong>Official k6 Dashboard</strong>: ID 19665 (imported from Grafana Labs)</li>
+<li><strong>Kubernetes Cluster Overview</strong>: Cluster health and resources</li>
+<li><strong>Online Boutique Dashboard</strong>: Microservices metrics</li>
+<li><strong>Node Exporter Dashboard</strong>: Node-level system metrics</li>
+</ol>
+<p><strong>Dashboard Import</strong>:</p>
+<ol>
+<li>Access Grafana UI</li>
+<li>Go to Dashboards → Import</li>
+<li>Enter Dashboard ID or upload JSON</li>
+<li>Select Prometheus as data source</li>
+<li>Save dashboard</li>
+</ol>
+<p><strong>Custom Dashboards</strong>:</p>
+<ul>
+<li>Create dashboards in Grafana UI</li>
+<li>Export as JSON</li>
+<li>Store in Git repository</li>
+<li>Deploy via ArgoCD</li>
+</ul>
+<p><strong>Dashboard Features</strong>:</p>
+<ul>
+<li>Request rate visualization</li>
+<li>Response time percentiles (p50, p95, p99)</li>
+<li>Error rate tracking</li>
+<li>Resource utilization</li>
+<li>Historical trends</li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Use official dashboards when available</li>
+<li>Customize for specific needs</li>
+<li>Version control dashboard JSON</li>
+<li>Document dashboard purposes"</li>
+</ul>
+<h3 id="q33-how-does-loki-aggregate-logs-from-all-pods"><a class="header" href="#q33-how-does-loki-aggregate-logs-from-all-pods">Q33: "How does Loki aggregate logs from all pods?"</a></h3>
+<p><strong>Answer:</strong>
+"Loki log aggregation pipeline:</p>
+<p><strong>Components</strong>:</p>
+<ol>
+<li><strong>Promtail</strong>: Log collection agent (DaemonSet on each node)</li>
+<li><strong>Loki</strong>: Log aggregation server</li>
+<li><strong>Grafana</strong>: Log visualization</li>
+</ol>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li>
+<p><strong>Promtail Discovery</strong>:</p>
+<ul>
+<li>Runs on every node</li>
+<li>Discovers pods automatically</li>
+<li>Reads log files from <code>/var/log/pods</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Log Collection</strong>:</p>
+<ul>
+<li>Promtail tails log files</li>
+<li>Adds Kubernetes labels (namespace, pod, container)</li>
+<li>Sends logs to Loki via HTTP</li>
+</ul>
+</li>
+<li>
+<p><strong>Loki Storage</strong>:</p>
+<ul>
+<li>Indexes by labels (not log content)</li>
+<li>Efficient storage (compressed)</li>
+<li>Fast queries by label</li>
+</ul>
+</li>
+<li>
+<p><strong>Grafana Queries</strong>:</p>
+<ul>
+<li>LogQL query language</li>
+<li>Filter by labels</li>
+<li>Search log content</li>
+<li>Visualize in dashboards</li>
+</ul>
+</li>
+</ol>
+<p><strong>Configuration</strong>:</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: kubernetes-pods
+    kubernetes_sd_configs:
+      - role: pod
+</code></pre>
+<p>This provides centralized logging with efficient storage and fast queries."</p>
+<h2 id="logging-questions"><a class="header" href="#logging-questions">Logging Questions</a></h2>
+<h3 id="q34-how-does-promtail-collect-logs-from-kubernetes-pods"><a class="header" href="#q34-how-does-promtail-collect-logs-from-kubernetes-pods">Q34: "How does Promtail collect logs from Kubernetes pods?"</a></h3>
+<p><strong>Answer:</strong>
+"Promtail log collection process:</p>
+<p><strong>DaemonSet Deployment</strong>:</p>
+<ul>
+<li>One Promtail pod per node</li>
+<li>Runs with hostPath volume mounts</li>
+<li>Accesses <code>/var/log/pods</code> directory</li>
+</ul>
+<p><strong>Log Discovery</strong>:</p>
+<ol>
+<li>
+<p><strong>Kubernetes Service Discovery</strong>:</p>
+<ul>
+<li>Discovers pods automatically</li>
+<li>Reads pod metadata</li>
+<li>Extracts labels and annotations</li>
+</ul>
+</li>
+<li>
+<p><strong>Log File Reading</strong>:</p>
+<ul>
+<li>Reads from <code>/var/log/pods/&lt;namespace&gt;_&lt;pod&gt;_&lt;uid&gt;/&lt;container&gt;/&lt;log-file&gt;</code></li>
+<li>Tails log files in real-time</li>
+<li>Handles log rotation</li>
+</ul>
+</li>
+<li>
+<p><strong>Label Enrichment</strong>:</p>
+<ul>
+<li>Adds Kubernetes labels (namespace, pod, container, node)</li>
+<li>Adds custom labels from annotations</li>
+<li>Creates unique log stream identifiers</li>
+</ul>
+</li>
+<li>
+<p><strong>Log Shipping</strong>:</p>
+<ul>
+<li>Sends logs to Loki via HTTP POST</li>
+<li>Batches logs for efficiency</li>
+<li>Retries on failures</li>
+</ul>
+</li>
+</ol>
+<p><strong>Configuration</strong>:</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: kubernetes-pods
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        target_label: __host__
+</code></pre>
+<p>This provides automatic log collection from all pods without manual configuration."</p>
+<h3 id="q35-how-do-you-query-logs-in-loki-using-logql"><a class="header" href="#q35-how-do-you-query-logs-in-loki-using-logql">Q35: "How do you query logs in Loki using LogQL?"</a></h3>
+<p><strong>Answer:</strong>
+"LogQL (Log Query Language) examples:</p>
+<p><strong>Basic Queries</strong>:</p>
+<pre><code class="language-logql"># Query logs by namespace
+{namespace="online-boutique"}
+
+# Query logs by service
+{namespace="online-boutique", service="frontend"}
+
+# Filter by log level
+{namespace="online-boutique"} |= "error"
+</code></pre>
+<p><strong>Advanced Queries</strong>:</p>
+<pre><code class="language-logql"># Count errors
+count_over_time({namespace="online-boutique"} |= "error" [5m])
+
+# Rate of errors
+rate({namespace="online-boutique"} |= "error" [1m])
+
+# Filter and aggregate
+{namespace="online-boutique"} 
+  |= "error" 
+  | json 
+  | line_format "{{.timestamp}} {{.message}}"
+</code></pre>
+<p><strong>Query Features</strong>:</p>
+<ul>
+<li>Label matching</li>
+<li>Log content filtering</li>
+<li>Aggregation functions</li>
+<li>Time range queries</li>
+<li>Log parsing and formatting</li>
+</ul>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Error investigation</li>
+<li>Performance analysis</li>
+<li>Security auditing</li>
+<li>Compliance reporting</li>
+</ul>
+<p>This provides powerful log querying capabilities similar to PromQL for metrics."</p>
+<h2 id="security-questions-2"><a class="header" href="#security-questions-2">Security Questions</a></h2>
+<h3 id="q36-how-do-you-implement-network-policies-in-your-cluster"><a class="header" href="#q36-how-do-you-implement-network-policies-in-your-cluster">Q36: "How do you implement network policies in your cluster?"</a></h3>
+<p><strong>Answer:</strong>
+"Network policies provide pod-to-pod network isolation:</p>
+<p><strong>Policy Example</strong>:</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: loadbalancer
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: cartservice
+      ports:
+        - protocol: TCP
+          port: 7070
+</code></pre>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Network segmentation</li>
+<li>Least privilege networking</li>
+<li>Multi-tenant isolation</li>
+<li>Security compliance</li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Start with deny-all, allow specific</li>
+<li>Use labels for policy matching</li>
+<li>Test policies in staging first</li>
+<li>Document allowed communications"</li>
+</ul>
+<h3 id="q37-how-do-you-manage-secrets-in-kubernetes"><a class="header" href="#q37-how-do-you-manage-secrets-in-kubernetes">Q37: "How do you manage secrets in Kubernetes?"</a></h3>
+<p><strong>Answer:</strong>
+"Multi-layered secrets management:</p>
+<ol>
+<li>
+<p><strong>Kubernetes Secrets</strong>:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+data:
+  password: &lt;base64-encoded&gt;
+</code></pre>
+<ul>
+<li>Encrypted at rest (if enabled)</li>
+<li>RBAC protected</li>
+<li>Mounted as volumes or env vars</li>
+</ul>
+</li>
+<li>
+<p><strong>AWS Secrets Manager Integration</strong>:</p>
+<pre><code class="language-hcl">data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = "production/database/password"
+}
+</code></pre>
+<ul>
+<li>External secrets management</li>
+<li>Automatic rotation</li>
+<li>Audit logging</li>
+</ul>
+</li>
+<li>
+<p><strong>Sealed Secrets</strong> (optional):</p>
+<ul>
+<li>Encrypt secrets in Git</li>
+<li>Decrypt in cluster</li>
+<li>GitOps friendly</li>
+</ul>
+</li>
+</ol>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Never commit secrets to Git</li>
+<li>Use external secrets manager for production</li>
+<li>Rotate secrets regularly</li>
+<li>Limit secret access via RBAC</li>
+<li>Audit secret access"</li>
+</ul>
+<h3 id="q38-how-does-rbac-work-in-your-argocd-setup"><a class="header" href="#q38-how-does-rbac-work-in-your-argocd-setup">Q38: "How does RBAC work in your ArgoCD setup?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD RBAC configuration:</p>
+<p><strong>ConfigMap</strong>:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:admin, applications, *, */*, allow
+    p, role:admin, clusters, get, *, allow
+    g, admins, role:admin
+</code></pre>
+<p><strong>Roles</strong>:</p>
+<ul>
+<li><strong>readonly</strong>: Default role, read-only access</li>
+<li><strong>admin</strong>: Full access to applications and clusters</li>
+</ul>
+<p><strong>Policies</strong>:</p>
+<ul>
+<li><code>p</code>: Policy definition (subject, resource, action, object, effect)</li>
+<li><code>g</code>: Group membership</li>
+</ul>
+<p><strong>Access Control</strong>:</p>
+<ul>
+<li>Application-level permissions</li>
+<li>Cluster-level permissions</li>
+<li>Project-based isolation</li>
+<li>OIDC integration (optional)</li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Least privilege principle</li>
+<li>Separate roles for different teams</li>
+<li>Regular access reviews</li>
+<li>Audit access logs"</li>
+</ul>
+<h2 id="infrastructure-questions-2"><a class="header" href="#infrastructure-questions-2">Infrastructure Questions</a></h2>
+<h3 id="q39-how-do-you-manage-terraform-state-in-your-infrastructure"><a class="header" href="#q39-how-do-you-manage-terraform-state-in-your-infrastructure">Q39: "How do you manage Terraform state in your infrastructure?"</a></h3>
+<p><strong>Answer:</strong>
+"Terraform state management:</p>
+<p><strong>Current Setup</strong>:</p>
+<ul>
+<li>Local state file (for demo/single-user)</li>
+<li>State file backed up to Git (not recommended for production)</li>
+</ul>
+<p><strong>Production Best Practices</strong>:</p>
+<ol>
+<li>
+<p><strong>Remote State Backend</strong>:</p>
+<pre><code class="language-hcl">terraform {
+  backend "s3" {
+    bucket = "terraform-state-bucket"
+    key    = "eks-cluster/terraform.tfstate"
+    region = "us-east-1"
+    encrypt = true
+  }
+}
+</code></pre>
+<ul>
+<li>S3 for state storage</li>
+<li>DynamoDB for state locking</li>
+<li>Encryption enabled</li>
+</ul>
+</li>
+<li>
+<p><strong>State Locking</strong>:</p>
+<ul>
+<li>Prevents concurrent modifications</li>
+<li>Uses DynamoDB table</li>
+<li>Automatic lock release</li>
+</ul>
+</li>
+<li>
+<p><strong>State Security</strong>:</p>
+<ul>
+<li>Encrypted at rest</li>
+<li>Access controlled via IAM</li>
+<li>Versioned in S3</li>
+<li>Backup and recovery</li>
+</ul>
+</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Team collaboration</li>
+<li>State consistency</li>
+<li>Disaster recovery</li>
+<li>Audit trail"</li>
+</ul>
+<h3 id="q40-how-do-you-handle-eks-cluster-upgrades"><a class="header" href="#q40-how-do-you-handle-eks-cluster-upgrades">Q40: "How do you handle EKS cluster upgrades?"</a></h3>
+<p><strong>Answer:</strong>
+"EKS cluster upgrade strategy:</p>
+<p><strong>Control Plane Upgrade</strong>:</p>
+<ol>
+<li><strong>AWS Managed</strong>: Control plane upgrades via AWS Console/CLI</li>
+<li><strong>Zero Downtime</strong>: AWS handles upgrade automatically</li>
+<li><strong>Version Compatibility</strong>: Check Kubernetes version compatibility</li>
+</ol>
+<p><strong>Node Group Upgrade</strong>:</p>
+<ol>
+<li><strong>Create New Node Group</strong>: New nodes with updated AMI</li>
+<li><strong>Drain Old Nodes</strong>: <code>kubectl drain</code> to move workloads</li>
+<li><strong>Verify</strong>: Ensure all pods are running on new nodes</li>
+<li><strong>Delete Old Node Group</strong>: Remove old nodes</li>
+</ol>
+<p><strong>Application Upgrade</strong>:</p>
+<ol>
+<li><strong>Git Update</strong>: Update manifests in Git</li>
+<li><strong>ArgoCD Sync</strong>: Automatic sync via GitOps</li>
+<li><strong>Rolling Update</strong>: Kubernetes rolling update strategy</li>
+<li><strong>Health Checks</strong>: Readiness probes validate deployment</li>
+</ol>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Test upgrades in staging first</li>
+<li>Upgrade control plane before nodes</li>
+<li>Use rolling updates for zero downtime</li>
+<li>Monitor during upgrades</li>
+<li>Have rollback plan ready"</li>
+</ul>
+<h2 id="advanced-scaling-questions"><a class="header" href="#advanced-scaling-questions">Advanced Scaling Questions</a></h2>
+<h3 id="q41-how-do-you-configure-hpa-for-different-workloads"><a class="header" href="#q41-how-do-you-configure-hpa-for-different-workloads">Q41: "How do you configure HPA for different workloads?"</a></h3>
+<p><strong>Answer:</strong>
+"HPA configuration strategies:</p>
+<p><strong>CPU-Based Scaling</strong>:</p>
+<pre><code class="language-yaml">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+</code></pre>
+<p><strong>Memory-Based Scaling</strong>:</p>
+<pre><code class="language-yaml">metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+</code></pre>
+<p><strong>Custom Metrics Scaling</strong>:</p>
+<pre><code class="language-yaml">metrics:
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "100"
+</code></pre>
+<p><strong>Scaling Behavior</strong>:</p>
+<pre><code class="language-yaml">behavior:
+  scaleDown:
+    stabilizationWindowSeconds: 300
+    policies:
+      - type: Percent
+        value: 50
+  scaleUp:
+    stabilizationWindowSeconds: 0
+    policies:
+      - type: Percent
+        value: 100
+</code></pre>
+<p><strong>Best Practices</strong>:</p>
+<ul>
+<li>Set appropriate min/max replicas</li>
+<li>Use multiple metrics for better decisions</li>
+<li>Configure stabilization windows</li>
+<li>Test scaling behavior under load"</li>
+</ul>
+<h3 id="q42-how-does-cluster-autoscaler-work-with-your-node-groups"><a class="header" href="#q42-how-does-cluster-autoscaler-work-with-your-node-groups">Q42: "How does Cluster Autoscaler work with your node groups?"</a></h3>
+<p><strong>Answer:</strong>
+"Cluster Autoscaler integration:</p>
+<p><strong>Node Group Configuration</strong>:</p>
+<pre><code class="language-hcl">eks_managed_node_groups = {
+  application = {
+    name = "application-nodes"
+    min_size     = 1
+    max_size     = 10
+    desired_size = 3
+    
+    labels = {
+      "k8s.io/cluster-autoscaler/enabled" = "true"
+      "k8s.io/cluster-autoscaler/${cluster_name}" = "owned"
+    }
+  }
+}
+</code></pre>
+<p><strong>How It Works</strong>:</p>
+<ol>
+<li><strong>Unschedulable Pods</strong>: Cluster Autoscaler monitors pods that can't be scheduled</li>
+<li><strong>Node Addition</strong>: Adds nodes when pods are pending</li>
+<li><strong>Node Removal</strong>: Removes nodes when underutilized</li>
+<li><strong>Pod Disruption Budgets</strong>: Respects PDBs during scale-down</li>
+</ol>
+<p><strong>Scaling Triggers</strong>:</p>
+<ul>
+<li>Pods pending due to insufficient resources</li>
+<li>Node utilization below threshold</li>
+<li>Pod affinity/anti-affinity requirements</li>
+</ul>
+<p><strong>Configuration</strong>:</p>
+<ul>
+<li>Expansion strategy: least-waste (preferred)</li>
+<li>Scale-down delay: 10 minutes</li>
+<li>Node utilization threshold: 50%</li>
+</ul>
+<p>This ensures optimal resource utilization and cost efficiency."</p>
+<h2 id="troubleshooting-questions"><a class="header" href="#troubleshooting-questions">Troubleshooting Questions</a></h2>
+<h3 id="q43-how-do-you-troubleshoot-argocd-sync-failures"><a class="header" href="#q43-how-do-you-troubleshoot-argocd-sync-failures">Q43: "How do you troubleshoot ArgoCD sync failures?"</a></h3>
+<p><strong>Answer:</strong>
+"ArgoCD troubleshooting steps:</p>
+<ol>
+<li>
+<p><strong>Check Application Status</strong>:</p>
+<pre><code class="language-bash">argocd app get &lt;app-name&gt;
+argocd app get &lt;app-name&gt; --refresh
+</code></pre>
+</li>
+<li>
+<p><strong>View Sync Operation</strong>:</p>
+<pre><code class="language-bash">argocd app sync &lt;app-name&gt; --dry-run
+argocd app sync &lt;app-name&gt; --prune
+</code></pre>
+</li>
+<li>
+<p><strong>Check Logs</strong>:</p>
+<pre><code class="language-bash">argocd app logs &lt;app-name&gt;
+kubectl logs -n argocd deployment/argocd-application-controller
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Repository Access</strong>:</p>
+<pre><code class="language-bash">argocd repo list
+argocd repo get &lt;repo-url&gt;
+</code></pre>
+</li>
+<li>
+<p><strong>Check Resource Events</strong>:</p>
+<pre><code class="language-bash">kubectl get events -n &lt;namespace&gt;
+kubectl describe &lt;resource&gt; -n &lt;namespace&gt;
+</code></pre>
+</li>
+</ol>
+<p><strong>Common Issues</strong>:</p>
+<ul>
+<li>Repository authentication failures</li>
+<li>Manifest validation errors</li>
+<li>Resource conflicts</li>
+<li>Network connectivity issues</li>
+<li>RBAC permission problems"</li>
+</ul>
+<h3 id="q44-how-do-you-debug-prometheus-scraping-issues"><a class="header" href="#q44-how-do-you-debug-prometheus-scraping-issues">Q44: "How do you debug Prometheus scraping issues?"</a></h3>
+<p><strong>Answer:</strong>
+"Prometheus troubleshooting:</p>
+<ol>
+<li>
+<p><strong>Check Targets</strong>:</p>
+<ul>
+<li>Access Prometheus UI: <code>http://localhost:9090/targets</code></li>
+<li>View scrape status for each target</li>
+<li>Check for down/unreachable targets</li>
+</ul>
+</li>
+<li>
+<p><strong>Verify Service Discovery</strong>:</p>
+<pre><code class="language-bash">kubectl get pods -n &lt;namespace&gt; -o yaml | grep prometheus.io
+</code></pre>
+</li>
+<li>
+<p><strong>Check Prometheus Logs</strong>:</p>
+<pre><code class="language-bash">kubectl logs -n monitoring deployment/prometheus
+</code></pre>
+</li>
+<li>
+<p><strong>Test Scraping Manually</strong>:</p>
+<pre><code class="language-bash">kubectl port-forward -n monitoring svc/prometheus 9090:9090
+curl http://localhost:9090/api/v1/targets
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Metrics Endpoint</strong>:</p>
+<pre><code class="language-bash">kubectl exec -n &lt;namespace&gt; &lt;pod-name&gt; -- wget -qO- http://localhost:9090/metrics
+</code></pre>
+</li>
+</ol>
+<p><strong>Common Issues</strong>:</p>
+<ul>
+<li>Missing pod annotations</li>
+<li>Network policies blocking access</li>
+<li>Incorrect service discovery config</li>
+<li>Authentication/authorization issues"</li>
+</ul>
+<h3 id="q45-how-do-you-troubleshoot-opa-policy-violations"><a class="header" href="#q45-how-do-you-troubleshoot-opa-policy-violations">Q45: "How do you troubleshoot OPA policy violations?"</a></h3>
+<p><strong>Answer:</strong>
+"OPA troubleshooting:</p>
+<ol>
+<li>
+<p><strong>Check Gatekeeper Status</strong>:</p>
+<pre><code class="language-bash">kubectl get pods -n gatekeeper-system
+kubectl logs -n gatekeeper-system -l control-plane=controller-manager
+</code></pre>
+</li>
+<li>
+<p><strong>View Constraint Status</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot
+kubectl describe K8sRequiredNonRoot &lt;constraint-name&gt;
+</code></pre>
+</li>
+<li>
+<p><strong>Check Violations</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot &lt;constraint-name&gt; -o jsonpath='{.status.violations}'
+</code></pre>
+</li>
+<li>
+<p><strong>Test Policy</strong>:</p>
+<pre><code class="language-bash"># Try to create violating resource
+kubectl run test-pod --image=nginx -n online-boutique
+# Check error message
+</code></pre>
+</li>
+<li>
+<p><strong>Verify Enforcement Mode</strong>:</p>
+<pre><code class="language-bash">kubectl get K8sRequiredNonRoot &lt;constraint-name&gt; -o yaml | grep enforcementAction
+</code></pre>
+</li>
+</ol>
+<p><strong>Common Issues</strong>:</p>
+<ul>
+<li>Constraint templates not installed</li>
+<li>CRDs not ready</li>
+<li>Enforcement mode misconfiguration</li>
+<li>Policy logic errors in Rego"</li>
+</ul>
+<h2 id="cost-optimization-questions-1"><a class="header" href="#cost-optimization-questions-1">Cost Optimization Questions</a></h2>
+<h3 id="q46-how-do-you-optimize-costs-in-your-eks-cluster"><a class="header" href="#q46-how-do-you-optimize-costs-in-your-eks-cluster">Q46: "How do you optimize costs in your EKS cluster?"</a></h3>
+<p><strong>Answer:</strong>
+"Cost optimization strategies:</p>
+<ol>
+<li>
+<p><strong>Right-Sizing</strong>:</p>
+<ul>
+<li>Analyze actual resource usage</li>
+<li>Set appropriate requests/limits</li>
+<li>Use VPA recommendations</li>
+</ul>
+</li>
+<li>
+<p><strong>Auto-Scaling</strong>:</p>
+<ul>
+<li>HPA for pod scaling</li>
+<li>Cluster Autoscaler for node scaling</li>
+<li>Scale down during low usage</li>
+</ul>
+</li>
+<li>
+<p><strong>Instance Types</strong>:</p>
+<ul>
+<li>Use appropriate instance sizes</li>
+<li>Consider spot instances for non-critical workloads</li>
+<li>Reserved instances for predictable workloads</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Quotas</strong>:</p>
+<ul>
+<li>Set namespace-level quotas</li>
+<li>Prevent resource waste</li>
+<li>Enforce via OPA policies</li>
+</ul>
+</li>
+<li>
+<p><strong>Monitoring</strong>:</p>
+<ul>
+<li>Track resource usage</li>
+<li>Identify idle resources</li>
+<li>Cost allocation by namespace/team</li>
+</ul>
+</li>
+</ol>
+<p><strong>Expected Costs</strong>:</p>
+<ul>
+<li>EKS Control Plane: ~$73/month</li>
+<li>Worker Nodes: Variable based on usage</li>
+<li>Load Balancers: ~$20-30/month each</li>
+<li>Data Transfer: Variable</li>
+</ul>
+<p><strong>Optimization Results</strong>:</p>
+<ul>
+<li>30-40% cost reduction through right-sizing</li>
+<li>20-30% savings with spot instances</li>
+<li>Better resource utilization"</li>
+</ul>
+<h2 id="disaster-recovery-questions"><a class="header" href="#disaster-recovery-questions">Disaster Recovery Questions</a></h2>
+<h3 id="q47-what-is-your-disaster-recovery-strategy"><a class="header" href="#q47-what-is-your-disaster-recovery-strategy">Q47: "What is your disaster recovery strategy?"</a></h3>
+<p><strong>Answer:</strong>
+"Disaster recovery approach:</p>
+<ol>
+<li>
+<p><strong>Infrastructure as Code</strong>:</p>
+<ul>
+<li>All infrastructure in Terraform</li>
+<li>Quick recreation from Git</li>
+<li>Version controlled</li>
+</ul>
+</li>
+<li>
+<p><strong>GitOps for Applications</strong>:</p>
+<ul>
+<li>All applications in Git</li>
+<li>Automatic deployment via ArgoCD</li>
+<li>Reproducible deployments</li>
+</ul>
+</li>
+<li>
+<p><strong>Backup Strategy</strong>:</p>
+<ul>
+<li><strong>ETCD Backups</strong>: EKS control plane (AWS managed)</li>
+<li><strong>Application Data</strong>: Database backups, persistent volumes</li>
+<li><strong>Configuration</strong>: All in Git (source of truth)</li>
+</ul>
+</li>
+<li>
+<p><strong>Recovery Process</strong>:</p>
+<ul>
+<li>Recreate cluster from Terraform</li>
+<li>Restore from backups</li>
+<li>ArgoCD syncs applications automatically</li>
+<li>Verify with sanity/availability tests</li>
+</ul>
+</li>
+<li>
+<p><strong>RTO/RPO</strong>:</p>
+<ul>
+<li><strong>RTO</strong>: &lt; 1 hour (recovery time objective)</li>
+<li><strong>RPO</strong>: &lt; 15 minutes (recovery point objective)</li>
+</ul>
+</li>
+</ol>
+<p><strong>Testing</strong>:</p>
+<ul>
+<li>Regular DR drills</li>
+<li>Test cluster recreation</li>
+<li>Verify backup restoration</li>
+<li>Document procedures"</li>
+</ul>
+<h2 id="advanced-integration-questions"><a class="header" href="#advanced-integration-questions">Advanced Integration Questions</a></h2>
+<h3 id="q48-how-would-you-integrate-this-platform-with-cicd-pipelines"><a class="header" href="#q48-how-would-you-integrate-this-platform-with-cicd-pipelines">Q48: "How would you integrate this platform with CI/CD pipelines?"</a></h3>
+<p><strong>Answer:</strong>
+"CI/CD integration strategy:</p>
+<ol>
+<li>
+<p><strong>GitHub Actions Workflow</strong>:</p>
+<pre><code class="language-yaml">- name: Deploy Infrastructure
+  run: terraform apply
+
+- name: Run Sanity Tests
+  run: kubectl apply -f sanity-test-job.yaml
+
+- name: Verify Deployment
+  run: argocd app wait monitoring-stack --health
+</code></pre>
+</li>
+<li>
+<p><strong>Pipeline Stages</strong>:</p>
+<ul>
+<li><strong>Build</strong>: Container image builds</li>
+<li><strong>Test</strong>: Unit tests, integration tests</li>
+<li><strong>Deploy</strong>: ArgoCD syncs from Git</li>
+<li><strong>Validate</strong>: Sanity tests, availability tests</li>
+<li><strong>Monitor</strong>: Prometheus alerts</li>
+</ul>
+</li>
+<li>
+<p><strong>GitOps Integration</strong>:</p>
+<ul>
+<li>Changes committed to Git</li>
+<li>ArgoCD automatically syncs</li>
+<li>No manual kubectl commands</li>
+<li>Full audit trail</li>
+</ul>
+</li>
+<li>
+<p><strong>Testing Integration</strong>:</p>
+<ul>
+<li>Smoke tests after deployment</li>
+<li>Performance tests on schedule</li>
+<li>Automated rollback on failure</li>
+</ul>
+</li>
+</ol>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Automated deployments</li>
+<li>Consistent process</li>
+<li>Fast feedback</li>
+<li>Easy rollbacks"</li>
+</ul>
+<h3 id="q49-how-would-you-extend-this-platform-for-multi-cluster-management"><a class="header" href="#q49-how-would-you-extend-this-platform-for-multi-cluster-management">Q49: "How would you extend this platform for multi-cluster management?"</a></h3>
+<p><strong>Answer:</strong>
+"Multi-cluster extension:</p>
+<ol>
+<li>
+<p><strong>ArgoCD Multi-Cluster</strong>:</p>
+<pre><code class="language-yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+spec:
+  destination:
+    server: https://prod-cluster.example.com
+</code></pre>
+</li>
+<li>
+<p><strong>Cluster Management</strong>:</p>
+<ul>
+<li>Register clusters in ArgoCD</li>
+<li>Manage from single ArgoCD instance</li>
+<li>Environment-specific applications</li>
+</ul>
+</li>
+<li>
+<p><strong>Federation</strong>:</p>
+<ul>
+<li>Prometheus federation for metrics</li>
+<li>Centralized logging</li>
+<li>Cross-cluster monitoring</li>
+</ul>
+</li>
+<li>
+<p><strong>GitOps Patterns</strong>:</p>
+<ul>
+<li>Environment-specific branches</li>
+<li>Cluster-specific overlays (Kustomize)</li>
+<li>Centralized configuration</li>
+</ul>
+</li>
+</ol>
+<p><strong>Use Cases</strong>:</p>
+<ul>
+<li>Dev/Staging/Production separation</li>
+<li>Multi-region deployments</li>
+<li>Disaster recovery clusters</li>
+<li>Blue-green deployments"</li>
+</ul>
+<h3 id="q50-how-do-you-ensure-platform-reliability-and-observability"><a class="header" href="#q50-how-do-you-ensure-platform-reliability-and-observability">Q50: "How do you ensure platform reliability and observability?"</a></h3>
+<p><strong>Answer:</strong>
+"Comprehensive reliability strategy:</p>
+<ol>
+<li>
+<p><strong>Monitoring</strong>:</p>
+<ul>
+<li>Prometheus for metrics</li>
+<li>Grafana for visualization</li>
+<li>Alerting on thresholds</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging</strong>:</p>
+<ul>
+<li>Loki for log aggregation</li>
+<li>Promtail for collection</li>
+<li>Centralized querying</li>
+</ul>
+</li>
+<li>
+<p><strong>Testing</strong>:</p>
+<ul>
+<li>Sanity tests (health checks)</li>
+<li>Availability tests (SRE metrics)</li>
+<li>k6 performance tests</li>
+</ul>
+</li>
+<li>
+<p><strong>Observability</strong>:</p>
+<ul>
+<li>Metrics, logs, traces (3 pillars)</li>
+<li>Dashboards for visibility</li>
+<li>Alerts for proactive response</li>
+</ul>
+</li>
+<li>
+<p><strong>Reliability</strong>:</p>
+<ul>
+<li>High availability (multi-replica)</li>
+<li>Auto-scaling (HPA, Cluster Autoscaler)</li>
+<li>Self-healing (ArgoCD, health probes)</li>
+<li>Circuit breakers (application level)</li>
+</ul>
+</li>
+</ol>
+<p><strong>SLOs</strong>:</p>
+<ul>
+<li>Uptime: 99.9%</li>
+<li>Response Time: p95 &lt; 500ms</li>
+<li>Error Rate: &lt; 0.1%</li>
+</ul>
+<p>This ensures production-ready reliability and full observability."</p>
 
                     </main>
 
